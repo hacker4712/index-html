@@ -14,6 +14,10 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    html {
+      font-size: 16px;
     }
     body {
       font-family: 'Inter', sans-serif;
@@ -21,69 +25,72 @@
       min-height: 100vh;
       display: flex;
       justify-content: center;
-      align-items: center;
-      padding: 16px;
+      align-items: flex-start;
+      padding: 12px;
+      padding-top: 20px;
     }
     .app-card {
-      max-width: 580px;
+      max-width: 480px;
       width: 100%;
       background: #0b2a4a;
-      border-radius: 40px 40px 32px 32px;
-      padding: 24px 20px 32px;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+      border-radius: 32px 32px 28px 28px;
+      padding: 18px 16px 28px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
       border: 1px solid #d4af37;
+      margin: 0 auto;
     }
     .school-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 16px;
-      padding-bottom: 8px;
+      margin-bottom: 14px;
+      padding-bottom: 6px;
       border-bottom: 2px solid #d4af37;
     }
     .school-header h1 {
-      font-size: 1.7rem;
+      font-size: 1.5rem;
       font-weight: 700;
       color: #f6e9d0;
-      letter-spacing: -0.5px;
+      letter-spacing: -0.3px;
     }
     .school-header span {
       background: #d4af37;
       color: #0b2a4a;
       font-weight: 700;
-      font-size: 0.9rem;
-      padding: 6px 14px;
+      font-size: 0.75rem;
+      padding: 4px 12px;
       border-radius: 40px;
       white-space: nowrap;
     }
     .top-menu {
       display: flex;
-      gap: 6px;
-      margin-bottom: 18px;
+      gap: 4px;
+      margin-bottom: 14px;
       background: #e9e1d6;
-      padding: 5px;
-      border-radius: 60px;
+      padding: 4px;
+      border-radius: 50px;
       border: 2px solid #d4af37;
       flex-wrap: wrap;
     }
     .menu-btn {
       flex: 1;
-      padding: 10px 12px;
+      padding: 10px 6px;
       border: none;
       border-radius: 40px;
       font-weight: 700;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       cursor: pointer;
       transition: 0.2s;
       background: transparent;
       color: #0b2a4a;
       text-align: center;
-      min-width: 60px;
+      min-width: 50px;
+      touch-action: manipulation;
     }
     .menu-btn.active {
       background: #d4af37;
       color: #0b2a4a;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
     .menu-btn:hover {
       background: rgba(212, 175, 55, 0.3);
@@ -93,17 +100,17 @@
     }
     .input-section {
       background: #e9e1d6;
-      border-radius: 28px;
-      padding: 18px 16px 16px;
-      margin-bottom: 20px;
+      border-radius: 24px;
+      padding: 16px 14px 14px;
+      margin-bottom: 16px;
       box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.05);
     }
     .input-label {
       display: block;
       font-weight: 600;
-      font-size: 1.1rem;
+      font-size: 1rem;
       color: #0b2a4a;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .input-label i {
       color: #d4af37;
@@ -111,22 +118,23 @@
     }
     .input-row {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       align-items: center;
       flex-wrap: wrap;
     }
     #uniqueIdInput {
       flex: 1;
-      min-width: 160px;
-      padding: 18px 16px;
-      font-size: 1.3rem;
+      min-width: 140px;
+      padding: 16px 14px;
+      font-size: 1.1rem;
       font-weight: 600;
       background: white;
       border: 2px solid #d4af37;
-      border-radius: 60px;
+      border-radius: 50px;
       color: #0b2a4a;
       transition: 0.15s;
       font-family: 'Inter', monospace;
+      height: 56px;
     }
     #uniqueIdInput:focus {
       outline: 3px solid #d4af37;
@@ -138,15 +146,17 @@
       border: none;
       color: #0b2a4a;
       font-weight: 700;
-      font-size: 1.3rem;
-      padding: 16px 28px;
-      border-radius: 60px;
+      font-size: 1.1rem;
+      padding: 14px 24px;
+      border-radius: 50px;
       cursor: pointer;
       transition: 0.1s;
       box-shadow: 0 4px 0 #8f7a2a;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.2px;
       white-space: nowrap;
-      min-width: 100px;
+      min-width: 90px;
+      height: 56px;
+      touch-action: manipulation;
     }
     #lookupBtn:active {
       transform: translateY(3px);
@@ -158,141 +168,141 @@
     .unique-id-box {
       background: #e9e1d6;
       border-radius: 40px;
-      padding: 12px 18px;
-      margin: 12px 0 20px;
+      padding: 10px 16px;
+      margin: 10px 0 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 8px 12px;
+      gap: 6px 10px;
       border-left: 6px solid #d4af37;
     }
     .unique-id-box .label {
       font-weight: 600;
       color: #0b2a4a;
-      font-size: 1rem;
+      font-size: 0.9rem;
     }
     .unique-id-box .id-value {
       background: #0b2a4a;
       color: #f6e9d0;
-      padding: 8px 20px;
-      border-radius: 60px;
+      padding: 6px 18px;
+      border-radius: 50px;
       font-weight: 700;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-family: 'Inter', monospace;
     }
     .venue-list {
       display: flex;
       flex-direction: column;
-      gap: 18px;
-      margin-top: 6px;
+      gap: 14px;
+      margin-top: 4px;
     }
     .venue-card {
       background: #fcf8f2;
-      border-radius: 28px;
-      padding: 18px 18px 16px;
+      border-radius: 24px;
+      padding: 16px 16px 14px;
       box-shadow: 0 6px 0 #d4af37;
       border: 1px solid #d4af37;
     }
     .venue-name {
       font-weight: 700;
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       color: #0b2a4a;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       border-bottom: 2px dashed #d4af37;
-      padding-bottom: 10px;
-      margin-bottom: 12px;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
     }
     .venue-name::before {
       content: "📍";
-      font-size: 1.6rem;
-      margin-right: 6px;
+      font-size: 1.3rem;
+      margin-right: 4px;
     }
     .project-detail {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
     }
     .project-detail .row {
       display: flex;
       flex-wrap: wrap;
       align-items: baseline;
-      gap: 4px 8px;
-      font-size: 1.1rem;
-      padding: 4px 0;
+      gap: 4px 6px;
+      font-size: 1rem;
+      padding: 3px 0;
     }
     .project-detail .row .tag {
       font-weight: 600;
       color: #3d2e1b;
-      min-width: 75px;
-      font-size: 0.95rem;
+      min-width: 65px;
+      font-size: 0.85rem;
     }
     .project-detail .row .value {
       font-weight: 600;
       color: #0b2a4a;
       word-break: break-word;
       background: #eae3d8;
-      padding: 2px 14px;
+      padding: 2px 12px;
       border-radius: 40px;
-      font-size: 1.05rem;
+      font-size: 0.95rem;
     }
     .teacher-tag {
       background: #d4af37;
       color: #0b2a4a;
-      padding: 6px 18px;
-      border-radius: 60px;
+      padding: 4px 16px;
+      border-radius: 50px;
       font-weight: 700;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       display: inline-block;
-      margin-top: 6px;
+      margin-top: 4px;
     }
     .group-members {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px 10px;
-      margin-top: 8px;
+      gap: 4px 8px;
+      margin-top: 6px;
       padding: 6px 0;
       border-top: 1px solid #d4af37;
     }
     .group-members .member-chip {
       background: #0b2a4a;
       color: #f6e9d0;
-      padding: 4px 16px;
+      padding: 4px 14px;
       border-radius: 40px;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       font-weight: 600;
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
     }
     .group-members .member-chip::before {
       content: "👤";
-      font-size: 0.9rem;
+      font-size: 0.8rem;
     }
     .empty-state {
       background: #e9e1d6;
-      border-radius: 28px;
-      padding: 32px 18px;
+      border-radius: 24px;
+      padding: 28px 16px;
       text-align: center;
       color: #0b2a4a;
       font-weight: 500;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       border: 2px dashed #d4af37;
     }
     .empty-state span {
-      font-size: 2.5rem;
+      font-size: 2.2rem;
       display: block;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .footer-note {
-      margin-top: 24px;
+      margin-top: 20px;
       text-align: center;
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       color: #c5b59b;
       border-top: 1px solid #3d5570;
-      padding-top: 16px;
+      padding-top: 14px;
     }
     .footer-note strong {
       color: #d4af37;
@@ -300,25 +310,25 @@
     .stats-badge {
       background: #d4af37;
       color: #0b2a4a;
-      padding: 4px 14px;
+      padding: 3px 12px;
       border-radius: 40px;
       font-weight: 600;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       display: inline-block;
-      margin-top: 4px;
+      margin-top: 3px;
     }
     .qr-section {
       background: #e9e1d6;
-      border-radius: 28px;
-      padding: 16px;
+      border-radius: 24px;
+      padding: 14px;
       margin-top: 0;
       text-align: center;
     }
     .qr-section h3 {
       color: #0b2a4a;
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 600;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .qr-section h3 i {
       color: #d4af37;
@@ -326,30 +336,30 @@
     #qrcode {
       display: inline-block;
       background: white;
-      padding: 12px;
-      border-radius: 20px;
+      padding: 10px;
+      border-radius: 16px;
       border: 3px solid #d4af37;
       box-shadow: 0 4px 0 #8f7a2a;
     }
     #qrcode img {
       display: block;
-      width: 180px;
-      height: 180px;
+      width: 160px;
+      height: 160px;
     }
     .qr-hint {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: #3d2e1b;
-      margin-top: 10px;
+      margin-top: 8px;
       opacity: 0.8;
     }
     .deploy-notice {
       background: #d4af37;
       color: #0b2a4a;
       border-radius: 40px;
-      padding: 8px 16px;
-      font-size: 0.75rem;
+      padding: 6px 14px;
+      font-size: 0.7rem;
       font-weight: 600;
-      margin-top: 8px;
+      margin-top: 6px;
       display: inline-block;
     }
     .page-content {
@@ -359,43 +369,43 @@
       display: block;
     }
 
-    /* Judgement & Feedback Styles */
+    /* Judgement & Feedback Styles - Mobile Optimized */
     .judge-section,
     .feedback-section {
       background: #e9e1d6;
-      border-radius: 28px;
-      padding: 18px 16px;
-      margin-bottom: 16px;
+      border-radius: 24px;
+      padding: 16px 14px;
+      margin-bottom: 14px;
     }
     .judge-section h3,
     .feedback-section h3 {
       color: #0b2a4a;
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 700;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       border-bottom: 2px solid #d4af37;
-      padding-bottom: 8px;
+      padding-bottom: 6px;
     }
     .judge-section h3 .judge-status-badge {
       background: #d4af37;
       color: #0b2a4a;
-      padding: 2px 12px;
+      padding: 2px 10px;
       border-radius: 40px;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-weight: 700;
       display: inline-block;
-      margin-left: 8px;
+      margin-left: 6px;
     }
     .criteria-group {
-      margin: 12px 0;
+      margin: 10px 0;
     }
     .criteria-item {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin: 8px 0;
+      gap: 8px;
+      margin: 6px 0;
       background: white;
-      padding: 10px 14px;
+      padding: 8px 12px;
       border-radius: 40px;
       border: 1px solid #d4af37;
     }
@@ -403,17 +413,18 @@
       flex: 1;
       font-weight: 600;
       color: #0b2a4a;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
     }
     .criteria-item select {
-      padding: 6px 12px;
+      padding: 6px 10px;
       border-radius: 30px;
       border: 2px solid #d4af37;
       font-weight: 600;
       background: white;
       color: #0b2a4a;
-      font-size: 0.9rem;
-      min-width: 70px;
+      font-size: 0.85rem;
+      min-width: 60px;
+      height: 40px;
     }
     .criteria-item select:focus {
       outline: 3px solid #d4af37;
@@ -421,98 +432,47 @@
     }
     .judge-code-input {
       display: flex;
-      gap: 10px;
-      margin-bottom: 12px;
+      gap: 8px;
+      margin-bottom: 10px;
       align-items: center;
       flex-wrap: wrap;
     }
     .judge-code-input input {
       flex: 1;
-      padding: 14px 16px;
+      padding: 12px 14px;
       border: 2px solid #d4af37;
-      border-radius: 60px;
-      font-size: 1.1rem;
+      border-radius: 50px;
+      font-size: 1rem;
       font-weight: 600;
       color: #0b2a4a;
-      min-width: 140px;
+      min-width: 120px;
+      height: 50px;
     }
     .judge-code-input button {
       background: #d4af37;
       border: none;
       color: #0b2a4a;
       font-weight: 700;
-      padding: 14px 24px;
-      border-radius: 60px;
+      padding: 12px 20px;
+      border-radius: 50px;
       cursor: pointer;
-      font-size: 1rem;
+      font-size: 0.95rem;
       box-shadow: 0 4px 0 #8f7a2a;
       transition: 0.1s;
+      height: 50px;
+      touch-action: manipulation;
     }
     .judge-code-input button:active {
       transform: translateY(3px);
       box-shadow: 0 1px 0 #8f7a2a;
     }
-    .locked-message {
-      text-align: center;
-      padding: 20px;
-      color: #721c24;
-      background: #f8d7da;
-      border-radius: 20px;
-      font-weight: 600;
-    }
-    .locked-message span {
-      font-size: 2rem;
-      display: block;
-      margin-bottom: 8px;
-    }
-    .feedback-area {
-      margin-top: 12px;
-    }
-    .feedback-area textarea {
-      width: 100%;
-      padding: 14px 16px;
-      border: 2px solid #d4af37;
-      border-radius: 20px;
-      font-family: 'Inter', sans-serif;
-      font-size: 1rem;
-      resize: vertical;
-      min-height: 80px;
-      transition: 0.15s;
-    }
-    .feedback-area textarea:focus {
-      outline: 3px solid #d4af37;
-      outline-offset: 2px;
-    }
-    .submit-judge-btn,
-    .submit-feedback-btn {
-      background: #0b2a4a;
-      color: #f6e9d0;
-      border: 2px solid #d4af37;
-      padding: 14px 28px;
-      border-radius: 60px;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      width: 100%;
-      margin-top: 12px;
-      transition: 0.2s;
-      box-shadow: 0 4px 0 #061a2e;
-    }
-    .submit-judge-btn:active,
-    .submit-feedback-btn:active {
-      transform: translateY(3px);
-      box-shadow: 0 1px 0 #061a2e;
-    }
-    .submit-judge-btn:hover,
-    .submit-feedback-btn:hover {
-      background: #1a3d5e;
-    }
     .judge-result {
-      margin-top: 12px;
-      padding: 12px 16px;
-      border-radius: 20px;
+      margin-top: 10px;
+      padding: 10px 14px;
+      border-radius: 16px;
       font-weight: 600;
       display: none;
+      font-size: 0.9rem;
     }
     .judge-result.success {
       background: #d4edda;
@@ -530,20 +490,21 @@
       display: block;
     }
 
-    /* Group Selector */
     .group-selector {
-      margin: 12px 0;
+      margin: 10px 0;
     }
     .group-selector select {
       width: 100%;
-      padding: 14px 16px;
+      padding: 12px 14px;
       border: 2px solid #d4af37;
-      border-radius: 60px;
-      font-size: 1rem;
+      border-radius: 50px;
+      font-size: 0.95rem;
       font-weight: 600;
       color: #0b2a4a;
       background: white;
       cursor: pointer;
+      height: 50px;
+      appearance: auto;
     }
     .group-selector select:focus {
       outline: 3px solid #d4af37;
@@ -551,35 +512,35 @@
     }
     .group-info {
       background: white;
-      border-radius: 20px;
-      padding: 12px 16px;
-      margin: 10px 0;
+      border-radius: 16px;
+      padding: 10px 14px;
+      margin: 8px 0;
       border: 1px solid #d4af37;
     }
     .group-info .group-name {
       font-weight: 700;
-      font-size: 1.1rem;
+      font-size: 1rem;
       color: #0b2a4a;
     }
     .group-info .group-members-list {
       display: flex;
       flex-wrap: wrap;
-      gap: 4px 8px;
-      margin-top: 6px;
+      gap: 3px 6px;
+      margin-top: 4px;
     }
     .group-info .group-members-list .member-tag {
       background: #e9e1d6;
-      padding: 2px 12px;
+      padding: 2px 10px;
       border-radius: 40px;
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       color: #0b2a4a;
       font-weight: 500;
     }
     .group-status {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: #3d2e1b;
-      margin-top: 6px;
-      padding: 6px 12px;
+      margin-top: 4px;
+      padding: 4px 10px;
       background: #e9e1d6;
       border-radius: 20px;
       display: inline-block;
@@ -593,13 +554,58 @@
       color: #721c24;
     }
 
-    .feedback-display {
+    .feedback-area {
       margin-top: 10px;
-      padding: 12px 16px;
-      background: white;
-      border-radius: 20px;
-      border: 1px solid #d4af37;
+    }
+    .feedback-area textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid #d4af37;
+      border-radius: 16px;
+      font-family: 'Inter', sans-serif;
       font-size: 0.95rem;
+      resize: vertical;
+      min-height: 80px;
+      transition: 0.15s;
+    }
+    .feedback-area textarea:focus {
+      outline: 3px solid #d4af37;
+      outline-offset: 2px;
+    }
+    .submit-judge-btn,
+    .submit-feedback-btn {
+      background: #0b2a4a;
+      color: #f6e9d0;
+      border: 2px solid #d4af37;
+      padding: 12px 20px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      transition: 0.2s;
+      box-shadow: 0 4px 0 #061a2e;
+      touch-action: manipulation;
+      height: 52px;
+    }
+    .submit-judge-btn:active,
+    .submit-feedback-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #061a2e;
+    }
+    .submit-judge-btn:hover,
+    .submit-feedback-btn:hover {
+      background: #1a3d5e;
+    }
+
+    .feedback-display {
+      margin-top: 8px;
+      padding: 10px 14px;
+      background: white;
+      border-radius: 16px;
+      border: 1px solid #d4af37;
+      font-size: 0.9rem;
       color: #0b2a4a;
     }
     .feedback-display strong {
@@ -619,14 +625,13 @@
       color: #0b2a4a;
     }
 
-    /* Email notification style */
     .email-notice {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: #3d2e1b;
       background: #fff3cd;
-      padding: 8px 14px;
-      border-radius: 20px;
-      margin-top: 8px;
+      padding: 6px 12px;
+      border-radius: 16px;
+      margin-top: 6px;
       text-align: center;
       border: 1px solid #ffc107;
     }
@@ -634,44 +639,181 @@
       color: #0b2a4a;
     }
 
-    @media (max-width: 420px) {
+    #feedbackStudentId {
+      flex: 1;
+      min-width: 120px;
+      padding: 12px 14px;
+      border: 2px solid #d4af37;
+      border-radius: 50px;
+      font-size: 0.95rem;
+      color: #0b2a4a;
+      height: 48px;
+    }
+    #feedbackRating {
+      width: 100%;
+      padding: 10px 14px;
+      border: 2px solid #d4af37;
+      border-radius: 50px;
+      font-weight: 600;
+      color: #0b2a4a;
+      background: white;
+      margin-top: 3px;
+      height: 48px;
+    }
+
+    /* Mobile optimizations */
+    @media (max-width: 480px) {
       .app-card {
-        padding: 18px 14px;
+        padding: 14px 12px 20px;
+        border-radius: 24px;
       }
       .school-header h1 {
-        font-size: 1.4rem;
-      }
-      .venue-name {
         font-size: 1.3rem;
       }
-      .input-row {
-        flex-direction: column;
-        align-items: stretch;
+      .school-header span {
+        font-size: 0.65rem;
+        padding: 3px 10px;
+      }
+      .menu-btn {
+        font-size: 0.7rem;
+        padding: 8px 4px;
+        min-width: 40px;
+      }
+      #uniqueIdInput {
+        font-size: 1rem;
+        padding: 12px 12px;
+        height: 48px;
+        min-width: 100px;
       }
       #lookupBtn {
-        width: 100%;
-        text-align: center;
+        font-size: 1rem;
+        padding: 12px 18px;
+        height: 48px;
+        min-width: 75px;
+      }
+      .venue-name {
+        font-size: 1.1rem;
+      }
+      .project-detail .row {
+        font-size: 0.9rem;
+      }
+      .project-detail .row .value {
+        font-size: 0.85rem;
+        padding: 2px 10px;
+      }
+      .group-members .member-chip {
+        font-size: 0.7rem;
+        padding: 3px 10px;
       }
       #qrcode img {
         width: 140px;
         height: 140px;
       }
+      .unique-id-box .id-value {
+        font-size: 1rem;
+        padding: 4px 14px;
+      }
+      .judge-code-input input {
+        height: 44px;
+        font-size: 0.9rem;
+      }
+      .judge-code-input button {
+        height: 44px;
+        font-size: 0.85rem;
+        padding: 10px 16px;
+      }
+      .group-selector select {
+        height: 44px;
+        font-size: 0.85rem;
+      }
+      .submit-judge-btn,
+      .submit-feedback-btn {
+        height: 46px;
+        font-size: 0.85rem;
+        padding: 10px 16px;
+      }
+      .criteria-item {
+        padding: 6px 10px;
+        gap: 6px;
+      }
+      .criteria-item label {
+        font-size: 0.8rem;
+      }
+      .criteria-item select {
+        font-size: 0.8rem;
+        min-width: 50px;
+        height: 34px;
+        padding: 4px 8px;
+      }
+      .empty-state {
+        padding: 20px 12px;
+        font-size: 1rem;
+      }
+      .empty-state span {
+        font-size: 2rem;
+      }
+      .group-info .group-name {
+        font-size: 0.9rem;
+      }
+      #feedbackStudentId {
+        height: 42px;
+        font-size: 0.85rem;
+      }
+      #feedbackRating {
+        height: 42px;
+        font-size: 0.85rem;
+      }
+      .feedback-area textarea {
+        font-size: 0.85rem;
+        min-height: 60px;
+        padding: 10px 12px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .app-card {
+        padding: 10px 8px 16px;
+      }
       .top-menu {
-        flex-direction: row;
-        gap: 4px;
+        gap: 2px;
+        padding: 3px;
       }
       .menu-btn {
-        font-size: 0.75rem;
-        padding: 8px 6px;
-        min-width: 45px;
+        font-size: 0.6rem;
+        padding: 6px 3px;
+        min-width: 35px;
+      }
+      .school-header h1 {
+        font-size: 1.1rem;
+      }
+      #uniqueIdInput {
+        font-size: 0.85rem;
+        padding: 10px 10px;
+        height: 42px;
+        min-width: 80px;
+      }
+      #lookupBtn {
+        font-size: 0.85rem;
+        padding: 10px 14px;
+        height: 42px;
+        min-width: 65px;
       }
       .criteria-item {
         flex-wrap: wrap;
-        gap: 6px;
+        gap: 4px;
       }
       .criteria-item select {
-        min-width: 60px;
+        min-width: 45px;
+      }
+      .judge-code-input input {
         font-size: 0.8rem;
+        padding: 10px 12px;
+        height: 40px;
+      }
+      .judge-code-input button {
+        font-size: 0.8rem;
+        padding: 10px 14px;
+        height: 40px;
       }
     }
     .app-card,
@@ -724,7 +866,7 @@
           <input type="text" id="uniqueIdInput" placeholder="e.g. 1001" inputmode="numeric" autocomplete="off" />
           <button id="lookupBtn">🔍 Lookup</button>
         </div>
-        <div style="font-size:0.8rem; color:#3d2e1b; margin-top: 8px;">
+        <div style="font-size:0.7rem; color:#3d2e1b; margin-top: 6px;">
           <span class="stats-badge" id="recordCount">Loading database...</span>
         </div>
       </div>
@@ -748,12 +890,12 @@
         <h3>🏆 Judgement Panel <span class="judge-status-badge locked" id="judgeStatusBadge">🔒 Locked</span></h3>
 
         <div id="judgeLockContainer">
-          <p style="color:#3d2e1b; font-size:0.9rem; margin-bottom:12px;">Enter the judge access code to unlock judging</p>
+          <p style="color:#3d2e1b; font-size:0.8rem; margin-bottom:10px;">Enter the judge access code to unlock judging</p>
           <div class="judge-code-input">
             <input type="password" id="judgeCodeInput" placeholder="Enter judge code" />
             <button id="unlockJudgeBtn">🔓 Unlock</button>
           </div>
-          <div id="judgeLockError" style="color:#721c24; font-weight:600; font-size:0.9rem; display:none;">❌ Invalid code. Please try again.</div>
+          <div id="judgeLockError" style="color:#721c24; font-weight:600; font-size:0.8rem; display:none;">❌ Invalid code. Please try again.</div>
         </div>
 
         <div id="judgeContent" style="display:none;">
@@ -762,7 +904,7 @@
           </div>
 
           <div class="group-selector">
-            <label style="font-weight:600; color:#0b2a4a; font-size:0.95rem;">Select Group to Judge:</label>
+            <label style="font-weight:600; color:#0b2a4a; font-size:0.85rem;">Select Group to Judge:</label>
             <select id="groupSelector">
               <option value="">-- Select a Group --</option>
             </select>
@@ -779,35 +921,35 @@
           <div id="judgeCriteria" style="display:none;">
             <div class="criteria-group">
               <div class="criteria-item">
-                <label>🔬 Innovation & Creativity</label>
+                <label>🔬 Innovation</label>
                 <select id="criteria1">
                   <option value="1">1</option><option value="2">2</option><option value="3">3</option>
                   <option value="4">4</option><option value="5" selected>5</option>
                 </select>
               </div>
               <div class="criteria-item">
-                <label>⚙️ Technical Execution</label>
+                <label>⚙️ Technical</label>
                 <select id="criteria2">
                   <option value="1">1</option><option value="2">2</option><option value="3">3</option>
                   <option value="4">4</option><option value="5" selected>5</option>
                 </select>
               </div>
               <div class="criteria-item">
-                <label>📊 Presentation & Clarity</label>
+                <label>📊 Presentation</label>
                 <select id="criteria3">
                   <option value="1">1</option><option value="2">2</option><option value="3">3</option>
                   <option value="4">4</option><option value="5" selected>5</option>
                 </select>
               </div>
               <div class="criteria-item">
-                <label>🌍 Real-World Impact</label>
+                <label>🌍 Impact</label>
                 <select id="criteria4">
                   <option value="1">1</option><option value="2">2</option><option value="3">3</option>
                   <option value="4">4</option><option value="5" selected>5</option>
                 </select>
               </div>
               <div class="criteria-item">
-                <label>🤝 Team Collaboration</label>
+                <label>🤝 Collaboration</label>
                 <select id="criteria5">
                   <option value="1">1</option><option value="2">2</option><option value="3">3</option>
                   <option value="4">4</option><option value="5" selected>5</option>
@@ -815,9 +957,9 @@
               </div>
             </div>
 
-            <div style="margin-top:12px;">
-              <label style="font-weight:600; color:#0b2a4a; font-size:0.95rem;">💬 Judge Comments</label>
-              <textarea id="judgeComments" placeholder="Add your comments about this group's project..." style="width:100%; padding:12px 16px; border:2px solid #d4af37; border-radius:20px; font-family:'Inter',sans-serif; font-size:0.95rem; resize:vertical; min-height:60px; margin-top:4px;"></textarea>
+            <div style="margin-top:10px;">
+              <label style="font-weight:600; color:#0b2a4a; font-size:0.85rem;">💬 Judge Comments</label>
+              <textarea id="judgeComments" placeholder="Add your comments..." style="width:100%; padding:10px 14px; border:2px solid #d4af37; border-radius:16px; font-family:'Inter',sans-serif; font-size:0.9rem; resize:vertical; min-height:50px; margin-top:3px;"></textarea>
             </div>
 
             <button class="submit-judge-btn" id="submitJudgeBtn">✅ Submit Judgement</button>
@@ -834,20 +976,20 @@
         <div class="email-notice">
           📧 Feedback will be sent to: <strong>prithviraj130808@gmail.com</strong>
         </div>
-        <p style="color:#3d2e1b; font-size:0.9rem; margin-bottom:12px; margin-top:8px;">Share your feedback about the event or any project</p>
+        <p style="color:#3d2e1b; font-size:0.8rem; margin-bottom:10px; margin-top:6px;">Share your feedback about the event or any project</p>
 
-        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:12px;">
-          <input type="text" id="feedbackStudentId" placeholder="Your Admission No (optional)" style="flex:1; min-width:140px; padding:14px 16px; border:2px solid #d4af37; border-radius:60px; font-size:1rem; color:#0b2a4a;" />
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:10px;">
+          <input type="text" id="feedbackStudentId" placeholder="Your Admission No (optional)" />
         </div>
 
         <div class="feedback-area">
-          <label style="font-weight:600; color:#0b2a4a; font-size:0.95rem;">✍️ Your Feedback</label>
-          <textarea id="feedbackText" placeholder="Share your thoughts, suggestions, or feedback..." style="width:100%; padding:14px 16px; border:2px solid #d4af37; border-radius:20px; font-family:'Inter',sans-serif; font-size:1rem; resize:vertical; min-height:100px; margin-top:4px;"></textarea>
+          <label style="font-weight:600; color:#0b2a4a; font-size:0.85rem;">✍️ Your Feedback</label>
+          <textarea id="feedbackText" placeholder="Share your thoughts, suggestions, or feedback..."></textarea>
         </div>
 
-        <div style="margin-top:12px;">
-          <label style="font-weight:600; color:#0b2a4a; font-size:0.95rem;">⭐ Rating</label>
-          <select id="feedbackRating" style="width:100%; padding:12px 16px; border:2px solid #d4af37; border-radius:60px; font-weight:600; color:#0b2a4a; background:white; margin-top:4px;">
+        <div style="margin-top:10px;">
+          <label style="font-weight:600; color:#0b2a4a; font-size:0.85rem;">⭐ Rating</label>
+          <select id="feedbackRating">
             <option value="5">⭐⭐⭐⭐⭐ - Excellent</option>
             <option value="4">⭐⭐⭐⭐ - Very Good</option>
             <option value="3" selected>⭐⭐⭐ - Good</option>
@@ -859,8 +1001,8 @@
         <button class="submit-feedback-btn" id="submitFeedbackBtn">📤 Submit Feedback</button>
         <div id="feedbackResult" class="judge-result"></div>
 
-        <div style="margin-top:16px; border-top:2px dashed #d4af37; padding-top:16px;">
-          <h4 style="color:#0b2a4a; font-size:0.95rem;">📋 Recent Feedback</h4>
+        <div style="margin-top:14px; border-top:2px dashed #d4af37; padding-top:12px;">
+          <h4 style="color:#0b2a4a; font-size:0.85rem;">📋 Recent Feedback</h4>
           <div id="feedbackList">
             <div class="feedback-display">
               <span class="empty-feedback">No feedback submitted yet</span>
@@ -1012,12 +1154,9 @@
           '?subject=' + encodeURIComponent(subject) +
           '&body=' + encodeURIComponent(body);
 
-        // Try to open email client
         var win = window.open(mailtoLink, '_blank');
 
-        // If mailto doesn't work (some browsers block it), show a copy option
         if (!win || win.closed || typeof win.closed === 'undefined') {
-          // Fallback: copy to clipboard and show alert
           var fullMessage = 'To: ' + EMAIL_TO + '\n\nSubject: ' + subject + '\n\n' + body;
           if (navigator.clipboard) {
             navigator.clipboard.writeText(fullMessage).then(function() {
@@ -1122,17 +1261,17 @@
           '<span class="tag">👨‍🏫 Teacher</span>' +
           '<span class="teacher-tag">' + student.teacher + '</span>' +
           '</div>' +
-          '<div style="margin-top: 8px; font-size:0.9rem; color:#3d2e1b; background:#eae3d8; padding: 2px 14px; border-radius: 40px; display:inline-block;">' +
+          '<div style="margin-top: 8px; font-size:0.8rem; color:#3d2e1b; background:#eae3d8; padding: 2px 12px; border-radius: 40px; display:inline-block;">' +
           student.class + ' · ' + student.section +
           '</div>' +
           '<div class="group-members">' +
-          '<span style="font-weight:600; color:#0b2a4a; font-size:0.9rem; width:100%; margin-bottom:4px;">👥 Group Members (' +
+          '<span style="font-weight:600; color:#0b2a4a; font-size:0.8rem; width:100%; margin-bottom:4px;">👥 Group Members (' +
           groupMembers.length + ')</span>';
 
         groupMembers.forEach(function(m) {
           html +=
             '<span class="member-chip">' + m.studentName +
-            ' <span style="font-weight:400; font-size:0.7rem; opacity:0.7;">#' + m.admissionNo + '</span></span>';
+            ' <span style="font-weight:400; font-size:0.6rem; opacity:0.7;">#' + m.admissionNo + '</span></span>';
         });
 
         html +=
@@ -1445,7 +1584,7 @@
             '<div class="feedback-display" style="margin-bottom:8px;">' +
             '<div><strong>' + (f.studentId || 'Anonymous') + '</strong> · ' + stars + '</div>' +
             '<div style="margin-top:4px;">' + f.feedback + '</div>' +
-            '<div style="font-size:0.7rem; color:#999; margin-top:4px;">' + date + '</div>' +
+            '<div style="font-size:0.65rem; color:#999; margin-top:4px;">' + date + '</div>' +
             '</div>';
         });
         container.innerHTML = html;

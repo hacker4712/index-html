@@ -340,6 +340,16 @@
       font-size: 1.3rem;
       margin-right: 4px;
     }
+    .student-name-display {
+      background: #0b2a4a;
+      color: #f6e9d0;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 1rem;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
     .project-detail .row {
       display: flex;
       flex-wrap: wrap;
@@ -812,6 +822,10 @@
         min-height: 60px;
         padding: 10px 12px;
       }
+      .student-name-display {
+        font-size: 0.9rem;
+        padding: 4px 12px;
+      }
     }
     @media (max-width: 380px) {
       .qr-pure {
@@ -1181,6 +1195,11 @@
         });
       }
 
+      function getStudentName(admissionNo) {
+        var student = studentData.find(function(s) { return s.admissionNo === admissionNo; });
+        return student ? student.studentName : null;
+      }
+
       function sendEmail(subject, body) {
         var mailtoLink = 'mailto:' + EMAIL_TO +
           '?subject=' + encodeURIComponent(subject) +
@@ -1304,12 +1323,17 @@
             return;
           }
           var student = venues[0];
+          var studentName = getStudentName(admissionNo);
           var groupMembers = getGroupMembers(admissionNo);
           groupMembers.sort(function(a, b) { return a.studentName.localeCompare(b.studentName); });
           var html = '<div class="venue-list">';
           html +=
             '<div class="venue-card">' +
-            '<div class="venue-name">' + student.venue + '</div>' +
+            '<div class="venue-name">' + student.venue + '</div>';
+          if (studentName) {
+            html += '<div class="student-name-display">👤 ' + studentName + '</div>';
+          }
+          html +=
             '<div class="project-detail">' +
             '<div class="row"><span class="tag">📁 Project</span><span class="value">' + student.project + '</span></div>' +
             '<div class="row"><span class="tag">📝 Desc.</span><span class="value">' + (student.description || '—') +
@@ -1489,8 +1513,12 @@
           };
           judgements[groupKey] = judgementData;
           localStorage.setItem('groupJudgements', JSON.stringify(judgements));
+
+          // Build email content
           var emailSubject = 'JUDGEMENT: ' + group.venue + ' - ' + group.project;
-          var emailBody = '========================================\nJUDGEMENT SUBMITTED\n========================================\n\n';
+          var emailBody = '========================================\n';
+          emailBody += 'JUDGEMENT SUBMITTED\n';
+          emailBody += '========================================\n\n';
           emailBody += 'Group: ' + group.venue + ' - ' + group.project + '\n';
           emailBody += 'Teacher: ' + group.teacher + '\n';
           emailBody += 'Members:\n';
@@ -1507,7 +1535,9 @@
           emailBody += '\nComments:\n' + (comments || 'No comments') + '\n\n';
           emailBody += 'Submitted: ' + new Date().toLocaleString() + '\n';
           emailBody += '========================================\n';
+
           sendEmail(emailSubject, emailBody);
+
           var resultEl = document.getElementById('judgeResult');
           resultEl.className = 'judge-result success';
           resultEl.textContent = '✅ Judgement submitted! Email sent to ' + EMAIL_TO + ' | Score: ' + total + '/25';
@@ -1520,6 +1550,7 @@
           var studentId = document.getElementById('feedbackStudentId').value.trim();
           var feedbackText = document.getElementById('feedbackText').value.trim();
           var rating = parseInt(document.getElementById('feedbackRating').value);
+
           if (!feedbackText) {
             var resultEl = document.getElementById('feedbackResult');
             resultEl.className = 'judge-result error';
@@ -1528,29 +1559,46 @@
             setTimeout(function() { resultEl.style.display = 'none'; }, 3000);
             return;
           }
+
+          var studentName = studentId ? getStudentName(parseInt(studentId)) : null;
           var feedbackData = {
             studentId: studentId || 'Anonymous',
+            studentName: studentName || 'Not provided',
             feedback: feedbackText,
             rating: rating,
             timestamp: Date.now()
           };
+
           feedbacks.push(feedbackData);
           localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+
+          // Build email content
           var emailSubject = 'FEEDBACK: ' + (studentId || 'Anonymous');
-          var emailBody = '========================================\nFEEDBACK SUBMITTED\n========================================\n\n';
-          emailBody += 'From: ' + (studentId || 'Anonymous') + '\n';
+          var emailBody = '========================================\n';
+          emailBody += 'FEEDBACK SUBMITTED\n';
+          emailBody += '========================================\n\n';
+          emailBody += 'From: ' + (studentId || 'Anonymous');
+          if (studentName) {
+            emailBody += ' (' + studentName + ')';
+          }
+          emailBody += '\n';
           emailBody += 'Rating: ' + '⭐'.repeat(rating) + ' (' + rating + '/5)\n';
           emailBody += '\nFeedback:\n' + feedbackText + '\n\n';
           emailBody += 'Submitted: ' + new Date().toLocaleString() + '\n';
           emailBody += '========================================\n';
+
           sendEmail(emailSubject, emailBody);
+
           var resultEl = document.getElementById('feedbackResult');
           resultEl.className = 'judge-result success';
           resultEl.textContent = '✅ Feedback submitted! Email sent to ' + EMAIL_TO;
           resultEl.style.display = 'block';
+
           document.getElementById('feedbackText').value = '';
           document.getElementById('feedbackStudentId').value = '';
+
           renderFeedbackList();
+
           setTimeout(function() { resultEl.style.display = 'none'; }, 3000);
         });
 
@@ -1561,13 +1609,18 @@
               '<div class="feedback-display"><span class="empty-feedback">No feedback submitted yet</span></div>';
             return;
           }
+
           var recent = feedbacks.slice(-5).reverse();
           var html = '';
           recent.forEach(function(f) {
             var stars = '⭐'.repeat(f.rating) + '☆'.repeat(5 - f.rating);
             var date = new Date(f.timestamp).toLocaleString();
-            html +=              '<div class="feedback-display" style="margin-bottom:8px;">' +
-              '<div><strong>' + (f.studentId || 'Anonymous') + '</strong> · ' + stars + '</div>' +
+            var displayName = f.studentName && f.studentName !== 'Not provided' ?
+              f.studentName + ' (#' + f.studentId + ')' :
+              (f.studentId || 'Anonymous');
+            html +=
+              '<div class="feedback-display" style="margin-bottom:8px;">' +
+              '<div><strong>' + displayName + '</strong> · ' + stars + '</div>' +
               '<div style="margin-top:4px;">' + f.feedback + '</div>' +
               '<div style="font-size:0.65rem; color:#999; margin-top:4px;">' + date + '</div>' +
               '</div>';

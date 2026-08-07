@@ -694,23 +694,6 @@
       height: 46px;
     }
 
-    .feedback-display {
-      margin-top: 8px;
-      padding: 10px 14px;
-      background: white;
-      border-radius: 16px;
-      border: 1px solid #d4af37;
-      font-size: 0.9rem;
-      color: #0b2a4a;
-    }
-    .feedback-display strong {
-      color: #d4af37;
-    }
-    .feedback-display .empty-feedback {
-      color: #999;
-      font-style: italic;
-    }
-
     .app-footer {
       margin-top: 18px;
       text-align: center;
@@ -871,9 +854,45 @@
         transform: translateX(0);
       }
     }
+
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0b2a4a;
+      color: #f6e9d0;
+      padding: 12px 24px;
+      border-radius: 50px;
+      border: 2px solid #d4af37;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      max-width: 90%;
+      text-align: center;
+    }
+    .toast.show {
+      opacity: 1;
+    }
+    .toast.success {
+      background: #155724;
+      border-color: #28a745;
+    }
+    .toast.error {
+      background: #721c24;
+      border-color: #dc3545;
+    }
   </style>
 </head>
 <body>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
 
   <!-- ===== QR PURE SCREEN ===== -->
   <div id="qrPureScreen" class="qr-pure">
@@ -1017,13 +1036,6 @@
 
           <button class="submit-feedback-btn" id="submitFeedbackBtn">📤 Submit Feedback</button>
           <div id="feedbackResult" class="judge-result"></div>
-
-          <div style="margin-top:14px; border-top:2px dashed #d4af37; padding-top:12px;">
-            <h4 style="color:#0b2a4a; font-size:0.85rem;">📋 Recent Feedback</h4>
-            <div id="feedbackList">
-              <div class="feedback-display"><span class="empty-feedback">No feedback submitted yet</span></div>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -1161,6 +1173,23 @@
       var feedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
 
       // =============================================================
+      //  TOAST NOTIFICATION
+      // =============================================================
+      var toastEl = document.getElementById('toast');
+      var toastTimeout;
+
+      function showToast(message, type) {
+        clearTimeout(toastTimeout);
+        toastEl.textContent = message;
+        toastEl.className = 'toast';
+        if (type) toastEl.classList.add(type);
+        toastEl.classList.add('show');
+        toastTimeout = setTimeout(function() {
+          toastEl.classList.remove('show');
+        }, 4000);
+      }
+
+      // =============================================================
       //  HELPERS
       // =============================================================
       function getGroupKey(s) { return s.venue + '|||' + s.project; }
@@ -1200,28 +1229,60 @@
         return student ? student.studentName : null;
       }
 
-      function sendEmail(subject, body) {
-        var mailtoLink = 'mailto:' + EMAIL_TO +
-          '?subject=' + encodeURIComponent(subject) +
-          '&body=' + encodeURIComponent(body);
-        var win = window.open(mailtoLink, '_blank');
-        if (!win || win.closed || typeof win.closed === 'undefined') {
-          var fullMessage = 'To: ' + EMAIL_TO + '\n\nSubject: ' + subject + '\n\n' + body;
-          if (navigator.clipboard) {
-            navigator.clipboard.writeText(fullMessage).then(function() {
-              alert('📧 Email content copied to clipboard!\n\nPlease paste it into your email client and send to:\n' +
-                EMAIL_TO +
-                '\n\nSubject: ' + subject);
-            }).catch(function() {
-              alert('📧 Please send an email to: ' + EMAIL_TO +
-                '\n\nSubject: ' + subject +
-                '\n\nBody:\n' + body);
-            });
-          } else {
-            alert('📧 Please send an email to: ' + EMAIL_TO +
-              '\n\nSubject: ' + subject +
-              '\n\nBody:\n' + body);
+      // =============================================================
+      //  EMAIL SENDING - Using Formspree or EmailJS alternative
+      //  For demo, we'll use a fetch to a simple email service
+      //  Since we can't use actual SMTP from client, we'll use a
+      //  serverless email service. For now, we'll use a fallback
+      //  that copies to clipboard and shows a toast.
+      // =============================================================
+
+      function sendEmailDirect(subject, body) {
+        // Try using a free email service endpoint
+        // For demo, we'll use a simple approach - copy to clipboard with toast
+        // In production, you'd want to use a service like EmailJS, Formspree, or your own backend
+
+        var fullMessage = 'To: ' + EMAIL_TO + '\n\nSubject: ' + subject + '\n\n' + body;
+
+        // Try to use navigator.share if available (mobile)
+        if (navigator.share) {
+          navigator.share({
+            title: subject,
+            text: fullMessage
+          }).then(function() {
+            showToast('📧 Email shared successfully!', 'success');
+          }).catch(function() {
+            // Fallback to clipboard
+            copyToClipboard(fullMessage, subject);
+          });
+        } else {
+          // Fallback to clipboard
+          copyToClipboard(fullMessage, subject);
+        }
+      }
+
+      function copyToClipboard(fullMessage, subject) {
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(fullMessage).then(function() {
+            showToast('📧 Email content copied! Please paste into your email client.\nSubject: ' + subject, 'success');
+          }).catch(function() {
+            showToast('📧 Please send email to: ' + EMAIL_TO + '\nSubject: ' + subject, 'info');
+          });
+        } else {
+          // Fallback for older browsers
+          var textarea = document.createElement('textarea');
+          textarea.value = fullMessage;
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+          textarea.select();
+          try {
+            document.execCommand('copy');
+            showToast('📧 Email content copied! Please paste into your email client.\nSubject: ' + subject, 'success');
+          } catch (err) {
+            showToast('📧 Please send email to: ' + EMAIL_TO + '\nSubject: ' + subject, 'info');
           }
+          document.body.removeChild(textarea);
         }
       }
 
@@ -1233,7 +1294,6 @@
       var deployNotice = document.getElementById('deployNotice');
       var currentUrl = window.location.href;
 
-      // Remove any existing ?app=1 param to keep QR clean
       var cleanUrl = currentUrl.split('?')[0];
       var isLocalFile = cleanUrl.indexOf('file://') === 0;
 
@@ -1248,7 +1308,6 @@
         deployNotice.style.display = 'none';
       }
 
-      // Generate QR code pointing to the clean URL with ?app=1 parameter
       var qrUrl = cleanUrl + '?app=1';
       new QRCode(qrContainer, {
         text: qrUrl,
@@ -1277,7 +1336,6 @@
         showApp();
       }
 
-      // For testing: click on QR code to enter app
       qrContainer.style.cursor = 'pointer';
       qrContainer.addEventListener('click', showApp);
 
@@ -1514,7 +1572,6 @@
           judgements[groupKey] = judgementData;
           localStorage.setItem('groupJudgements', JSON.stringify(judgements));
 
-          // Build email content
           var emailSubject = 'JUDGEMENT: ' + group.venue + ' - ' + group.project;
           var emailBody = '========================================\n';
           emailBody += 'JUDGEMENT SUBMITTED\n';
@@ -1536,7 +1593,7 @@
           emailBody += 'Submitted: ' + new Date().toLocaleString() + '\n';
           emailBody += '========================================\n';
 
-          sendEmail(emailSubject, emailBody);
+          sendEmailDirect(emailSubject, emailBody);
 
           var resultEl = document.getElementById('judgeResult');
           resultEl.className = 'judge-result success';
@@ -1572,7 +1629,6 @@
           feedbacks.push(feedbackData);
           localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
 
-          // Build email content
           var emailSubject = 'FEEDBACK: ' + (studentId || 'Anonymous');
           var emailBody = '========================================\n';
           emailBody += 'FEEDBACK SUBMITTED\n';
@@ -1587,7 +1643,7 @@
           emailBody += 'Submitted: ' + new Date().toLocaleString() + '\n';
           emailBody += '========================================\n';
 
-          sendEmail(emailSubject, emailBody);
+          sendEmailDirect(emailSubject, emailBody);
 
           var resultEl = document.getElementById('feedbackResult');
           resultEl.className = 'judge-result success';
@@ -1597,37 +1653,8 @@
           document.getElementById('feedbackText').value = '';
           document.getElementById('feedbackStudentId').value = '';
 
-          renderFeedbackList();
-
           setTimeout(function() { resultEl.style.display = 'none'; }, 3000);
         });
-
-        function renderFeedbackList() {
-          var container = document.getElementById('feedbackList');
-          if (feedbacks.length === 0) {
-            container.innerHTML =
-              '<div class="feedback-display"><span class="empty-feedback">No feedback submitted yet</span></div>';
-            return;
-          }
-
-          var recent = feedbacks.slice(-5).reverse();
-          var html = '';
-          recent.forEach(function(f) {
-            var stars = '⭐'.repeat(f.rating) + '☆'.repeat(5 - f.rating);
-            var date = new Date(f.timestamp).toLocaleString();
-            var displayName = f.studentName && f.studentName !== 'Not provided' ?
-              f.studentName + ' (#' + f.studentId + ')' :
-              (f.studentId || 'Anonymous');
-            html +=
-              '<div class="feedback-display" style="margin-bottom:8px;">' +
-              '<div><strong>' + displayName + '</strong> · ' + stars + '</div>' +
-              '<div style="margin-top:4px;">' + f.feedback + '</div>' +
-              '<div style="font-size:0.65rem; color:#999; margin-top:4px;">' + date + '</div>' +
-              '</div>';
-          });
-          container.innerHTML = html;
-        }
-        renderFeedbackList();
 
         // ---- MENU ----
         var menuBtns = document.querySelectorAll('.menu-btn');
@@ -1645,7 +1672,6 @@
               pages[key].classList.remove('active');
             });
             pages[page].classList.add('active');
-            if (page === 'feedback') renderFeedbackList();
             if (page === 'judge' && judgeUnlocked) populateGroupSelector();
           });
         });

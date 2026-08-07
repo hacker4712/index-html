@@ -74,11 +74,6 @@
       border: 3px solid #d4af37;
       box-shadow: 0 8px 0 #8f7a2a;
       margin: 0 auto 12px;
-      cursor: pointer;
-      transition: transform 0.15s ease;
-    }
-    #qrcode-container:active {
-      transform: scale(0.96);
     }
     #qrcode-container img,
     #qrcode-container canvas {
@@ -101,30 +96,6 @@
       font-weight: 600;
       display: inline-block;
       margin-top: 8px;
-    }
-    .tap-btn {
-      margin-top: 18px;
-      background: #0b2a4a;
-      border: 2px solid #d4af37;
-      color: #f6e9d0;
-      font-weight: 700;
-      font-size: 1rem;
-      padding: 14px 32px;
-      border-radius: 50px;
-      cursor: pointer;
-      box-shadow: 0 4px 0 #061a2e;
-      transition: 0.1s ease;
-      touch-action: manipulation;
-      width: 100%;
-      max-width: 260px;
-      letter-spacing: 0.3px;
-    }
-    .tap-btn:active {
-      transform: translateY(3px);
-      box-shadow: 0 1px 0 #061a2e;
-    }
-    .tap-btn:hover {
-      background: #1a3d5e;
     }
     .qr-footer {
       margin-top: 18px;
@@ -841,11 +812,6 @@
         min-height: 60px;
         padding: 10px 12px;
       }
-      .tap-btn {
-        font-size: 0.9rem;
-        padding: 12px 24px;
-        max-width: 220px;
-      }
     }
     @media (max-width: 380px) {
       .qr-pure {
@@ -869,11 +835,6 @@
       }
       .app-header h1 {
         font-size: 1.1rem;
-      }
-      .tap-btn {
-        font-size: 0.8rem;
-        padding: 10px 20px;
-        max-width: 180px;
       }
     }
     .error-shake {
@@ -910,7 +871,6 @@
     <div id="qrcode-container"></div>
     <div class="qr-hint" id="qrStatus">Generating QR code…</div>
     <div class="deploy-notice" id="deployNotice">⚠️ Deploy to server for universal access</div>
-    <button class="tap-btn" id="enterAppBtn">📱 Tap to Enter App</button>
     <div class="qr-footer"><strong>📍</strong> Student Cognito · scan &amp; go</div>
   </div>
 
@@ -1276,7 +1236,8 @@
       });
 
       // =============================================================
-      //  ENTER APP
+      //  AUTO-SWITCH: show app if URL param ?app=1 is present
+      //  (this simulates the QR scan opening the app)
       // =============================================================
       var qrPure = document.getElementById('qrPureScreen');
       var fullApp = document.getElementById('fullApp');
@@ -1288,15 +1249,14 @@
         initApp();
       }
 
-      document.getElementById('enterAppBtn').addEventListener('click', showApp);
-      qrContainer.addEventListener('click', showApp);
-      qrContainer.style.cursor = 'pointer';
-
-      // Also support URL param ?app=1 for deep linking
       var urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('app') === '1') {
         showApp();
       }
+
+      // Also allow clicking on the QR code to enter (for testing)
+      qrContainer.style.cursor = 'pointer';
+      qrContainer.addEventListener('click', showApp);
 
       // =============================================================
       //  INIT APP

@@ -1213,7 +1213,10 @@
       var qrStatus = document.getElementById('qrStatus');
       var deployNotice = document.getElementById('deployNotice');
       var currentUrl = window.location.href;
-      var isLocalFile = currentUrl.indexOf('file://') === 0;
+
+      // Remove any existing ?app=1 param to keep QR clean
+      var cleanUrl = currentUrl.split('?')[0];
+      var isLocalFile = cleanUrl.indexOf('file://') === 0;
 
       if (isLocalFile) {
         qrStatus.innerHTML = '⚠️ Local file — deploy to server for universal access';
@@ -1226,8 +1229,10 @@
         deployNotice.style.display = 'none';
       }
 
+      // Generate QR code pointing to the clean URL with ?app=1 parameter
+      var qrUrl = cleanUrl + '?app=1';
       new QRCode(qrContainer, {
-        text: currentUrl,
+        text: qrUrl,
         width: 220,
         height: 220,
         colorDark: "#0b2a4a",
@@ -1237,7 +1242,6 @@
 
       // =============================================================
       //  AUTO-SWITCH: show app if URL param ?app=1 is present
-      //  (this simulates the QR scan opening the app)
       // =============================================================
       var qrPure = document.getElementById('qrPureScreen');
       var fullApp = document.getElementById('fullApp');
@@ -1254,7 +1258,7 @@
         showApp();
       }
 
-      // Also allow clicking on the QR code to enter (for testing)
+      // For testing: click on QR code to enter app
       qrContainer.style.cursor = 'pointer';
       qrContainer.addEventListener('click', showApp);
 
@@ -1562,8 +1566,7 @@
           recent.forEach(function(f) {
             var stars = '⭐'.repeat(f.rating) + '☆'.repeat(5 - f.rating);
             var date = new Date(f.timestamp).toLocaleString();
-            html +=
-              '<div class="feedback-display" style="margin-bottom:8px;">' +
+            html +=              '<div class="feedback-display" style="margin-bottom:8px;">' +
               '<div><strong>' + (f.studentId || 'Anonymous') + '</strong> · ' + stars + '</div>' +
               '<div style="margin-top:4px;">' + f.feedback + '</div>' +
               '<div style="font-size:0.65rem; color:#999; margin-top:4px;">' + date + '</div>' +

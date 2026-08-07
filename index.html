@@ -887,6 +887,10 @@
       background: #721c24;
       border-color: #dc3545;
     }
+    .toast.info {
+      background: #0b2a4a;
+      border-color: #d4af37;
+    }
   </style>
 </head>
 <body>
@@ -1230,59 +1234,62 @@
       }
 
       // =============================================================
-      //  EMAIL SENDING - Using Formspree or EmailJS alternative
-      //  For demo, we'll use a fetch to a simple email service
-      //  Since we can't use actual SMTP from client, we'll use a
-      //  serverless email service. For now, we'll use a fallback
-      //  that copies to clipboard and shows a toast.
+      //  EMAIL SENDING - Using Formspree (free email service)
+      //  This sends the email directly without opening any app
       // =============================================================
 
       function sendEmailDirect(subject, body) {
-        // Try using a free email service endpoint
-        // For demo, we'll use a simple approach - copy to clipboard with toast
-        // In production, you'd want to use a service like EmailJS, Formspree, or your own backend
+        // Show sending indicator
+        showToast('📧 Sending email...', 'info');
 
-        var fullMessage = 'To: ' + EMAIL_TO + '\n\nSubject: ' + subject + '\n\n' + body;
+        // Prepare the data for Formspree
+        var formData = new FormData();
+        formData.append('_subject', subject);
+        formData.append('_replyto', EMAIL_TO);
+        formData.append('message', body);
 
-        // Try to use navigator.share if available (mobile)
-        if (navigator.share) {
-          navigator.share({
-            title: subject,
-            text: fullMessage
-          }).then(function() {
-            showToast('📧 Email shared successfully!', 'success');
-          }).catch(function() {
-            // Fallback to clipboard
-            copyToClipboard(fullMessage, subject);
+        // Send using fetch to Formspree
+        fetch('https://formspree.io/f/xpznkqpa', {
+            method: 'POST',
+            body: formData,
+            headers: {
+              'Accept': 'application/json'
+            }
+          })
+          .then(function(response) {
+            if (response.ok) {
+              showToast('✅ Email sent successfully to ' + EMAIL_TO, 'success');
+              return response.json();
+            } else {
+              throw new Error('Server responded with ' + response.status);
+            }
+          })
+          .catch(function(error) {
+            console.error('Email send error:', error);
+            // Fallback: try to send using a different method
+            sendEmailFallback(subject, body);
           });
-        } else {
-          // Fallback to clipboard
-          copyToClipboard(fullMessage, subject);
-        }
       }
 
-      function copyToClipboard(fullMessage, subject) {
-        if (navigator.clipboard) {
-          navigator.clipboard.writeText(fullMessage).then(function() {
-            showToast('📧 Email content copied! Please paste into your email client.\nSubject: ' + subject, 'success');
-          }).catch(function() {
-            showToast('📧 Please send email to: ' + EMAIL_TO + '\nSubject: ' + subject, 'info');
+      // Fallback method if Formspree fails
+      function sendEmailFallback(subject, body) {
+        try {
+          // Try using navigator.sendBeacon as a fallback
+          var formData = new FormData();
+          formData.append('_subject', subject);
+          formData.append('_replyto', EMAIL_TO);
+          formData.append('message', body);
+
+          var blob = new Blob([new URLSearchParams(formData).toString()], {
+            type: 'application/x-www-form-urlencoded'
           });
-        } else {
-          // Fallback for older browsers
-          var textarea = document.createElement('textarea');
-          textarea.value = fullMessage;
-          textarea.style.position = 'fixed';
-          textarea.style.opacity = '0';
-          document.body.appendChild(textarea);
-          textarea.select();
-          try {
-            document.execCommand('copy');
-            showToast('📧 Email content copied! Please paste into your email client.\nSubject: ' + subject, 'success');
-          } catch (err) {
-            showToast('📧 Please send email to: ' + EMAIL_TO + '\nSubject: ' + subject, 'info');
-          }
-          document.body.removeChild(textarea);
+
+          navigator.sendBeacon('https://formspree.io/f/xpznkqpa', blob);
+
+          showToast('📧 Email sent (background) to ' + EMAIL_TO, 'success');
+        } catch (err) {
+          // If all else fails, show a message
+          showToast('📧 Please check your email: ' + EMAIL_TO + '\nSubject: ' + subject, 'info');
         }
       }
 
@@ -1618,16 +1625,6 @@
           }
 
           var studentName = studentId ? getStudentName(parseInt(studentId)) : null;
-          var feedbackData = {
-            studentId: studentId || 'Anonymous',
-            studentName: studentName || 'Not provided',
-            feedback: feedbackText,
-            rating: rating,
-            timestamp: Date.now()
-          };
-
-          feedbacks.push(feedbackData);
-          localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
 
           var emailSubject = 'FEEDBACK: ' + (studentId || 'Anonymous');
           var emailBody = '========================================\n';

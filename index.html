@@ -20,7 +20,7 @@
     }
     body {
       font-family: 'Inter', sans-serif;
-      background: #0b2a4a;
+      background: #f5f0eb;
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -28,16 +28,27 @@
       padding: 16px;
     }
 
+    /* ===== MODERN SCHOOL COLOR PALETTE ===== */
+    :root {
+      --ms-navy: #0a1a3a;
+      --ms-gold: #c9a84c;
+      --ms-gold-light: #e8d5a3;
+      --ms-cream: #f5f0eb;
+      --ms-white: #ffffff;
+      --ms-charcoal: #2d2d2d;
+      --ms-warm-gold: #b8943c;
+    }
+
     /* ===== QR PURE SCREEN ===== */
     .qr-pure {
       max-width: 420px;
       width: 100%;
-      background: #f5f0eb;
+      background: var(--ms-cream);
       border-radius: 40px;
       padding: 32px 20px 28px;
       text-align: center;
-      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
-      border: 2px solid #d4af37;
+      box-shadow: 0 16px 48px rgba(10, 26, 58, 0.25);
+      border: 2px solid var(--ms-gold);
     }
     .qr-pure .brand {
       display: flex;
@@ -49,12 +60,12 @@
     .qr-pure .brand h1 {
       font-size: 2rem;
       font-weight: 700;
-      color: #0b2a4a;
+      color: var(--ms-navy);
       letter-spacing: -0.5px;
     }
     .qr-pure .brand span {
-      background: #d4af37;
-      color: #0b2a4a;
+      background: var(--ms-gold);
+      color: var(--ms-navy);
       font-weight: 700;
       font-size: 0.7rem;
       padding: 4px 12px;
@@ -62,17 +73,17 @@
     }
     .qr-pure .sub {
       font-size: 0.95rem;
-      color: #3d2e1b;
+      color: var(--ms-charcoal);
       margin-bottom: 20px;
       opacity: 0.8;
     }
     #qrcode-container {
       display: inline-block;
-      background: white;
+      background: var(--ms-white);
       padding: 16px;
       border-radius: 24px;
-      border: 3px solid #d4af37;
-      box-shadow: 0 8px 0 #8f7a2a;
+      border: 3px solid var(--ms-gold);
+      box-shadow: 0 8px 0 var(--ms-warm-gold);
       margin: 0 auto 12px;
     }
     #qrcode-container img,
@@ -83,13 +94,13 @@
     }
     .qr-hint {
       font-size: 0.85rem;
-      color: #3d2e1b;
+      color: var(--ms-charcoal);
       margin-top: 6px;
       font-weight: 500;
     }
     .deploy-notice {
-      background: #d4af37;
-      color: #0b2a4a;
+      background: var(--ms-gold);
+      color: var(--ms-navy);
       border-radius: 40px;
       padding: 6px 16px;
       font-size: 0.7rem;
@@ -100,13 +111,13 @@
     .qr-footer {
       margin-top: 18px;
       font-size: 0.65rem;
-      color: #5a4a33;
-      border-top: 1px solid #d4af37;
+      color: var(--ms-charcoal);
+      border-top: 1px solid var(--ms-gold);
       padding-top: 14px;
       opacity: 0.7;
     }
     .qr-footer strong {
-      color: #0b2a4a;
+      color: var(--ms-navy);
     }
 
     /* ===== FULL APP ===== */
@@ -116,11 +127,11 @@
     .app-card {
       max-width: 480px;
       width: 100%;
-      background: #f5f0eb;
+      background: var(--ms-cream);
       border-radius: 32px 32px 28px 28px;
       padding: 18px 16px 24px;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-      border: 1px solid #d4af37;
+      box-shadow: 0 12px 40px rgba(10, 26, 58, 0.2);
+      border: 1px solid var(--ms-gold);
     }
 
     /* ===== MODERN SCHOOL LOGO ===== */
@@ -130,10 +141,10 @@
       gap: 14px;
       padding: 14px 16px;
       margin-bottom: 16px;
-      background: linear-gradient(135deg, #0b2a4a 0%, #1a3d5e 100%);
+      background: linear-gradient(135deg, var(--ms-navy) 0%, #1a2d5a 100%);
       border-radius: 20px;
-      border: 2px solid #d4af37;
-      box-shadow: 0 4px 16px rgba(11, 42, 74, 0.3);
+      border: 2px solid var(--ms-gold);
+      box-shadow: 0 4px 20px rgba(10, 26, 58, 0.25);
       position: relative;
       overflow: hidden;
     }
@@ -144,7 +155,7 @@
       right: -20%;
       width: 200px;
       height: 200px;
-      background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(201, 168, 76, 0.1) 0%, transparent 70%);
       border-radius: 50%;
     }
     .school-logo-container::after {
@@ -154,13 +165,13 @@
       left: -10%;
       width: 150px;
       height: 150px;
-      background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(201, 168, 76, 0.06) 0%, transparent 70%);
       border-radius: 50%;
     }
     .school-logo-icon {
       width: 56px;
       height: 56px;
-      background: linear-gradient(135deg, #d4af37, #f5e3b3);
+      background: linear-gradient(135deg, var(--ms-gold), var(--ms-gold-light));
       border-radius: 14px;
       display: flex;
       align-items: center;
@@ -168,28 +179,12 @@
       flex-shrink: 0;
       position: relative;
       z-index: 1;
-      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+      box-shadow: 0 4px 12px rgba(201, 168, 76, 0.35);
       padding: 6px;
-      overflow: hidden;
     }
-    .school-logo-icon img {
+    .school-logo-icon svg {
       width: 100%;
       height: 100%;
-      object-fit: contain;
-      border-radius: 8px;
-    }
-    .school-logo-icon .logo-placeholder {
-      font-size: 24px;
-      font-weight: 800;
-      color: #0b2a4a;
-      letter-spacing: -0.5px;
-      line-height: 1;
-    }
-    .school-logo-icon .logo-placeholder small {
-      display: block;
-      font-size: 8px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
     }
     .school-logo-text {
       flex: 1;
@@ -199,13 +194,13 @@
     .school-logo-text .school-name {
       font-size: 1.1rem;
       font-weight: 800;
-      color: #f6e9d0;
+      color: var(--ms-gold-light);
       letter-spacing: 0.5px;
       line-height: 1.2;
     }
     .school-logo-text .school-tagline {
       font-size: 0.65rem;
-      color: #d4af37;
+      color: var(--ms-gold);
       font-weight: 600;
       letter-spacing: 0.3px;
       opacity: 0.9;
@@ -213,8 +208,8 @@
     }
     .school-logo-text .school-expo {
       display: inline-block;
-      background: #d4af37;
-      color: #0b2a4a;
+      background: var(--ms-gold);
+      color: var(--ms-navy);
       font-size: 0.6rem;
       font-weight: 800;
       padding: 2px 12px;
@@ -233,12 +228,12 @@
     .school-logo-right .year {
       font-size: 0.65rem;
       font-weight: 700;
-      color: #d4af37;
+      color: var(--ms-gold);
       letter-spacing: 1px;
     }
     .school-logo-right .grade {
       font-size: 0.55rem;
-      color: #f6e9d0;
+      color: var(--ms-cream);
       opacity: 0.7;
       font-weight: 600;
     }
@@ -249,20 +244,20 @@
       justify-content: space-between;
       margin-bottom: 16px;
       padding-bottom: 8px;
-      border-bottom: 2px solid #d4af37;
+      border-bottom: 2px solid var(--ms-gold);
     }
     .app-header h1 {
       font-size: 1.3rem;
       font-weight: 700;
-      color: #0b2a4a;
+      color: var(--ms-navy);
       letter-spacing: -0.3px;
     }
     .app-header h1 i {
-      color: #d4af37;
+      color: var(--ms-gold);
     }
     .app-header .badge {
-      background: #d4af37;
-      color: #0b2a4a;
+      background: var(--ms-gold);
+      color: var(--ms-navy);
       font-weight: 700;
       font-size: 0.65rem;
       padding: 4px 14px;
@@ -273,10 +268,10 @@
       display: flex;
       gap: 4px;
       margin-bottom: 16px;
-      background: #e9e1d6;
+      background: var(--ms-white);
       padding: 4px;
       border-radius: 50px;
-      border: 2px solid #d4af37;
+      border: 2px solid var(--ms-gold);
     }
     .menu-btn {
       flex: 1;
@@ -288,16 +283,16 @@
       cursor: pointer;
       transition: 0.2s;
       background: transparent;
-      color: #0b2a4a;
+      color: var(--ms-navy);
       text-align: center;
     }
     .menu-btn.active {
-      background: #d4af37;
-      color: #0b2a4a;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+      background: var(--ms-gold);
+      color: var(--ms-navy);
+      box-shadow: 0 2px 8px rgba(201, 168, 76, 0.3);
     }
     .menu-btn:hover {
-      background: rgba(212, 175, 55, 0.25);
+      background: rgba(201, 168, 76, 0.2);
     }
 
     .page-content {
@@ -319,21 +314,22 @@
     }
 
     .input-section {
-      background: #e9e1d6;
+      background: var(--ms-white);
       border-radius: 24px;
       padding: 16px 14px 14px;
       margin-bottom: 14px;
-      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 2px 8px rgba(10, 26, 58, 0.06);
+      border: 1px solid var(--ms-gold-light);
     }
     .input-label {
       display: block;
       font-weight: 600;
       font-size: 0.95rem;
-      color: #0b2a4a;
+      color: var(--ms-navy);
       margin-bottom: 6px;
     }
     .input-label i {
-      color: #d4af37;
+      color: var(--ms-gold);
       margin-right: 6px;
     }
     .input-row {
@@ -348,40 +344,41 @@
       padding: 14px 14px;
       font-size: 1rem;
       font-weight: 600;
-      background: white;
-      border: 2px solid #d4af37;
+      background: var(--ms-cream);
+      border: 2px solid var(--ms-gold);
       border-radius: 50px;
-      color: #0b2a4a;
+      color: var(--ms-navy);
       height: 52px;
     }
     #uniqueIdInput:focus {
-      outline: 3px solid #d4af37;
+      outline: 3px solid var(--ms-gold);
       outline-offset: 2px;
+      border-color: var(--ms-gold-light);
     }
     #lookupBtn {
-      background: #d4af37;
+      background: var(--ms-gold);
       border: none;
-      color: #0b2a4a;
+      color: var(--ms-navy);
       font-weight: 700;
       font-size: 1rem;
       padding: 14px 22px;
       border-radius: 50px;
       cursor: pointer;
-      box-shadow: 0 4px 0 #8f7a2a;
+      box-shadow: 0 4px 0 var(--ms-warm-gold);
       white-space: nowrap;
       min-width: 80px;
       height: 52px;
     }
     #lookupBtn:active {
       transform: translateY(3px);
-      box-shadow: 0 1px 0 #8f7a2a;
+      box-shadow: 0 1px 0 var(--ms-warm-gold);
     }
     #lookupBtn:hover {
-      background: #e5c55a;
+      background: var(--ms-gold-light);
     }
     .stats-badge {
-      background: #d4af37;
-      color: #0b2a4a;
+      background: var(--ms-gold);
+      color: var(--ms-navy);
       padding: 3px 14px;
       border-radius: 40px;
       font-weight: 600;
@@ -391,7 +388,7 @@
     }
 
     .unique-id-box {
-      background: #e9e1d6;
+      background: var(--ms-white);
       border-radius: 40px;
       padding: 10px 16px;
       margin: 10px 0 16px;
@@ -400,16 +397,18 @@
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 6px 10px;
-      border-left: 6px solid #d4af37;
+      border-left: 6px solid var(--ms-gold);
+      border: 1px solid var(--ms-gold-light);
+      border-left-width: 6px;
     }
     .unique-id-box .label {
       font-weight: 600;
-      color: #0b2a4a;
+      color: var(--ms-navy);
       font-size: 0.9rem;
     }
     .unique-id-box .id-value {
-      background: #0b2a4a;
-      color: #f6e9d0;
+      background: var(--ms-navy);
+      color: var(--ms-cream);
       padding: 6px 18px;
       border-radius: 50px;
       font-weight: 700;
@@ -424,20 +423,20 @@
       margin-top: 4px;
     }
     .venue-card {
-      background: #fcf8f2;
+      background: var(--ms-white);
       border-radius: 24px;
       padding: 16px 16px 14px;
-      box-shadow: 0 6px 0 #d4af37;
-      border: 1px solid #d4af37;
+      box-shadow: 0 6px 0 var(--ms-gold);
+      border: 1px solid var(--ms-gold);
     }
     .venue-name {
       font-weight: 700;
       font-size: 1.3rem;
-      color: #0b2a4a;
+      color: var(--ms-navy);
       display: flex;
       align-items: center;
       gap: 6px;
-      border-bottom: 2px dashed #d4af37;
+      border-bottom: 2px dashed var(--ms-gold);
       padding-bottom: 8px;
       margin-bottom: 10px;
     }
@@ -447,8 +446,8 @@
       margin-right: 4px;
     }
     .student-name-display {
-      background: #0b2a4a;
-      color: #f6e9d0;
+      background: var(--ms-navy);
+      color: var(--ms-cream);
       padding: 6px 16px;
       border-radius: 40px;
       font-weight: 700;
@@ -466,21 +465,21 @@
     }
     .project-detail .row .tag {
       font-weight: 600;
-      color: #3d2e1b;
+      color: var(--ms-charcoal);
       min-width: 65px;
       font-size: 0.85rem;
     }
     .project-detail .row .value {
       font-weight: 600;
-      color: #0b2a4a;
-      background: #eae3d8;
+      color: var(--ms-navy);
+      background: var(--ms-cream);
       padding: 2px 14px;
       border-radius: 40px;
       font-size: 0.9rem;
     }
     .teacher-tag {
-      background: #d4af37;
-      color: #0b2a4a;
+      background: var(--ms-gold);
+      color: var(--ms-navy);
       padding: 4px 16px;
       border-radius: 50px;
       font-weight: 700;
@@ -494,11 +493,11 @@
       gap: 4px 8px;
       margin-top: 6px;
       padding: 6px 0;
-      border-top: 1px solid #d4af37;
+      border-top: 1px solid var(--ms-gold);
     }
     .group-members .member-chip {
-      background: #0b2a4a;
-      color: #f6e9d0;
+      background: var(--ms-navy);
+      color: var(--ms-cream);
       padding: 4px 14px;
       border-radius: 40px;
       font-size: 0.8rem;
@@ -512,14 +511,14 @@
       font-size: 0.8rem;
     }
     .empty-state {
-      background: #e9e1d6;
+      background: var(--ms-white);
       border-radius: 24px;
       padding: 28px 16px;
       text-align: center;
-      color: #0b2a4a;
+      color: var(--ms-navy);
       font-weight: 500;
       font-size: 1rem;
-      border: 2px dashed #d4af37;
+      border: 2px dashed var(--ms-gold);
     }
     .empty-state span {
       font-size: 2.2rem;
@@ -529,18 +528,19 @@
 
     .judge-section,
     .feedback-section {
-      background: #e9e1d6;
+      background: var(--ms-white);
       border-radius: 24px;
       padding: 16px 14px;
       margin-bottom: 14px;
+      border: 1px solid var(--ms-gold-light);
     }
     .judge-section h3,
     .feedback-section h3 {
-      color: #0b2a4a;
+      color: var(--ms-navy);
       font-size: 1rem;
       font-weight: 700;
       margin-bottom: 10px;
-      border-bottom: 2px solid #d4af37;
+      border-bottom: 2px solid var(--ms-gold);
       padding-bottom: 6px;
       display: flex;
       align-items: center;
@@ -549,8 +549,8 @@
       gap: 4px;
     }
     .judge-status-badge {
-      background: #d4af37;
-      color: #0b2a4a;
+      background: var(--ms-gold);
+      color: var(--ms-navy);
       padding: 2px 12px;
       border-radius: 40px;
       font-size: 0.65rem;
@@ -561,8 +561,8 @@
       color: white;
     }
     .judge-status-badge.locked {
-      background: #d4af37;
-      color: #0b2a4a;
+      background: var(--ms-gold);
+      color: var(--ms-navy);
     }
 
     .judge-code-input {
@@ -575,29 +575,34 @@
     .judge-code-input input {
       flex: 1;
       padding: 12px 14px;
-      border: 2px solid #d4af37;
+      border: 2px solid var(--ms-gold);
       border-radius: 50px;
       font-size: 1rem;
       font-weight: 600;
-      color: #0b2a4a;
+      color: var(--ms-navy);
       min-width: 120px;
       height: 48px;
+      background: var(--ms-cream);
+    }
+    .judge-code-input input:focus {
+      outline: 3px solid var(--ms-gold);
+      outline-offset: 2px;
     }
     .judge-code-input button {
-      background: #d4af37;
+      background: var(--ms-gold);
       border: none;
-      color: #0b2a4a;
+      color: var(--ms-navy);
       font-weight: 700;
       padding: 12px 20px;
       border-radius: 50px;
       cursor: pointer;
       font-size: 0.9rem;
-      box-shadow: 0 4px 0 #8f7a2a;
+      box-shadow: 0 4px 0 var(--ms-warm-gold);
       height: 48px;
     }
     .judge-code-input button:active {
       transform: translateY(3px);
-      box-shadow: 0 1px 0 #8f7a2a;
+      box-shadow: 0 1px 0 var(--ms-warm-gold);
     }
     .judge-result {
       margin-top: 10px;
@@ -626,31 +631,31 @@
     .group-selector select {
       width: 100%;
       padding: 12px 14px;
-      border: 2px solid #d4af37;
+      border: 2px solid var(--ms-gold);
       border-radius: 50px;
       font-size: 0.95rem;
       font-weight: 600;
-      color: #0b2a4a;
-      background: white;
+      color: var(--ms-navy);
+      background: var(--ms-cream);
       cursor: pointer;
       height: 48px;
     }
     .group-selector select:focus {
-      outline: 3px solid #d4af37;
+      outline: 3px solid var(--ms-gold);
       outline-offset: 2px;
     }
 
     .group-info {
-      background: white;
+      background: var(--ms-cream);
       border-radius: 16px;
       padding: 10px 14px;
       margin: 8px 0;
-      border: 1px solid #d4af37;
+      border: 1px solid var(--ms-gold);
     }
     .group-info .group-name {
       font-weight: 700;
       font-size: 1rem;
-      color: #0b2a4a;
+      color: var(--ms-navy);
     }
     .group-info .group-members-list {
       display: flex;
@@ -659,19 +664,20 @@
       margin-top: 4px;
     }
     .group-info .group-members-list .member-tag {
-      background: #e9e1d6;
+      background: var(--ms-white);
       padding: 2px 10px;
       border-radius: 40px;
       font-size: 0.75rem;
-      color: #0b2a4a;
+      color: var(--ms-navy);
       font-weight: 500;
+      border: 1px solid var(--ms-gold-light);
     }
     .group-status {
       font-size: 0.8rem;
-      color: #3d2e1b;
+      color: var(--ms-charcoal);
       margin-top: 4px;
       padding: 4px 10px;
-      background: #e9e1d6;
+      background: var(--ms-white);
       border-radius: 20px;
       display: inline-block;
     }
@@ -689,38 +695,38 @@
       align-items: center;
       gap: 8px;
       margin: 6px 0;
-      background: white;
+      background: var(--ms-cream);
       padding: 6px 12px;
       border-radius: 40px;
-      border: 1px solid #d4af37;
+      border: 1px solid var(--ms-gold);
     }
     .criteria-item label {
       flex: 1;
       font-weight: 600;
-      color: #0b2a4a;
+      color: var(--ms-navy);
       font-size: 0.85rem;
     }
     .criteria-item select {
       padding: 4px 10px;
       border-radius: 30px;
-      border: 2px solid #d4af37;
+      border: 2px solid var(--ms-gold);
       font-weight: 600;
-      background: white;
-      color: #0b2a4a;
+      background: var(--ms-white);
+      color: var(--ms-navy);
       font-size: 0.85rem;
       min-width: 56px;
       height: 36px;
     }
     .criteria-item select:focus {
-      outline: 3px solid #d4af37;
+      outline: 3px solid var(--ms-gold);
       outline-offset: 2px;
     }
 
     .submit-judge-btn,
     .submit-feedback-btn {
-      background: #0b2a4a;
-      color: #f6e9d0;
-      border: 2px solid #d4af37;
+      background: var(--ms-navy);
+      color: var(--ms-cream);
+      border: 2px solid var(--ms-gold);
       padding: 12px 20px;
       border-radius: 50px;
       font-weight: 700;
@@ -739,70 +745,80 @@
     }
     .submit-judge-btn:hover,
     .submit-feedback-btn:hover {
-      background: #1a3d5e;
+      background: #1a2d5a;
     }
 
     .email-notice {
       font-size: 0.75rem;
-      color: #3d2e1b;
-      background: #fff3cd;
+      color: var(--ms-charcoal);
+      background: var(--ms-gold-light);
       padding: 6px 12px;
       border-radius: 16px;
       margin-top: 6px;
       text-align: center;
-      border: 1px solid #ffc107;
+      border: 1px solid var(--ms-gold);
     }
     .email-notice strong {
-      color: #0b2a4a;
+      color: var(--ms-navy);
     }
 
     .feedback-area textarea {
       width: 100%;
       padding: 12px 14px;
-      border: 2px solid #d4af37;
+      border: 2px solid var(--ms-gold);
       border-radius: 16px;
       font-family: 'Inter', sans-serif;
       font-size: 0.95rem;
       resize: vertical;
       min-height: 80px;
+      background: var(--ms-cream);
     }
     .feedback-area textarea:focus {
-      outline: 3px solid #d4af37;
+      outline: 3px solid var(--ms-gold);
       outline-offset: 2px;
     }
     #feedbackStudentId {
       flex: 1;
       min-width: 120px;
       padding: 12px 14px;
-      border: 2px solid #d4af37;
+      border: 2px solid var(--ms-gold);
       border-radius: 50px;
       font-size: 0.95rem;
-      color: #0b2a4a;
+      color: var(--ms-navy);
       height: 46px;
+      background: var(--ms-cream);
+    }
+    #feedbackStudentId:focus {
+      outline: 3px solid var(--ms-gold);
+      outline-offset: 2px;
     }
     #feedbackRating {
       width: 100%;
       padding: 10px 14px;
-      border: 2px solid #d4af37;
+      border: 2px solid var(--ms-gold);
       border-radius: 50px;
       font-weight: 600;
-      color: #0b2a4a;
-      background: white;
+      color: var(--ms-navy);
+      background: var(--ms-cream);
       margin-top: 3px;
       height: 46px;
+    }
+    #feedbackRating:focus {
+      outline: 3px solid var(--ms-gold);
+      outline-offset: 2px;
     }
 
     .app-footer {
       margin-top: 18px;
       text-align: center;
       font-size: 0.7rem;
-      color: #5a4a33;
-      border-top: 1px solid #d4af37;
+      color: var(--ms-charcoal);
+      border-top: 1px solid var(--ms-gold);
       padding-top: 14px;
       opacity: 0.7;
     }
     .app-footer strong {
-      color: #0b2a4a;
+      color: var(--ms-navy);
     }
 
     /* Toast */
@@ -811,14 +827,14 @@
       bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      background: #0b2a4a;
-      color: #f6e9d0;
+      background: var(--ms-navy);
+      color: var(--ms-cream);
       padding: 12px 24px;
       border-radius: 50px;
-      border: 2px solid #d4af37;
+      border: 2px solid var(--ms-gold);
       font-weight: 600;
       font-size: 0.9rem;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 16px rgba(10, 26, 58, 0.3);
       z-index: 1000;
       opacity: 0;
       transition: opacity 0.3s ease;
@@ -838,8 +854,8 @@
       border-color: #dc3545;
     }
     .toast.info {
-      background: #0b2a4a;
-      border-color: #d4af37;
+      background: var(--ms-navy);
+      border-color: var(--ms-gold);
     }
 
     /* Mobile */
@@ -867,12 +883,6 @@
         height: 46px;
         border-radius: 12px;
         padding: 4px;
-      }
-      .school-logo-icon .logo-placeholder {
-        font-size: 18px;
-      }
-      .school-logo-icon .logo-placeholder small {
-        font-size: 6px;
       }
       .school-logo-text .school-name {
         font-size: 0.95rem;
@@ -996,12 +1006,6 @@
         border-radius: 10px;
         padding: 3px;
       }
-      .school-logo-icon .logo-placeholder {
-        font-size: 14px;
-      }
-      .school-logo-icon .logo-placeholder small {
-        font-size: 5px;
-      }
       .school-logo-text .school-name {
         font-size: 0.85rem;
       }
@@ -1064,12 +1068,12 @@
       <!-- ===== MODERN SCHOOL LOGO ===== -->
       <div class="school-logo-container">
         <div class="school-logo-icon">
-          <!-- Modern School Logo - SVG Shield with "MS" -->
-          <svg viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
-            <path d="M50 5 L5 30 L5 65 C5 85 50 105 50 105 C50 105 95 85 95 65 L95 30 L50 5Z" fill="#0b2a4a" stroke="#d4af37" stroke-width="3"/>
+          <!-- Modern School Logo - Shield with "MS" -->
+          <svg viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 L5 30 L5 65 C5 85 50 105 50 105 C50 105 95 85 95 65 L95 30 L50 5Z" fill="#0a1a3a" stroke="#c9a84c" stroke-width="3"/>
             <path d="M50 15 L15 35 L15 65 C15 80 50 95 50 95 C50 95 85 80 85 65 L85 35 L50 15Z" fill="#f5f0eb" stroke="none"/>
-            <text x="50" y="52" font-family="Arial, sans-serif" font-size="28" font-weight="900" fill="#0b2a4a" text-anchor="middle" dominant-baseline="middle">MS</text>
-            <text x="50" y="78" font-family="Arial, sans-serif" font-size="8" font-weight="700" fill="#d4af37" text-anchor="middle" dominant-baseline="middle">EST. 2026</text>
+            <text x="50" y="52" font-family="Arial, sans-serif" font-size="28" font-weight="900" fill="#0a1a3a" text-anchor="middle" dominant-baseline="middle">MS</text>
+            <text x="50" y="78" font-family="Arial, sans-serif" font-size="8" font-weight="700" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">EST. 1979</text>
           </svg>
         </div>
         <div class="school-logo-text">
@@ -1104,7 +1108,7 @@
             <input type="text" id="uniqueIdInput" placeholder="e.g. 1001" inputmode="numeric" autocomplete="off" />
             <button id="lookupBtn">🔍 Lookup</button>
           </div>
-          <div style="font-size:0.7rem; color:#3d2e1b; margin-top: 6px;">
+          <div style="font-size:0.7rem; color:var(--ms-charcoal); margin-top: 6px;">
             <span class="stats-badge" id="recordCount">Loading database...</span>
           </div>
         </div>
@@ -1131,7 +1135,7 @@
           </h3>
 
           <div id="judgeLockContainer">
-            <p style="color:#3d2e1b; font-size:0.8rem; margin-bottom:10px;">Enter the judge access code to unlock</p>
+            <p style="color:var(--ms-charcoal); font-size:0.8rem; margin-bottom:10px;">Enter the judge access code to unlock</p>
             <div class="judge-code-input">
               <input type="password" id="judgeCodeInput" placeholder="Enter judge code" />
               <button id="unlockJudgeBtn">🔓 Unlock</button>
@@ -1145,7 +1149,7 @@
             </div>
 
             <div class="group-selector" style="margin-top:10px;">
-              <label style="font-weight:600; color:#0b2a4a; font-size:0.85rem;">Select Group to Judge:</label>
+              <label style="font-weight:600; color:var(--ms-navy); font-size:0.85rem;">Select Group to Judge:</label>
               <select id="groupSelector">
                 <option value="">-- Select a Group --</option>
               </select>
@@ -1168,8 +1172,8 @@
                 <div class="criteria-item"><label>🤝 Collaboration</label><select id="criteria5"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option></select></div>
               </div>
               <div style="margin-top:10px;">
-                <label style="font-weight:600; color:#0b2a4a; font-size:0.85rem;">💬 Judge Comments</label>
-                <textarea id="judgeComments" placeholder="Add your comments..." style="width:100%; padding:10px 14px; border:2px solid #d4af37; border-radius:16px; font-family:'Inter',sans-serif; font-size:0.9rem; resize:vertical; min-height:50px; margin-top:3px;"></textarea>
+                <label style="font-weight:600; color:var(--ms-navy); font-size:0.85rem;">💬 Judge Comments</label>
+                <textarea id="judgeComments" placeholder="Add your comments..." style="width:100%; padding:10px 14px; border:2px solid var(--ms-gold); border-radius:16px; font-family:'Inter',sans-serif; font-size:0.9rem; resize:vertical; min-height:50px; margin-top:3px; background:var(--ms-cream);"></textarea>
               </div>
               <button class="submit-judge-btn" id="submitJudgeBtn">✅ Submit Judgement</button>
               <div id="judgeResult" class="judge-result"></div>
@@ -1185,19 +1189,19 @@
           <div class="email-notice">
             📧 Feedback will be sent to: <strong>prithviraj130808@gmail.com</strong>
           </div>
-          <p style="color:#3d2e1b; font-size:0.8rem; margin-bottom:10px; margin-top:6px;">Share your feedback about the event or any project</p>
+          <p style="color:var(--ms-charcoal); font-size:0.8rem; margin-bottom:10px; margin-top:6px;">Share your feedback about the event or any project</p>
 
           <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:10px;">
             <input type="text" id="feedbackStudentId" placeholder="Your Admission No (optional)" />
           </div>
 
           <div class="feedback-area">
-            <label style="font-weight:600; color:#0b2a4a; font-size:0.85rem;">✍️ Your Feedback</label>
+            <label style="font-weight:600; color:var(--ms-navy); font-size:0.85rem;">✍️ Your Feedback</label>
             <textarea id="feedbackText" placeholder="Share your thoughts, suggestions, or feedback..."></textarea>
           </div>
 
           <div style="margin-top:10px;">
-            <label style="font-weight:600; color:#0b2a4a; font-size:0.85rem;">⭐ Rating</label>
+            <label style="font-weight:600; color:var(--ms-navy); font-size:0.85rem;">⭐ Rating</label>
             <select id="feedbackRating">
               <option value="5">⭐⭐⭐⭐⭐ - Excellent</option>
               <option value="4">⭐⭐⭐⭐ - Very Good</option>
@@ -1464,7 +1468,7 @@
         deployNotice.style.display = 'inline-block';
       } else {
         qrStatus.innerHTML = '📸 Scan with your phone camera';
-        qrStatus.style.color = '#0b2a4a';
+        qrStatus.style.color = 'var(--ms-charcoal)';
         deployNotice.style.display = 'none';
       }
 
@@ -1473,7 +1477,7 @@
         text: qrUrl,
         width: 220,
         height: 220,
-        colorDark: "#0b2a4a",
+        colorDark: "#0a1a3a",
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.H
       });
@@ -1558,9 +1562,9 @@
             '</span></div>' +
             '<div class="row" style="margin-top: 4px;"><span class="tag">👨‍🏫 Teacher</span><span class="teacher-tag">' +
             student.teacher + '</span></div>' +
-            '<div style="margin-top: 8px; font-size:0.8rem; color:#3d2e1b; background:#eae3d8; padding: 2px 14px; border-radius: 40px; display:inline-block;">' +
+            '<div style="margin-top: 8px; font-size:0.8rem; color:var(--ms-charcoal); background:var(--ms-cream); padding: 2px 14px; border-radius: 40px; display:inline-block;">' +
             student.class + ' · ' + student.section + '</div>' +
-            '<div class="group-members"><span style="font-weight:600; color:#0b2a4a; font-size:0.8rem; width:100%; margin-bottom:4px;">👥 Group Members (' +
+            '<div class="group-members"><span style="font-weight:600; color:var(--ms-navy); font-size:0.8rem; width:100%; margin-bottom:4px;">👥 Group Members (' +
             groupMembers.length + ')</span>';
           groupMembers.forEach(function(m) {
             html +=

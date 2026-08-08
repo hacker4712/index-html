@@ -42,6 +42,7 @@
       --ms-green: #2eb45f;
       --ms-orange: #f6921c;
       --ms-blue: #488ecc;
+      --ms-warm-bg: #fcf9f5;
     }
 
     /* ===== QR PURE SCREEN ===== */
@@ -132,11 +133,11 @@
     .app-card {
       max-width: 480px;
       width: 100%;
-      background: var(--ms-cream);
+      background: var(--ms-warm-bg);
       border-radius: 32px 32px 28px 28px;
       padding: 18px 16px 24px;
-      box-shadow: 0 12px 40px rgba(10, 26, 58, 0.2);
-      border: 1px solid var(--ms-gold);
+      box-shadow: 0 12px 40px rgba(10, 26, 58, 0.15);
+      border: 1px solid var(--ms-gold-light);
     }
 
     /* ===== MODERN SCHOOL LOGO - EXACT SVG ===== */
@@ -144,12 +145,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 12px 8px;
-      margin-bottom: 16px;
+      padding: 8px 4px;
+      margin-bottom: 12px;
       background: var(--ms-white);
       border-radius: 16px;
       border: 1px solid var(--ms-gold-light);
-      box-shadow: 0 2px 12px rgba(10, 26, 58, 0.06);
+      box-shadow: 0 2px 12px rgba(10, 26, 58, 0.05);
     }
     .school-logo-wrapper {
       display: flex;
@@ -160,10 +161,8 @@
     .school-logo-main {
       display: flex;
       align-items: center;
-      gap: 12px;
-      width: 100%;
       justify-content: center;
-      flex-wrap: wrap;
+      width: 100%;
     }
     .school-logo-icon {
       flex-shrink: 0;
@@ -174,44 +173,8 @@
     }
     .school-logo-icon svg {
       width: 100%;
-      max-width: 200px;
+      max-width: 220px;
       height: auto;
-    }
-    .school-logo-text {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .school-logo-text .school-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--ms-navy);
-      letter-spacing: 1.5px;
-      line-height: 1.1;
-      text-transform: uppercase;
-    }
-    .school-logo-text .school-name .gold {
-      color: var(--ms-gold);
-    }
-    .school-logo-text .school-tagline {
-      font-family: 'Playfair Display', serif;
-      font-size: 0.75rem;
-      font-weight: 400;
-      font-style: italic;
-      color: var(--ms-charcoal);
-      letter-spacing: 2px;
-      margin-top: 1px;
-      opacity: 0.8;
-    }
-    .school-logo-text .school-tagline .gold {
-      color: var(--ms-gold);
-    }
-    .school-logo-divider {
-      width: 60px;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--ms-gold), transparent);
-      margin: 4px auto 0;
     }
     .school-logo-expo {
       display: inline-block;
@@ -222,7 +185,7 @@
       font-weight: 800;
       padding: 2px 14px;
       border-radius: 40px;
-      margin-top: 4px;
+      margin-top: 2px;
       letter-spacing: 0.5px;
       text-transform: uppercase;
     }
@@ -231,12 +194,12 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       padding-bottom: 8px;
       border-bottom: 2px solid var(--ms-gold);
     }
     .app-header h1 {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       font-weight: 700;
       color: var(--ms-navy);
       letter-spacing: -0.3px;
@@ -248,7 +211,7 @@
       background: var(--ms-gold);
       color: var(--ms-navy);
       font-weight: 700;
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       padding: 4px 14px;
       border-radius: 40px;
     }
@@ -256,7 +219,7 @@
     .top-menu {
       display: flex;
       gap: 4px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       background: var(--ms-white);
       padding: 4px;
       border-radius: 50px;
@@ -268,7 +231,7 @@
       border: none;
       border-radius: 40px;
       font-weight: 700;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       cursor: pointer;
       transition: 0.2s;
       background: transparent;
@@ -278,10 +241,10 @@
     .menu-btn.active {
       background: var(--ms-gold);
       color: var(--ms-navy);
-      box-shadow: 0 2px 8px rgba(201, 168, 76, 0.3);
+      box-shadow: 0 2px 8px rgba(201, 168, 76, 0.25);
     }
     .menu-btn:hover {
-      background: rgba(201, 168, 76, 0.2);
+      background: rgba(201, 168, 76, 0.15);
     }
 
     .page-content {
@@ -307,13 +270,13 @@
       border-radius: 24px;
       padding: 16px 14px 14px;
       margin-bottom: 14px;
-      box-shadow: 0 2px 8px rgba(10, 26, 58, 0.06);
+      box-shadow: 0 2px 8px rgba(10, 26, 58, 0.05);
       border: 1px solid var(--ms-gold-light);
     }
     .input-label {
       display: block;
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: var(--ms-navy);
       margin-bottom: 6px;
     }
@@ -331,13 +294,13 @@
       flex: 1;
       min-width: 140px;
       padding: 14px 14px;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 600;
       background: var(--ms-cream);
       border: 2px solid var(--ms-gold);
       border-radius: 50px;
       color: var(--ms-navy);
-      height: 52px;
+      height: 48px;
     }
     #uniqueIdInput:focus {
       outline: 3px solid var(--ms-gold);
@@ -349,14 +312,14 @@
       border: none;
       color: var(--ms-navy);
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 0.95rem;
       padding: 14px 22px;
       border-radius: 50px;
       cursor: pointer;
       box-shadow: 0 4px 0 var(--ms-warm-gold);
       white-space: nowrap;
       min-width: 80px;
-      height: 52px;
+      height: 48px;
     }
     #lookupBtn:active {
       transform: translateY(3px);
@@ -371,7 +334,7 @@
       padding: 3px 14px;
       border-radius: 40px;
       font-weight: 600;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       display: inline-block;
       margin-top: 6px;
     }
@@ -393,7 +356,7 @@
     .unique-id-box .label {
       font-weight: 600;
       color: var(--ms-navy);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
     .unique-id-box .id-value {
       background: var(--ms-navy);
@@ -401,7 +364,7 @@
       padding: 6px 18px;
       border-radius: 50px;
       font-weight: 700;
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-family: 'Inter', monospace;
     }
 
@@ -420,7 +383,7 @@
     }
     .venue-name {
       font-weight: 700;
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       color: var(--ms-navy);
       display: flex;
       align-items: center;
@@ -431,7 +394,7 @@
     }
     .venue-name::before {
       content: "📍";
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       margin-right: 4px;
     }
     .student-name-display {
@@ -440,7 +403,7 @@
       padding: 6px 16px;
       border-radius: 40px;
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 0.95rem;
       display: inline-block;
       margin-bottom: 8px;
     }
@@ -449,14 +412,14 @@
       flex-wrap: wrap;
       align-items: baseline;
       gap: 4px 6px;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       padding: 3px 0;
     }
     .project-detail .row .tag {
       font-weight: 600;
       color: var(--ms-charcoal);
       min-width: 65px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
     }
     .project-detail .row .value {
       font-weight: 600;
@@ -464,7 +427,7 @@
       background: var(--ms-cream);
       padding: 2px 14px;
       border-radius: 40px;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
     .teacher-tag {
       background: var(--ms-gold);
@@ -472,7 +435,7 @@
       padding: 4px 16px;
       border-radius: 50px;
       font-weight: 700;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       display: inline-block;
       margin-top: 4px;
     }
@@ -489,7 +452,7 @@
       color: var(--ms-cream);
       padding: 4px 14px;
       border-radius: 40px;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 600;
       display: inline-flex;
       align-items: center;
@@ -497,7 +460,7 @@
     }
     .group-members .member-chip::before {
       content: "👤";
-      font-size: 0.8rem;
+      font-size: 0.75rem;
     }
     .empty-state {
       background: var(--ms-white);
@@ -506,11 +469,11 @@
       text-align: center;
       color: var(--ms-navy);
       font-weight: 500;
-      font-size: 1rem;
+      font-size: 0.95rem;
       border: 2px dashed var(--ms-gold);
     }
     .empty-state span {
-      font-size: 2.2rem;
+      font-size: 2rem;
       display: block;
       margin-bottom: 6px;
     }
@@ -526,7 +489,7 @@
     .judge-section h3,
     .feedback-section h3 {
       color: var(--ms-navy);
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 700;
       margin-bottom: 10px;
       border-bottom: 2px solid var(--ms-gold);
@@ -542,7 +505,7 @@
       color: var(--ms-navy);
       padding: 2px 12px;
       border-radius: 40px;
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       font-weight: 700;
     }
     .judge-status-badge.unlocked {
@@ -566,11 +529,11 @@
       padding: 12px 14px;
       border: 2px solid var(--ms-gold);
       border-radius: 50px;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 600;
       color: var(--ms-navy);
       min-width: 120px;
-      height: 48px;
+      height: 44px;
       background: var(--ms-cream);
     }
     .judge-code-input input:focus {
@@ -585,9 +548,9 @@
       padding: 12px 20px;
       border-radius: 50px;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       box-shadow: 0 4px 0 var(--ms-warm-gold);
-      height: 48px;
+      height: 44px;
     }
     .judge-code-input button:active {
       transform: translateY(3px);
@@ -599,7 +562,7 @@
       border-radius: 16px;
       font-weight: 600;
       display: none;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
     .judge-result.success {
       background: #d4edda;
@@ -622,12 +585,12 @@
       padding: 12px 14px;
       border: 2px solid var(--ms-gold);
       border-radius: 50px;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 600;
       color: var(--ms-navy);
       background: var(--ms-cream);
       cursor: pointer;
-      height: 48px;
+      height: 44px;
     }
     .group-selector select:focus {
       outline: 3px solid var(--ms-gold);
@@ -643,7 +606,7 @@
     }
     .group-info .group-name {
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: var(--ms-navy);
     }
     .group-info .group-members-list {
@@ -656,13 +619,13 @@
       background: var(--ms-white);
       padding: 2px 10px;
       border-radius: 40px;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: var(--ms-navy);
       font-weight: 500;
       border: 1px solid var(--ms-gold-light);
     }
     .group-status {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: var(--ms-charcoal);
       margin-top: 4px;
       padding: 4px 10px;
@@ -693,7 +656,7 @@
       flex: 1;
       font-weight: 600;
       color: var(--ms-navy);
-      font-size: 0.85rem;
+      font-size: 0.8rem;
     }
     .criteria-item select {
       padding: 4px 10px;
@@ -702,9 +665,9 @@
       font-weight: 600;
       background: var(--ms-white);
       color: var(--ms-navy);
-      font-size: 0.85rem;
-      min-width: 56px;
-      height: 36px;
+      font-size: 0.8rem;
+      min-width: 52px;
+      height: 34px;
     }
     .criteria-item select:focus {
       outline: 3px solid var(--ms-gold);
@@ -719,13 +682,13 @@
       padding: 12px 20px;
       border-radius: 50px;
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       cursor: pointer;
       width: 100%;
       margin-top: 10px;
       transition: 0.2s;
       box-shadow: 0 4px 0 #061a2e;
-      height: 50px;
+      height: 46px;
     }
     .submit-judge-btn:active,
     .submit-feedback-btn:active {
@@ -738,7 +701,7 @@
     }
 
     .email-notice {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: var(--ms-charcoal);
       background: var(--ms-gold-light);
       padding: 6px 12px;
@@ -757,7 +720,7 @@
       border: 2px solid var(--ms-gold);
       border-radius: 16px;
       font-family: 'Inter', sans-serif;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       resize: vertical;
       min-height: 80px;
       background: var(--ms-cream);
@@ -772,9 +735,9 @@
       padding: 12px 14px;
       border: 2px solid var(--ms-gold);
       border-radius: 50px;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: var(--ms-navy);
-      height: 46px;
+      height: 42px;
       background: var(--ms-cream);
     }
     #feedbackStudentId:focus {
@@ -790,7 +753,7 @@
       color: var(--ms-navy);
       background: var(--ms-cream);
       margin-top: 3px;
-      height: 46px;
+      height: 42px;
     }
     #feedbackRating:focus {
       outline: 3px solid var(--ms-gold);
@@ -800,7 +763,7 @@
     .app-footer {
       margin-top: 18px;
       text-align: center;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       color: var(--ms-charcoal);
       border-top: 1px solid var(--ms-gold);
       padding-top: 14px;
@@ -822,7 +785,7 @@
       border-radius: 50px;
       border: 2px solid var(--ms-gold);
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       box-shadow: 0 4px 16px rgba(10, 26, 58, 0.3);
       z-index: 1000;
       opacity: 0;
@@ -864,54 +827,50 @@
         padding: 14px 12px 18px;
       }
       .school-logo-container {
-        padding: 8px 4px;
+        padding: 6px 2px;
       }
       .school-logo-icon svg {
-        max-width: 150px;
+        max-width: 170px;
       }
-      .school-logo-text .school-name {
-        font-size: 1.2rem;
-        letter-spacing: 1px;
-      }
-      .school-logo-text .school-tagline {
-        font-size: 0.65rem;
-        letter-spacing: 1.5px;
+      .school-logo-expo {
+        font-size: 0.5rem;
+        padding: 1px 10px;
       }
       .app-header h1 {
-        font-size: 1.1rem;
+        font-size: 1.05rem;
       }
       .menu-btn {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         padding: 8px 4px;
       }
       #uniqueIdInput {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         padding: 12px 12px;
-        height: 46px;
+        height: 44px;
         min-width: 100px;
       }
       #lookupBtn {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         padding: 12px 16px;
-        height: 46px;
+        height: 44px;
         min-width: 70px;
       }
       .venue-name {
-        font-size: 1.1rem;
+        font-size: 1.05rem;
       }
       .project-detail .row {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
       }
       .project-detail .row .value {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         padding: 2px 10px;
       }
       .group-members .member-chip {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         padding: 3px 10px;
       }
       .unique-id-box .id-value {
-        font-size: 1rem;
+        font-size: 0.95rem;
         padding: 4px 14px;
       }
       .criteria-item {
@@ -919,48 +878,48 @@
         gap: 4px;
       }
       .criteria-item label {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
       }
       .criteria-item select {
-        font-size: 0.8rem;
-        min-width: 48px;
-        height: 32px;
+        font-size: 0.75rem;
+        min-width: 44px;
+        height: 30px;
         padding: 2px 6px;
       }
       .judge-code-input input {
-        height: 44px;
-        font-size: 0.9rem;
+        height: 40px;
+        font-size: 0.85rem;
       }
       .judge-code-input button {
-        height: 44px;
-        font-size: 0.85rem;
+        height: 40px;
+        font-size: 0.8rem;
         padding: 10px 16px;
       }
       .group-selector select {
-        height: 44px;
-        font-size: 0.85rem;
+        height: 40px;
+        font-size: 0.8rem;
       }
       .submit-judge-btn,
       .submit-feedback-btn {
-        height: 44px;
-        font-size: 0.85rem;
+        height: 42px;
+        font-size: 0.8rem;
         padding: 10px 16px;
       }
       #feedbackStudentId {
-        height: 42px;
-        font-size: 0.85rem;
+        height: 40px;
+        font-size: 0.8rem;
       }
       #feedbackRating {
-        height: 42px;
-        font-size: 0.85rem;
+        height: 40px;
+        font-size: 0.8rem;
       }
       .feedback-area textarea {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         min-height: 60px;
         padding: 10px 12px;
       }
       .student-name-display {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         padding: 4px 12px;
       }
     }
@@ -977,29 +936,21 @@
         padding: 10px 8px 14px;
       }
       .school-logo-container {
-        padding: 6px 2px;
+        padding: 4px 2px;
       }
       .school-logo-icon svg {
-        max-width: 120px;
-      }
-      .school-logo-text .school-name {
-        font-size: 1rem;
-        letter-spacing: 0.5px;
-      }
-      .school-logo-text .school-tagline {
-        font-size: 0.55rem;
-        letter-spacing: 1px;
+        max-width: 140px;
       }
       .top-menu {
         gap: 2px;
         padding: 3px;
       }
       .menu-btn {
-        font-size: 0.6rem;
+        font-size: 0.55rem;
         padding: 6px 3px;
       }
       .app-header h1 {
-        font-size: 1rem;
+        font-size: 0.95rem;
       }
     }
     .error-shake {
@@ -1081,7 +1032,7 @@
             <input type="text" id="uniqueIdInput" placeholder="e.g. 1001" inputmode="numeric" autocomplete="off" />
             <button id="lookupBtn">🔍 Lookup</button>
           </div>
-          <div style="font-size:0.7rem; color:var(--ms-charcoal); margin-top: 6px;">
+          <div style="font-size:0.65rem; color:var(--ms-charcoal); margin-top: 6px;">
             <span class="stats-badge" id="recordCount">Loading database...</span>
           </div>
         </div>
@@ -1108,12 +1059,12 @@
           </h3>
 
           <div id="judgeLockContainer">
-            <p style="color:var(--ms-charcoal); font-size:0.8rem; margin-bottom:10px;">Enter the judge access code to unlock</p>
+            <p style="color:var(--ms-charcoal); font-size:0.75rem; margin-bottom:10px;">Enter the judge access code to unlock</p>
             <div class="judge-code-input">
               <input type="password" id="judgeCodeInput" placeholder="Enter judge code" />
               <button id="unlockJudgeBtn">🔓 Unlock</button>
             </div>
-            <div id="judgeLockError" style="color:#721c24; font-weight:600; font-size:0.8rem; display:none;">❌ Invalid code. Please try again.</div>
+            <div id="judgeLockError" style="color:#721c24; font-weight:600; font-size:0.75rem; display:none;">❌ Invalid code. Please try again.</div>
           </div>
 
           <div id="judgeContent" style="display:none;">
@@ -1122,7 +1073,7 @@
             </div>
 
             <div class="group-selector" style="margin-top:10px;">
-              <label style="font-weight:600; color:var(--ms-navy); font-size:0.85rem;">Select Group to Judge:</label>
+              <label style="font-weight:600; color:var(--ms-navy); font-size:0.8rem;">Select Group to Judge:</label>
               <select id="groupSelector">
                 <option value="">-- Select a Group --</option>
               </select>
@@ -1145,8 +1096,8 @@
                 <div class="criteria-item"><label>🤝 Collaboration</label><select id="criteria5"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option></select></div>
               </div>
               <div style="margin-top:10px;">
-                <label style="font-weight:600; color:var(--ms-navy); font-size:0.85rem;">💬 Judge Comments</label>
-                <textarea id="judgeComments" placeholder="Add your comments..." style="width:100%; padding:10px 14px; border:2px solid var(--ms-gold); border-radius:16px; font-family:'Inter',sans-serif; font-size:0.9rem; resize:vertical; min-height:50px; margin-top:3px; background:var(--ms-cream);"></textarea>
+                <label style="font-weight:600; color:var(--ms-navy); font-size:0.8rem;">💬 Judge Comments</label>
+                <textarea id="judgeComments" placeholder="Add your comments..." style="width:100%; padding:10px 14px; border:2px solid var(--ms-gold); border-radius:16px; font-family:'Inter',sans-serif; font-size:0.85rem; resize:vertical; min-height:50px; margin-top:3px; background:var(--ms-cream);"></textarea>
               </div>
               <button class="submit-judge-btn" id="submitJudgeBtn">✅ Submit Judgement</button>
               <div id="judgeResult" class="judge-result"></div>
@@ -1162,19 +1113,19 @@
           <div class="email-notice">
             📧 Feedback will be sent to: <strong>prithviraj130808@gmail.com</strong>
           </div>
-          <p style="color:var(--ms-charcoal); font-size:0.8rem; margin-bottom:10px; margin-top:6px;">Share your feedback about the event or any project</p>
+          <p style="color:var(--ms-charcoal); font-size:0.75rem; margin-bottom:10px; margin-top:6px;">Share your feedback about the event or any project</p>
 
           <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:10px;">
             <input type="text" id="feedbackStudentId" placeholder="Your Admission No (optional)" />
           </div>
 
           <div class="feedback-area">
-            <label style="font-weight:600; color:var(--ms-navy); font-size:0.85rem;">✍️ Your Feedback</label>
+            <label style="font-weight:600; color:var(--ms-navy); font-size:0.8rem;">✍️ Your Feedback</label>
             <textarea id="feedbackText" placeholder="Share your thoughts, suggestions, or feedback..."></textarea>
           </div>
 
           <div style="margin-top:10px;">
-            <label style="font-weight:600; color:var(--ms-navy); font-size:0.85rem;">⭐ Rating</label>
+            <label style="font-weight:600; color:var(--ms-navy); font-size:0.8rem;">⭐ Rating</label>
             <select id="feedbackRating">
               <option value="5">⭐⭐⭐⭐⭐ - Excellent</option>
               <option value="4">⭐⭐⭐⭐ - Very Good</option>
@@ -1588,14 +1539,14 @@
             '</span></div>' +
             '<div class="row" style="margin-top: 4px;"><span class="tag">👨‍🏫 Teacher</span><span class="teacher-tag">' +
             student.teacher + '</span></div>' +
-            '<div style="margin-top: 8px; font-size:0.8rem; color:var(--ms-charcoal); background:var(--ms-cream); padding: 2px 14px; border-radius: 40px; display:inline-block;">' +
+            '<div style="margin-top: 8px; font-size:0.75rem; color:var(--ms-charcoal); background:var(--ms-cream); padding: 2px 14px; border-radius: 40px; display:inline-block;">' +
             student.class + ' · ' + student.section + '</div>' +
-            '<div class="group-members"><span style="font-weight:600; color:var(--ms-navy); font-size:0.8rem; width:100%; margin-bottom:4px;">👥 Group Members (' +
+            '<div class="group-members"><span style="font-weight:600; color:var(--ms-navy); font-size:0.75rem; width:100%; margin-bottom:4px;">👥 Group Members (' +
             groupMembers.length + ')</span>';
           groupMembers.forEach(function(m) {
             html +=
               '<span class="member-chip">' + m.studentName +
-              ' <span style="font-weight:400; font-size:0.6rem; opacity:0.7;">#' + m.admissionNo + '</span></span>';
+              ' <span style="font-weight:400; font-size:0.55rem; opacity:0.7;">#' + m.admissionNo + '</span></span>';
           });
           html += '</div></div></div></div>';
           venueContainer.innerHTML = html;

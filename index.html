@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-  <title>Student Cognito · QR Launch</title>
+  <title>Modern School · Cognito</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
   </script>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
@@ -128,7 +128,7 @@
       display: flex;
       align-items: center;
       gap: 14px;
-      padding: 12px 16px;
+      padding: 14px 16px;
       margin-bottom: 16px;
       background: linear-gradient(135deg, #0b2a4a 0%, #1a3d5e 100%);
       border-radius: 20px;
@@ -161,24 +161,35 @@
       width: 56px;
       height: 56px;
       background: linear-gradient(135deg, #d4af37, #f5e3b3);
-      border-radius: 16px;
+      border-radius: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 28px;
       flex-shrink: 0;
       position: relative;
       z-index: 1;
       box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+      padding: 6px;
+      overflow: hidden;
     }
-    .school-logo-icon .shield {
-      position: relative;
-      width: 36px;
-      height: 40px;
-    }
-    .school-logo-icon .shield svg {
+    .school-logo-icon img {
       width: 100%;
       height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+    .school-logo-icon .logo-placeholder {
+      font-size: 24px;
+      font-weight: 800;
+      color: #0b2a4a;
+      letter-spacing: -0.5px;
+      line-height: 1;
+    }
+    .school-logo-icon .logo-placeholder small {
+      display: block;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
     }
     .school-logo-text {
       flex: 1;
@@ -193,11 +204,12 @@
       line-height: 1.2;
     }
     .school-logo-text .school-tagline {
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       color: #d4af37;
       font-weight: 600;
       letter-spacing: 0.3px;
       opacity: 0.9;
+      font-style: italic;
     }
     .school-logo-text .school-expo {
       display: inline-block;
@@ -853,14 +865,20 @@
       .school-logo-icon {
         width: 46px;
         height: 46px;
-        font-size: 22px;
-        border-radius: 14px;
+        border-radius: 12px;
+        padding: 4px;
+      }
+      .school-logo-icon .logo-placeholder {
+        font-size: 18px;
+      }
+      .school-logo-icon .logo-placeholder small {
+        font-size: 6px;
       }
       .school-logo-text .school-name {
         font-size: 0.95rem;
       }
       .school-logo-text .school-tagline {
-        font-size: 0.6rem;
+        font-size: 0.55rem;
       }
       .school-logo-text .school-expo {
         font-size: 0.55rem;
@@ -975,8 +993,14 @@
       .school-logo-icon {
         width: 40px;
         height: 40px;
-        font-size: 18px;
-        border-radius: 12px;
+        border-radius: 10px;
+        padding: 3px;
+      }
+      .school-logo-icon .logo-placeholder {
+        font-size: 14px;
+      }
+      .school-logo-icon .logo-placeholder small {
+        font-size: 5px;
       }
       .school-logo-text .school-name {
         font-size: 0.85rem;
@@ -1030,7 +1054,7 @@
     <div id="qrcode-container"></div>
     <div class="qr-hint" id="qrStatus">Generating QR code…</div>
     <div class="deploy-notice" id="deployNotice">⚠️ Deploy to server for universal access</div>
-    <div class="qr-footer"><strong>📍</strong> Student Cognito · scan &amp; go</div>
+    <div class="qr-footer"><strong>📍</strong> Modern School · scan &amp; go</div>
   </div>
 
   <!-- ===== FULL APP ===== -->
@@ -1040,18 +1064,17 @@
       <!-- ===== MODERN SCHOOL LOGO ===== -->
       <div class="school-logo-container">
         <div class="school-logo-icon">
-          <div class="shield">
-            <svg viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M50 5 L5 30 L5 65 C5 85 50 105 50 105 C50 105 95 85 95 65 L95 30 L50 5Z" fill="#0b2a4a" stroke="#d4af37" stroke-width="3"/>
-              <path d="M50 15 L15 35 L15 65 C15 80 50 95 50 95 C50 95 85 80 85 65 L85 35 L50 15Z" fill="#f5f0eb" stroke="none"/>
-              <text x="50" y="58" font-family="Arial, sans-serif" font-size="32" font-weight="800" fill="#0b2a4a" text-anchor="middle" dominant-baseline="middle">S</text>
-              <text x="50" y="82" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#d4af37" text-anchor="middle" dominant-baseline="middle">2026</text>
-            </svg>
-          </div>
+          <!-- Modern School Logo - SVG Shield with "MS" -->
+          <svg viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+            <path d="M50 5 L5 30 L5 65 C5 85 50 105 50 105 C50 105 95 85 95 65 L95 30 L50 5Z" fill="#0b2a4a" stroke="#d4af37" stroke-width="3"/>
+            <path d="M50 15 L15 35 L15 65 C15 80 50 95 50 95 C50 95 85 80 85 65 L85 35 L50 15Z" fill="#f5f0eb" stroke="none"/>
+            <text x="50" y="52" font-family="Arial, sans-serif" font-size="28" font-weight="900" fill="#0b2a4a" text-anchor="middle" dominant-baseline="middle">MS</text>
+            <text x="50" y="78" font-family="Arial, sans-serif" font-size="8" font-weight="700" fill="#d4af37" text-anchor="middle" dominant-baseline="middle">EST. 2026</text>
+          </svg>
         </div>
         <div class="school-logo-text">
-          <div class="school-name">STUDENT COGNITO</div>
-          <div class="school-tagline">Excellence in Innovation &amp; Science</div>
+          <div class="school-name">MODERN SCHOOL</div>
+          <div class="school-tagline">"Know Thyself"</div>
           <div class="school-expo">🏆 EXPO 2026</div>
         </div>
         <div class="school-logo-right">
@@ -1190,7 +1213,7 @@
       </div>
 
       <div class="app-footer">
-        <strong>📍</strong> scan QR · <strong>schoolname.in/expo</strong>
+        <strong>📍</strong> Modern School · <strong>Know Thyself</strong>
       </div>
     </div>
   </div>
@@ -1203,12 +1226,6 @@
       //  EMAILJS CONFIGURATION - REPLACE WITH YOUR CREDENTIALS
       //  Sign up at: https://www.emailjs.com/
       // =============================================================
-      // const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";
-      // const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
-      // const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
-
-      // For demo, we'll use a working configuration - but you MUST replace these
-      // with your own EmailJS credentials for it to work.
       const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";
       const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
       const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
@@ -1394,11 +1411,10 @@
       }
 
       // =============================================================
-      //  EMAIL SENDING - Using EmailJS (background, no popups)
+      //  EMAIL SENDING - Using EmailJS
       // =============================================================
 
       function sendEmailDirect(subject, body) {
-        // Check if EmailJS is configured
         if (EMAILJS_PUBLIC_KEY === "YOUR_PUBLIC_KEY" || EMAILJS_SERVICE_ID === "YOUR_SERVICE_ID" || EMAILJS_TEMPLATE_ID ===
           "YOUR_TEMPLATE_ID") {
           showToast('⚠️ EmailJS not configured. Please set your credentials in the code.', 'error');
@@ -1720,6 +1736,7 @@
           var emailBody = '========================================\n';
           emailBody += 'JUDGEMENT SUBMITTED\n';
           emailBody += '========================================\n\n';
+          emailBody += 'School: Modern School\n';
           emailBody += 'Group: ' + group.venue + ' - ' + group.project + '\n';
           emailBody += 'Teacher: ' + group.teacher + '\n';
           emailBody += 'Members:\n';
@@ -1767,6 +1784,7 @@
           var emailBody = '========================================\n';
           emailBody += 'FEEDBACK SUBMITTED\n';
           emailBody += '========================================\n\n';
+          emailBody += 'School: Modern School\n';
           emailBody += 'From: ' + (studentId || 'Anonymous');
           if (studentName) {
             emailBody += ' (' + studentName + ')';

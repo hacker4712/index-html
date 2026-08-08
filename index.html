@@ -10,7 +10,7 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
   <style>
     * {
       margin: 0;
@@ -134,108 +134,91 @@
       border: 1px solid var(--ms-gold);
     }
 
-    /* ===== MODERN SCHOOL LOGO ===== */
+    /* ===== MODERN SCHOOL LOGO - EXACT REPLICA ===== */
     .school-logo-container {
       display: flex;
       align-items: center;
-      gap: 14px;
-      padding: 14px 16px;
+      justify-content: center;
+      padding: 16px 12px;
       margin-bottom: 16px;
-      background: linear-gradient(135deg, var(--ms-navy) 0%, #1a2d5a 100%);
-      border-radius: 20px;
-      border: 2px solid var(--ms-gold);
-      box-shadow: 0 4px 20px rgba(10, 26, 58, 0.25);
+      background: var(--ms-white);
+      border-radius: 16px;
+      border: 1px solid var(--ms-gold-light);
+      box-shadow: 0 2px 12px rgba(10, 26, 58, 0.06);
       position: relative;
-      overflow: hidden;
     }
-    .school-logo-container::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -20%;
-      width: 200px;
-      height: 200px;
-      background: radial-gradient(circle, rgba(201, 168, 76, 0.1) 0%, transparent 70%);
-      border-radius: 50%;
+    .school-logo-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
     }
-    .school-logo-container::after {
-      content: '';
-      position: absolute;
-      bottom: -30%;
-      left: -10%;
-      width: 150px;
-      height: 150px;
-      background: radial-gradient(circle, rgba(201, 168, 76, 0.06) 0%, transparent 70%);
-      border-radius: 50%;
+    .school-logo-main {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
     }
     .school-logo-icon {
-      width: 56px;
-      height: 56px;
-      background: linear-gradient(135deg, var(--ms-gold), var(--ms-gold-light));
-      border-radius: 14px;
+      flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
-      position: relative;
-      z-index: 1;
-      box-shadow: 0 4px 12px rgba(201, 168, 76, 0.35);
-      padding: 6px;
     }
     .school-logo-icon svg {
-      width: 100%;
-      height: 100%;
+      width: 48px;
+      height: 48px;
     }
     .school-logo-text {
-      flex: 1;
-      position: relative;
-      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     .school-logo-text .school-name {
-      font-size: 1.1rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
       font-weight: 800;
-      color: var(--ms-gold-light);
-      letter-spacing: 0.5px;
-      line-height: 1.2;
+      color: var(--ms-navy);
+      letter-spacing: 1.5px;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+    .school-logo-text .school-name .gold {
+      color: var(--ms-gold);
     }
     .school-logo-text .school-tagline {
-      font-size: 0.65rem;
-      color: var(--ms-gold);
-      font-weight: 600;
-      letter-spacing: 0.3px;
-      opacity: 0.9;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.75rem;
+      font-weight: 400;
       font-style: italic;
+      color: var(--ms-charcoal);
+      letter-spacing: 2px;
+      margin-top: 1px;
+      opacity: 0.8;
     }
-    .school-logo-text .school-expo {
+    .school-logo-text .school-tagline .gold {
+      color: var(--ms-gold);
+    }
+    .school-logo-divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--ms-gold), transparent);
+      margin: 4px auto 0;
+    }
+    .school-logo-expo {
       display: inline-block;
       background: var(--ms-gold);
       color: var(--ms-navy);
-      font-size: 0.6rem;
-      font-weight: 800;
-      padding: 2px 12px;
-      border-radius: 40px;
-      margin-top: 2px;
-      letter-spacing: 0.5px;
-    }
-    .school-logo-right {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 2px;
-    }
-    .school-logo-right .year {
-      font-size: 0.65rem;
-      font-weight: 700;
-      color: var(--ms-gold);
-      letter-spacing: 1px;
-    }
-    .school-logo-right .grade {
+      font-family: 'Inter', sans-serif;
       font-size: 0.55rem;
-      color: var(--ms-cream);
-      opacity: 0.7;
-      font-weight: 600;
+      font-weight: 800;
+      padding: 2px 14px;
+      border-radius: 40px;
+      margin-top: 4px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
     }
 
     .app-header {
@@ -875,27 +858,19 @@
         padding: 14px 12px 18px;
       }
       .school-logo-container {
-        padding: 10px 14px;
-        gap: 12px;
-      }
-      .school-logo-icon {
-        width: 46px;
-        height: 46px;
-        border-radius: 12px;
-        padding: 4px;
+        padding: 12px 8px;
       }
       .school-logo-text .school-name {
-        font-size: 0.95rem;
+        font-size: 1.2rem;
+        letter-spacing: 1px;
       }
       .school-logo-text .school-tagline {
-        font-size: 0.55rem;
+        font-size: 0.65rem;
+        letter-spacing: 1.5px;
       }
-      .school-logo-text .school-expo {
-        font-size: 0.55rem;
-        padding: 1px 10px;
-      }
-      .school-logo-right .year {
-        font-size: 0.55rem;
+      .school-logo-icon svg {
+        width: 40px;
+        height: 40px;
       }
       .app-header h1 {
         font-size: 1.1rem;
@@ -997,17 +972,19 @@
         padding: 10px 8px 14px;
       }
       .school-logo-container {
-        padding: 8px 10px;
-        gap: 10px;
-      }
-      .school-logo-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
-        padding: 3px;
+        padding: 10px 6px;
       }
       .school-logo-text .school-name {
-        font-size: 0.85rem;
+        font-size: 1rem;
+        letter-spacing: 0.5px;
+      }
+      .school-logo-text .school-tagline {
+        font-size: 0.55rem;
+        letter-spacing: 1px;
+      }
+      .school-logo-icon svg {
+        width: 34px;
+        height: 34px;
       }
       .top-menu {
         gap: 2px;
@@ -1065,25 +1042,30 @@
   <div id="fullApp" class="app-hidden" style="width:100%; max-width:480px;">
     <div class="app-card">
 
-      <!-- ===== MODERN SCHOOL LOGO ===== -->
+      <!-- ===== MODERN SCHOOL LOGO - EXACT REPLICA ===== -->
       <div class="school-logo-container">
-        <div class="school-logo-icon">
-          <!-- Modern School Logo - Shield with "MS" -->
-          <svg viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M50 5 L5 30 L5 65 C5 85 50 105 50 105 C50 105 95 85 95 65 L95 30 L50 5Z" fill="#0a1a3a" stroke="#c9a84c" stroke-width="3"/>
-            <path d="M50 15 L15 35 L15 65 C15 80 50 95 50 95 C50 95 85 80 85 65 L85 35 L50 15Z" fill="#f5f0eb" stroke="none"/>
-            <text x="50" y="52" font-family="Arial, sans-serif" font-size="28" font-weight="900" fill="#0a1a3a" text-anchor="middle" dominant-baseline="middle">MS</text>
-            <text x="50" y="78" font-family="Arial, sans-serif" font-size="8" font-weight="700" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">EST. 1979</text>
-          </svg>
-        </div>
-        <div class="school-logo-text">
-          <div class="school-name">MODERN SCHOOL</div>
-          <div class="school-tagline">"Know Thyself"</div>
-          <div class="school-expo">🏆 EXPO 2026</div>
-        </div>
-        <div class="school-logo-right">
-          <div class="year">2026</div>
-          <div class="grade">K-12</div>
+        <div class="school-logo-wrapper">
+          <div class="school-logo-main">
+            <div class="school-logo-icon">
+              <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="10" y="10" width="80" height="80" rx="8" fill="#0a1a3a" stroke="#c9a84c" stroke-width="3"/>
+                <rect x="16" y="16" width="68" height="68" rx="4" fill="none" stroke="#c9a84c" stroke-width="1.5"/>
+                <path d="M50 30 L35 45 L35 70 L50 70 L65 70 L65 45 L50 30Z" fill="#c9a84c" opacity="0.15"/>
+                <text x="50" y="55" font-family="'Playfair Display', serif" font-size="28" font-weight="800" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">M</text>
+                <text x="50" y="82" font-family="'Inter', sans-serif" font-size="10" font-weight="700" fill="#f5f0eb" text-anchor="middle" dominant-baseline="middle">1979</text>
+              </svg>
+            </div>
+            <div class="school-logo-text">
+              <div class="school-name">
+                MODERN <span class="gold">SCHOOL</span>
+              </div>
+              <div class="school-divider"></div>
+              <div class="school-tagline">
+                <span class="gold">"</span>Know Thyself<span class="gold">"</span>
+              </div>
+            </div>
+          </div>
+          <div class="school-logo-expo">🏆 EXPO 2026</div>
         </div>
       </div>
 

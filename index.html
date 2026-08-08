@@ -3,12 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-  <title>Student Cognito · Group Judgement</title>
+  <title>Student Cognito · QR Launch</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
   <style>
     * {
       margin: 0;
@@ -16,61 +18,253 @@
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
     }
-    html {
-      font-size: 16px;
-    }
     body {
       font-family: 'Inter', sans-serif;
-      background: #f5f0eb;
+      background: #0b2a4a;
       min-height: 100vh;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
-      padding: 12px;
-      padding-top: 20px;
+      align-items: center;
+      padding: 16px;
+    }
+
+    /* ===== QR PURE SCREEN ===== */
+    .qr-pure {
+      max-width: 420px;
+      width: 100%;
+      background: #f5f0eb;
+      border-radius: 40px;
+      padding: 32px 20px 28px;
+      text-align: center;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+      border: 2px solid #d4af37;
+    }
+    .qr-pure .brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .qr-pure .brand h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0b2a4a;
+      letter-spacing: -0.5px;
+    }
+    .qr-pure .brand span {
+      background: #d4af37;
+      color: #0b2a4a;
+      font-weight: 700;
+      font-size: 0.7rem;
+      padding: 4px 12px;
+      border-radius: 40px;
+    }
+    .qr-pure .sub {
+      font-size: 0.95rem;
+      color: #3d2e1b;
+      margin-bottom: 20px;
+      opacity: 0.8;
+    }
+    #qrcode-container {
+      display: inline-block;
+      background: white;
+      padding: 16px;
+      border-radius: 24px;
+      border: 3px solid #d4af37;
+      box-shadow: 0 8px 0 #8f7a2a;
+      margin: 0 auto 12px;
+    }
+    #qrcode-container img,
+    #qrcode-container canvas {
+      display: block;
+      width: 220px;
+      height: 220px;
+    }
+    .qr-hint {
+      font-size: 0.85rem;
+      color: #3d2e1b;
+      margin-top: 6px;
+      font-weight: 500;
+    }
+    .deploy-notice {
+      background: #d4af37;
+      color: #0b2a4a;
+      border-radius: 40px;
+      padding: 6px 16px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      display: inline-block;
+      margin-top: 8px;
+    }
+    .qr-footer {
+      margin-top: 18px;
+      font-size: 0.65rem;
+      color: #5a4a33;
+      border-top: 1px solid #d4af37;
+      padding-top: 14px;
+      opacity: 0.7;
+    }
+    .qr-footer strong {
+      color: #0b2a4a;
+    }
+
+    /* ===== FULL APP ===== */
+    .app-hidden {
+      display: none;
     }
     .app-card {
       max-width: 480px;
       width: 100%;
-      background: #0b2a4a;
+      background: #f5f0eb;
       border-radius: 32px 32px 28px 28px;
-      padding: 18px 16px 28px;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+      padding: 18px 16px 24px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
       border: 1px solid #d4af37;
-      margin: 0 auto;
     }
-    .school-header {
+
+    /* ===== MODERN SCHOOL LOGO ===== */
+    .school-logo-container {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #0b2a4a 0%, #1a3d5e 100%);
+      border-radius: 20px;
+      border: 2px solid #d4af37;
+      box-shadow: 0 4px 16px rgba(11, 42, 74, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    .school-logo-container::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .school-logo-container::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      left: -10%;
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .school-logo-icon {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #d4af37, #f5e3b3);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+    }
+    .school-logo-icon .shield {
+      position: relative;
+      width: 36px;
+      height: 40px;
+    }
+    .school-logo-icon .shield svg {
+      width: 100%;
+      height: 100%;
+    }
+    .school-logo-text {
+      flex: 1;
+      position: relative;
+      z-index: 1;
+    }
+    .school-logo-text .school-name {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #f6e9d0;
+      letter-spacing: 0.5px;
+      line-height: 1.2;
+    }
+    .school-logo-text .school-tagline {
+      font-size: 0.7rem;
+      color: #d4af37;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      opacity: 0.9;
+    }
+    .school-logo-text .school-expo {
+      display: inline-block;
+      background: #d4af37;
+      color: #0b2a4a;
+      font-size: 0.6rem;
+      font-weight: 800;
+      padding: 2px 12px;
+      border-radius: 40px;
+      margin-top: 2px;
+      letter-spacing: 0.5px;
+    }
+    .school-logo-right {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+    }
+    .school-logo-right .year {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #d4af37;
+      letter-spacing: 1px;
+    }
+    .school-logo-right .grade {
+      font-size: 0.55rem;
+      color: #f6e9d0;
+      opacity: 0.7;
+      font-weight: 600;
+    }
+
+    .app-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 14px;
-      padding-bottom: 6px;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
       border-bottom: 2px solid #d4af37;
     }
-    .school-header h1 {
-      font-size: 1.5rem;
+    .app-header h1 {
+      font-size: 1.3rem;
       font-weight: 700;
-      color: #f6e9d0;
+      color: #0b2a4a;
       letter-spacing: -0.3px;
     }
-    .school-header span {
+    .app-header h1 i {
+      color: #d4af37;
+    }
+    .app-header .badge {
       background: #d4af37;
       color: #0b2a4a;
       font-weight: 700;
-      font-size: 0.75rem;
-      padding: 4px 12px;
+      font-size: 0.65rem;
+      padding: 4px 14px;
       border-radius: 40px;
-      white-space: nowrap;
     }
+
     .top-menu {
       display: flex;
       gap: 4px;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
       background: #e9e1d6;
       padding: 4px;
       border-radius: 50px;
       border: 2px solid #d4af37;
-      flex-wrap: wrap;
     }
     .menu-btn {
       flex: 1;
@@ -84,31 +278,45 @@
       background: transparent;
       color: #0b2a4a;
       text-align: center;
-      min-width: 50px;
-      touch-action: manipulation;
     }
     .menu-btn.active {
       background: #d4af37;
       color: #0b2a4a;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
     }
     .menu-btn:hover {
-      background: rgba(212, 175, 55, 0.3);
+      background: rgba(212, 175, 55, 0.25);
     }
-    .menu-btn.active:hover {
-      background: #d4af37;
+
+    .page-content {
+      display: none;
+      animation: fadeIn 0.25s ease;
     }
+    .page-content.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     .input-section {
       background: #e9e1d6;
       border-radius: 24px;
       padding: 16px 14px 14px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.05);
     }
     .input-label {
       display: block;
       font-weight: 600;
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: #0b2a4a;
       margin-bottom: 6px;
     }
@@ -125,38 +333,32 @@
     #uniqueIdInput {
       flex: 1;
       min-width: 140px;
-      padding: 16px 14px;
-      font-size: 1.1rem;
+      padding: 14px 14px;
+      font-size: 1rem;
       font-weight: 600;
       background: white;
       border: 2px solid #d4af37;
       border-radius: 50px;
       color: #0b2a4a;
-      transition: 0.15s;
-      font-family: 'Inter', monospace;
-      height: 56px;
+      height: 52px;
     }
     #uniqueIdInput:focus {
       outline: 3px solid #d4af37;
       outline-offset: 2px;
-      border-color: #f5e3b3;
     }
     #lookupBtn {
       background: #d4af37;
       border: none;
       color: #0b2a4a;
       font-weight: 700;
-      font-size: 1.1rem;
-      padding: 14px 24px;
+      font-size: 1rem;
+      padding: 14px 22px;
       border-radius: 50px;
       cursor: pointer;
-      transition: 0.1s;
       box-shadow: 0 4px 0 #8f7a2a;
-      letter-spacing: 0.2px;
       white-space: nowrap;
-      min-width: 90px;
-      height: 56px;
-      touch-action: manipulation;
+      min-width: 80px;
+      height: 52px;
     }
     #lookupBtn:active {
       transform: translateY(3px);
@@ -165,6 +367,17 @@
     #lookupBtn:hover {
       background: #e5c55a;
     }
+    .stats-badge {
+      background: #d4af37;
+      color: #0b2a4a;
+      padding: 3px 14px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.7rem;
+      display: inline-block;
+      margin-top: 6px;
+    }
+
     .unique-id-box {
       background: #e9e1d6;
       border-radius: 40px;
@@ -191,6 +404,7 @@
       font-size: 1.1rem;
       font-family: 'Inter', monospace;
     }
+
     .venue-list {
       display: flex;
       flex-direction: column;
@@ -220,17 +434,22 @@
       font-size: 1.3rem;
       margin-right: 4px;
     }
-    .project-detail {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+    .student-name-display {
+      background: #0b2a4a;
+      color: #f6e9d0;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 1rem;
+      display: inline-block;
+      margin-bottom: 8px;
     }
     .project-detail .row {
       display: flex;
       flex-wrap: wrap;
       align-items: baseline;
       gap: 4px 6px;
-      font-size: 1rem;
+      font-size: 0.95rem;
       padding: 3px 0;
     }
     .project-detail .row .tag {
@@ -242,11 +461,10 @@
     .project-detail .row .value {
       font-weight: 600;
       color: #0b2a4a;
-      word-break: break-word;
       background: #eae3d8;
-      padding: 2px 12px;
+      padding: 2px 14px;
       border-radius: 40px;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
     .teacher-tag {
       background: #d4af37;
@@ -288,88 +506,15 @@
       text-align: center;
       color: #0b2a4a;
       font-weight: 500;
-      font-size: 1.1rem;
+      font-size: 1rem;
       border: 2px dashed #d4af37;
     }
     .empty-state span {
       font-size: 2.2rem;
       display: block;
-      margin-bottom: 8px;
-    }
-    .footer-note {
-      margin-top: 20px;
-      text-align: center;
-      font-size: 0.7rem;
-      color: #c5b59b;
-      border-top: 1px solid #3d5570;
-      padding-top: 14px;
-    }
-    .footer-note strong {
-      color: #d4af37;
-    }
-    .stats-badge {
-      background: #d4af37;
-      color: #0b2a4a;
-      padding: 3px 12px;
-      border-radius: 40px;
-      font-weight: 600;
-      font-size: 0.7rem;
-      display: inline-block;
-      margin-top: 3px;
-    }
-    .qr-section {
-      background: #e9e1d6;
-      border-radius: 24px;
-      padding: 14px;
-      margin-top: 0;
-      text-align: center;
-    }
-    .qr-section h3 {
-      color: #0b2a4a;
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 10px;
-    }
-    .qr-section h3 i {
-      color: #d4af37;
-    }
-    #qrcode {
-      display: inline-block;
-      background: white;
-      padding: 10px;
-      border-radius: 16px;
-      border: 3px solid #d4af37;
-      box-shadow: 0 4px 0 #8f7a2a;
-    }
-    #qrcode img {
-      display: block;
-      width: 160px;
-      height: 160px;
-    }
-    .qr-hint {
-      font-size: 0.75rem;
-      color: #3d2e1b;
-      margin-top: 8px;
-      opacity: 0.8;
-    }
-    .deploy-notice {
-      background: #d4af37;
-      color: #0b2a4a;
-      border-radius: 40px;
-      padding: 6px 14px;
-      font-size: 0.7rem;
-      font-weight: 600;
-      margin-top: 6px;
-      display: inline-block;
-    }
-    .page-content {
-      display: none;
-    }
-    .page-content.active {
-      display: block;
+      margin-bottom: 6px;
     }
 
-    /* Judgement & Feedback Styles - Mobile Optimized */
     .judge-section,
     .feedback-section {
       background: #e9e1d6;
@@ -385,51 +530,29 @@
       margin-bottom: 10px;
       border-bottom: 2px solid #d4af37;
       padding-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 4px;
     }
-    .judge-section h3 .judge-status-badge {
+    .judge-status-badge {
       background: #d4af37;
       color: #0b2a4a;
-      padding: 2px 10px;
+      padding: 2px 12px;
       border-radius: 40px;
       font-size: 0.65rem;
       font-weight: 700;
-      display: inline-block;
-      margin-left: 6px;
     }
-    .criteria-group {
-      margin: 10px 0;
+    .judge-status-badge.unlocked {
+      background: #28a745;
+      color: white;
     }
-    .criteria-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin: 6px 0;
-      background: white;
-      padding: 8px 12px;
-      border-radius: 40px;
-      border: 1px solid #d4af37;
-    }
-    .criteria-item label {
-      flex: 1;
-      font-weight: 600;
+    .judge-status-badge.locked {
+      background: #d4af37;
       color: #0b2a4a;
-      font-size: 0.85rem;
     }
-    .criteria-item select {
-      padding: 6px 10px;
-      border-radius: 30px;
-      border: 2px solid #d4af37;
-      font-weight: 600;
-      background: white;
-      color: #0b2a4a;
-      font-size: 0.85rem;
-      min-width: 60px;
-      height: 40px;
-    }
-    .criteria-item select:focus {
-      outline: 3px solid #d4af37;
-      outline-offset: 2px;
-    }
+
     .judge-code-input {
       display: flex;
       gap: 8px;
@@ -446,7 +569,7 @@
       font-weight: 600;
       color: #0b2a4a;
       min-width: 120px;
-      height: 50px;
+      height: 48px;
     }
     .judge-code-input button {
       background: #d4af37;
@@ -456,11 +579,9 @@
       padding: 12px 20px;
       border-radius: 50px;
       cursor: pointer;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       box-shadow: 0 4px 0 #8f7a2a;
-      transition: 0.1s;
-      height: 50px;
-      touch-action: manipulation;
+      height: 48px;
     }
     .judge-code-input button:active {
       transform: translateY(3px);
@@ -490,9 +611,6 @@
       display: block;
     }
 
-    .group-selector {
-      margin: 10px 0;
-    }
     .group-selector select {
       width: 100%;
       padding: 12px 14px;
@@ -503,13 +621,13 @@
       color: #0b2a4a;
       background: white;
       cursor: pointer;
-      height: 50px;
-      appearance: auto;
+      height: 48px;
     }
     .group-selector select:focus {
       outline: 3px solid #d4af37;
       outline-offset: 2px;
     }
+
     .group-info {
       background: white;
       border-radius: 16px;
@@ -554,24 +672,38 @@
       color: #721c24;
     }
 
-    .feedback-area {
-      margin-top: 10px;
+    .criteria-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 6px 0;
+      background: white;
+      padding: 6px 12px;
+      border-radius: 40px;
+      border: 1px solid #d4af37;
     }
-    .feedback-area textarea {
-      width: 100%;
-      padding: 12px 14px;
+    .criteria-item label {
+      flex: 1;
+      font-weight: 600;
+      color: #0b2a4a;
+      font-size: 0.85rem;
+    }
+    .criteria-item select {
+      padding: 4px 10px;
+      border-radius: 30px;
       border: 2px solid #d4af37;
-      border-radius: 16px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.95rem;
-      resize: vertical;
-      min-height: 80px;
-      transition: 0.15s;
+      font-weight: 600;
+      background: white;
+      color: #0b2a4a;
+      font-size: 0.85rem;
+      min-width: 56px;
+      height: 36px;
     }
-    .feedback-area textarea:focus {
+    .criteria-item select:focus {
       outline: 3px solid #d4af37;
       outline-offset: 2px;
     }
+
     .submit-judge-btn,
     .submit-feedback-btn {
       background: #0b2a4a;
@@ -586,8 +718,7 @@
       margin-top: 10px;
       transition: 0.2s;
       box-shadow: 0 4px 0 #061a2e;
-      touch-action: manipulation;
-      height: 52px;
+      height: 50px;
     }
     .submit-judge-btn:active,
     .submit-feedback-btn:active {
@@ -597,32 +728,6 @@
     .submit-judge-btn:hover,
     .submit-feedback-btn:hover {
       background: #1a3d5e;
-    }
-
-    .feedback-display {
-      margin-top: 8px;
-      padding: 10px 14px;
-      background: white;
-      border-radius: 16px;
-      border: 1px solid #d4af37;
-      font-size: 0.9rem;
-      color: #0b2a4a;
-    }
-    .feedback-display strong {
-      color: #d4af37;
-    }
-    .feedback-display .empty-feedback {
-      color: #999;
-      font-style: italic;
-    }
-
-    .judge-status-badge.unlocked {
-      background: #28a745;
-      color: white;
-    }
-    .judge-status-badge.locked {
-      background: #d4af37;
-      color: #0b2a4a;
     }
 
     .email-notice {
@@ -639,6 +744,20 @@
       color: #0b2a4a;
     }
 
+    .feedback-area textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid #d4af37;
+      border-radius: 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      resize: vertical;
+      min-height: 80px;
+    }
+    .feedback-area textarea:focus {
+      outline: 3px solid #d4af37;
+      outline-offset: 2px;
+    }
     #feedbackStudentId {
       flex: 1;
       min-width: 120px;
@@ -647,7 +766,7 @@
       border-radius: 50px;
       font-size: 0.95rem;
       color: #0b2a4a;
-      height: 48px;
+      height: 46px;
     }
     #feedbackRating {
       width: 100%;
@@ -658,38 +777,116 @@
       color: #0b2a4a;
       background: white;
       margin-top: 3px;
-      height: 48px;
+      height: 46px;
     }
 
-    /* Mobile optimizations */
+    .app-footer {
+      margin-top: 18px;
+      text-align: center;
+      font-size: 0.7rem;
+      color: #5a4a33;
+      border-top: 1px solid #d4af37;
+      padding-top: 14px;
+      opacity: 0.7;
+    }
+    .app-footer strong {
+      color: #0b2a4a;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0b2a4a;
+      color: #f6e9d0;
+      padding: 12px 24px;
+      border-radius: 50px;
+      border: 2px solid #d4af37;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      max-width: 90%;
+      text-align: center;
+    }
+    .toast.show {
+      opacity: 1;
+    }
+    .toast.success {
+      background: #155724;
+      border-color: #28a745;
+    }
+    .toast.error {
+      background: #721c24;
+      border-color: #dc3545;
+    }
+    .toast.info {
+      background: #0b2a4a;
+      border-color: #d4af37;
+    }
+
+    /* Mobile */
     @media (max-width: 480px) {
+      .qr-pure {
+        padding: 24px 16px 20px;
+      }
+      #qrcode-container img,
+      #qrcode-container canvas {
+        width: 180px;
+        height: 180px;
+      }
+      .qr-pure .brand h1 {
+        font-size: 1.6rem;
+      }
       .app-card {
-        padding: 14px 12px 20px;
-        border-radius: 24px;
+        padding: 14px 12px 18px;
       }
-      .school-header h1 {
-        font-size: 1.3rem;
+      .school-logo-container {
+        padding: 10px 14px;
+        gap: 12px;
       }
-      .school-header span {
-        font-size: 0.65rem;
-        padding: 3px 10px;
+      .school-logo-icon {
+        width: 46px;
+        height: 46px;
+        font-size: 22px;
+        border-radius: 14px;
+      }
+      .school-logo-text .school-name {
+        font-size: 0.95rem;
+      }
+      .school-logo-text .school-tagline {
+        font-size: 0.6rem;
+      }
+      .school-logo-text .school-expo {
+        font-size: 0.55rem;
+        padding: 1px 10px;
+      }
+      .school-logo-right .year {
+        font-size: 0.55rem;
+      }
+      .app-header h1 {
+        font-size: 1.1rem;
       }
       .menu-btn {
         font-size: 0.7rem;
         padding: 8px 4px;
-        min-width: 40px;
       }
       #uniqueIdInput {
-        font-size: 1rem;
+        font-size: 0.95rem;
         padding: 12px 12px;
-        height: 48px;
+        height: 46px;
         min-width: 100px;
       }
       #lookupBtn {
-        font-size: 1rem;
-        padding: 12px 18px;
-        height: 48px;
-        min-width: 75px;
+        font-size: 0.95rem;
+        padding: 12px 16px;
+        height: 46px;
+        min-width: 70px;
       }
       .venue-name {
         font-size: 1.1rem;
@@ -705,13 +902,22 @@
         font-size: 0.7rem;
         padding: 3px 10px;
       }
-      #qrcode img {
-        width: 140px;
-        height: 140px;
-      }
       .unique-id-box .id-value {
         font-size: 1rem;
         padding: 4px 14px;
+      }
+      .criteria-item {
+        padding: 4px 10px;
+        gap: 4px;
+      }
+      .criteria-item label {
+        font-size: 0.8rem;
+      }
+      .criteria-item select {
+        font-size: 0.8rem;
+        min-width: 48px;
+        height: 32px;
+        padding: 2px 6px;
       }
       .judge-code-input input {
         height: 44px;
@@ -728,32 +934,9 @@
       }
       .submit-judge-btn,
       .submit-feedback-btn {
-        height: 46px;
+        height: 44px;
         font-size: 0.85rem;
         padding: 10px 16px;
-      }
-      .criteria-item {
-        padding: 6px 10px;
-        gap: 6px;
-      }
-      .criteria-item label {
-        font-size: 0.8rem;
-      }
-      .criteria-item select {
-        font-size: 0.8rem;
-        min-width: 50px;
-        height: 34px;
-        padding: 4px 8px;
-      }
-      .empty-state {
-        padding: 20px 12px;
-        font-size: 1rem;
-      }
-      .empty-state span {
-        font-size: 2rem;
-      }
-      .group-info .group-name {
-        font-size: 0.9rem;
       }
       #feedbackStudentId {
         height: 42px;
@@ -768,11 +951,35 @@
         min-height: 60px;
         padding: 10px 12px;
       }
+      .student-name-display {
+        font-size: 0.9rem;
+        padding: 4px 12px;
+      }
     }
-
     @media (max-width: 380px) {
+      .qr-pure {
+        padding: 16px 10px;
+      }
+      #qrcode-container img,
+      #qrcode-container canvas {
+        width: 150px;
+        height: 150px;
+      }
       .app-card {
-        padding: 10px 8px 16px;
+        padding: 10px 8px 14px;
+      }
+      .school-logo-container {
+        padding: 8px 10px;
+        gap: 10px;
+      }
+      .school-logo-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+        border-radius: 12px;
+      }
+      .school-logo-text .school-name {
+        font-size: 0.85rem;
       }
       .top-menu {
         gap: 2px;
@@ -781,44 +988,10 @@
       .menu-btn {
         font-size: 0.6rem;
         padding: 6px 3px;
-        min-width: 35px;
       }
-      .school-header h1 {
-        font-size: 1.1rem;
+      .app-header h1 {
+        font-size: 1rem;
       }
-      #uniqueIdInput {
-        font-size: 0.85rem;
-        padding: 10px 10px;
-        height: 42px;
-        min-width: 80px;
-      }
-      #lookupBtn {
-        font-size: 0.85rem;
-        padding: 10px 14px;
-        height: 42px;
-        min-width: 65px;
-      }
-      .criteria-item {
-        flex-wrap: wrap;
-        gap: 4px;
-      }
-      .criteria-item select {
-        min-width: 45px;
-      }
-      .judge-code-input input {
-        font-size: 0.8rem;
-        padding: 10px 12px;
-        height: 40px;
-      }
-      .judge-code-input button {
-        font-size: 0.8rem;
-        padding: 10px 14px;
-        height: 40px;
-      }
-    }
-    .app-card,
-    body {
-      overflow-x: hidden;
     }
     .error-shake {
       animation: shake 0.2s;
@@ -843,187 +1016,182 @@
   </style>
 </head>
 <body>
-  <div class="app-card">
-    <div class="school-header">
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
+
+  <!-- ===== QR PURE SCREEN ===== -->
+  <div id="qrPureScreen" class="qr-pure">
+    <div class="brand">
       <h1>🎓 Cognito</h1>
       <span>EXPO 2026</span>
     </div>
+    <div class="sub">Scan to open the app</div>
+    <div id="qrcode-container"></div>
+    <div class="qr-hint" id="qrStatus">Generating QR code…</div>
+    <div class="deploy-notice" id="deployNotice">⚠️ Deploy to server for universal access</div>
+    <div class="qr-footer"><strong>📍</strong> Student Cognito · scan &amp; go</div>
+  </div>
 
-    <div class="top-menu">
-      <button class="menu-btn active" data-page="lookup">🔍 Lookup</button>
-      <button class="menu-btn" data-page="judge">🏆 Judge</button>
-      <button class="menu-btn" data-page="feedback">💬 Feedback</button>
-      <button class="menu-btn" data-page="qr">📱 QR</button>
-    </div>
+  <!-- ===== FULL APP ===== -->
+  <div id="fullApp" class="app-hidden" style="width:100%; max-width:480px;">
+    <div class="app-card">
 
-    <!-- LOOKUP PAGE -->
-    <div id="page-lookup" class="page-content active">
-      <div class="input-section">
-        <label class="input-label" for="uniqueIdInput">
-          <i>🔑</i> Enter Unique ID (Admission No.)
-        </label>
-        <div class="input-row">
-          <input type="text" id="uniqueIdInput" placeholder="e.g. 1001" inputmode="numeric" autocomplete="off" />
-          <button id="lookupBtn">🔍 Lookup</button>
-        </div>
-        <div style="font-size:0.7rem; color:#3d2e1b; margin-top: 6px;">
-          <span class="stats-badge" id="recordCount">Loading database...</span>
-        </div>
-      </div>
-
-      <div class="unique-id-box">
-        <span class="label">🆔 Unique ID</span>
-        <span class="id-value" id="uniqueIdDisplay">—</span>
-      </div>
-
-      <div id="venueContainer">
-        <div class="empty-state">
-          <span>🔍</span>
-          Type an ID and press Lookup
-        </div>
-      </div>
-    </div>
-
-    <!-- JUDGE PAGE -->
-    <div id="page-judge" class="page-content">
-      <div class="judge-section">
-        <h3>🏆 Judgement Panel <span class="judge-status-badge locked" id="judgeStatusBadge">🔒 Locked</span></h3>
-
-        <div id="judgeLockContainer">
-          <p style="color:#3d2e1b; font-size:0.8rem; margin-bottom:10px;">Enter the judge access code to unlock judging</p>
-          <div class="judge-code-input">
-            <input type="password" id="judgeCodeInput" placeholder="Enter judge code" />
-            <button id="unlockJudgeBtn">🔓 Unlock</button>
+      <!-- ===== MODERN SCHOOL LOGO ===== -->
+      <div class="school-logo-container">
+        <div class="school-logo-icon">
+          <div class="shield">
+            <svg viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M50 5 L5 30 L5 65 C5 85 50 105 50 105 C50 105 95 85 95 65 L95 30 L50 5Z" fill="#0b2a4a" stroke="#d4af37" stroke-width="3"/>
+              <path d="M50 15 L15 35 L15 65 C15 80 50 95 50 95 C50 95 85 80 85 65 L85 35 L50 15Z" fill="#f5f0eb" stroke="none"/>
+              <text x="50" y="58" font-family="Arial, sans-serif" font-size="32" font-weight="800" fill="#0b2a4a" text-anchor="middle" dominant-baseline="middle">S</text>
+              <text x="50" y="82" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#d4af37" text-anchor="middle" dominant-baseline="middle">2026</text>
+            </svg>
           </div>
-          <div id="judgeLockError" style="color:#721c24; font-weight:600; font-size:0.8rem; display:none;">❌ Invalid code. Please try again.</div>
+        </div>
+        <div class="school-logo-text">
+          <div class="school-name">STUDENT COGNITO</div>
+          <div class="school-tagline">Excellence in Innovation &amp; Science</div>
+          <div class="school-expo">🏆 EXPO 2026</div>
+        </div>
+        <div class="school-logo-right">
+          <div class="year">2026</div>
+          <div class="grade">K-12</div>
+        </div>
+      </div>
+
+      <div class="app-header">
+        <h1><i>🎓</i> Cognito</h1>
+        <span class="badge">EXPO 2026</span>
+      </div>
+
+      <div class="top-menu">
+        <button class="menu-btn active" data-page="lookup">🔍 Lookup</button>
+        <button class="menu-btn" data-page="judge">🏆 Judge</button>
+        <button class="menu-btn" data-page="feedback">💬 Feedback</button>
+      </div>
+
+      <!-- LOOKUP -->
+      <div id="page-lookup" class="page-content active">
+        <div class="input-section">
+          <label class="input-label" for="uniqueIdInput">
+            <i>🔑</i> Enter Unique ID (Admission No.)
+          </label>
+          <div class="input-row">
+            <input type="text" id="uniqueIdInput" placeholder="e.g. 1001" inputmode="numeric" autocomplete="off" />
+            <button id="lookupBtn">🔍 Lookup</button>
+          </div>
+          <div style="font-size:0.7rem; color:#3d2e1b; margin-top: 6px;">
+            <span class="stats-badge" id="recordCount">Loading database...</span>
+          </div>
         </div>
 
-        <div id="judgeContent" style="display:none;">
+        <div class="unique-id-box">
+          <span class="label">🆔 Unique ID</span>
+          <span class="id-value" id="uniqueIdDisplay">—</span>
+        </div>
+
+        <div id="venueContainer">
+          <div class="empty-state">
+            <span>🔍</span>
+            Type an ID and press Lookup
+          </div>
+        </div>
+      </div>
+
+      <!-- JUDGE -->
+      <div id="page-judge" class="page-content">
+        <div class="judge-section">
+          <h3>
+            <span>🏆 Judgement Panel</span>
+            <span class="judge-status-badge locked" id="judgeStatusBadge">🔒 Locked</span>
+          </h3>
+
+          <div id="judgeLockContainer">
+            <p style="color:#3d2e1b; font-size:0.8rem; margin-bottom:10px;">Enter the judge access code to unlock</p>
+            <div class="judge-code-input">
+              <input type="password" id="judgeCodeInput" placeholder="Enter judge code" />
+              <button id="unlockJudgeBtn">🔓 Unlock</button>
+            </div>
+            <div id="judgeLockError" style="color:#721c24; font-weight:600; font-size:0.8rem; display:none;">❌ Invalid code. Please try again.</div>
+          </div>
+
+          <div id="judgeContent" style="display:none;">
+            <div class="email-notice">
+              📧 Judgements will be sent to: <strong>prithviraj130808@gmail.com</strong>
+            </div>
+
+            <div class="group-selector" style="margin-top:10px;">
+              <label style="font-weight:600; color:#0b2a4a; font-size:0.85rem;">Select Group to Judge:</label>
+              <select id="groupSelector">
+                <option value="">-- Select a Group --</option>
+              </select>
+            </div>
+
+            <div id="groupInfoDisplay" style="display:none;">
+              <div class="group-info">
+                <div class="group-name" id="groupDisplayName">Group Name</div>
+                <div class="group-members-list" id="groupMembersList"></div>
+                <div class="group-status" id="groupStatusDisplay">Status: Not Judged</div>
+              </div>
+            </div>
+
+            <div id="judgeCriteria" style="display:none;">
+              <div class="criteria-group">
+                <div class="criteria-item"><label>🔬 Innovation</label><select id="criteria1"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option></select></div>
+                <div class="criteria-item"><label>⚙️ Technical</label><select id="criteria2"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option></select></div>
+                <div class="criteria-item"><label>📊 Presentation</label><select id="criteria3"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option></select></div>
+                <div class="criteria-item"><label>🌍 Impact</label><select id="criteria4"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option></select></div>
+                <div class="criteria-item"><label>🤝 Collaboration</label><select id="criteria5"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option></select></div>
+              </div>
+              <div style="margin-top:10px;">
+                <label style="font-weight:600; color:#0b2a4a; font-size:0.85rem;">💬 Judge Comments</label>
+                <textarea id="judgeComments" placeholder="Add your comments..." style="width:100%; padding:10px 14px; border:2px solid #d4af37; border-radius:16px; font-family:'Inter',sans-serif; font-size:0.9rem; resize:vertical; min-height:50px; margin-top:3px;"></textarea>
+              </div>
+              <button class="submit-judge-btn" id="submitJudgeBtn">✅ Submit Judgement</button>
+              <div id="judgeResult" class="judge-result"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FEEDBACK -->
+      <div id="page-feedback" class="page-content">
+        <div class="feedback-section">
+          <h3>💬 Feedback &amp; Suggestions</h3>
           <div class="email-notice">
-            📧 Judgements will be sent to: <strong>prithviraj130808@gmail.com</strong>
+            📧 Feedback will be sent to: <strong>prithviraj130808@gmail.com</strong>
+          </div>
+          <p style="color:#3d2e1b; font-size:0.8rem; margin-bottom:10px; margin-top:6px;">Share your feedback about the event or any project</p>
+
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:10px;">
+            <input type="text" id="feedbackStudentId" placeholder="Your Admission No (optional)" />
           </div>
 
-          <div class="group-selector">
-            <label style="font-weight:600; color:#0b2a4a; font-size:0.85rem;">Select Group to Judge:</label>
-            <select id="groupSelector">
-              <option value="">-- Select a Group --</option>
+          <div class="feedback-area">
+            <label style="font-weight:600; color:#0b2a4a; font-size:0.85rem;">✍️ Your Feedback</label>
+            <textarea id="feedbackText" placeholder="Share your thoughts, suggestions, or feedback..."></textarea>
+          </div>
+
+          <div style="margin-top:10px;">
+            <label style="font-weight:600; color:#0b2a4a; font-size:0.85rem;">⭐ Rating</label>
+            <select id="feedbackRating">
+              <option value="5">⭐⭐⭐⭐⭐ - Excellent</option>
+              <option value="4">⭐⭐⭐⭐ - Very Good</option>
+              <option value="3" selected>⭐⭐⭐ - Good</option>
+              <option value="2">⭐⭐ - Fair</option>
+              <option value="1">⭐ - Poor</option>
             </select>
           </div>
 
-          <div id="groupInfoDisplay" style="display:none;">
-            <div class="group-info">
-              <div class="group-name" id="groupDisplayName">Group Name</div>
-              <div class="group-members-list" id="groupMembersList"></div>
-              <div class="group-status" id="groupStatusDisplay">Status: Not Judged</div>
-            </div>
-          </div>
-
-          <div id="judgeCriteria" style="display:none;">
-            <div class="criteria-group">
-              <div class="criteria-item">
-                <label>🔬 Innovation</label>
-                <select id="criteria1">
-                  <option value="1">1</option><option value="2">2</option><option value="3">3</option>
-                  <option value="4">4</option><option value="5" selected>5</option>
-                </select>
-              </div>
-              <div class="criteria-item">
-                <label>⚙️ Technical</label>
-                <select id="criteria2">
-                  <option value="1">1</option><option value="2">2</option><option value="3">3</option>
-                  <option value="4">4</option><option value="5" selected>5</option>
-                </select>
-              </div>
-              <div class="criteria-item">
-                <label>📊 Presentation</label>
-                <select id="criteria3">
-                  <option value="1">1</option><option value="2">2</option><option value="3">3</option>
-                  <option value="4">4</option><option value="5" selected>5</option>
-                </select>
-              </div>
-              <div class="criteria-item">
-                <label>🌍 Impact</label>
-                <select id="criteria4">
-                  <option value="1">1</option><option value="2">2</option><option value="3">3</option>
-                  <option value="4">4</option><option value="5" selected>5</option>
-                </select>
-              </div>
-              <div class="criteria-item">
-                <label>🤝 Collaboration</label>
-                <select id="criteria5">
-                  <option value="1">1</option><option value="2">2</option><option value="3">3</option>
-                  <option value="4">4</option><option value="5" selected>5</option>
-                </select>
-              </div>
-            </div>
-
-            <div style="margin-top:10px;">
-              <label style="font-weight:600; color:#0b2a4a; font-size:0.85rem;">💬 Judge Comments</label>
-              <textarea id="judgeComments" placeholder="Add your comments..." style="width:100%; padding:10px 14px; border:2px solid #d4af37; border-radius:16px; font-family:'Inter',sans-serif; font-size:0.9rem; resize:vertical; min-height:50px; margin-top:3px;"></textarea>
-            </div>
-
-            <button class="submit-judge-btn" id="submitJudgeBtn">✅ Submit Judgement</button>
-            <div id="judgeResult" class="judge-result"></div>
-          </div>
+          <button class="submit-feedback-btn" id="submitFeedbackBtn">📤 Submit Feedback</button>
+          <div id="feedbackResult" class="judge-result"></div>
         </div>
       </div>
-    </div>
 
-    <!-- FEEDBACK PAGE -->
-    <div id="page-feedback" class="page-content">
-      <div class="feedback-section">
-        <h3>💬 Feedback & Suggestions</h3>
-        <div class="email-notice">
-          📧 Feedback will be sent to: <strong>prithviraj130808@gmail.com</strong>
-        </div>
-        <p style="color:#3d2e1b; font-size:0.8rem; margin-bottom:10px; margin-top:6px;">Share your feedback about the event or any project</p>
-
-        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:10px;">
-          <input type="text" id="feedbackStudentId" placeholder="Your Admission No (optional)" />
-        </div>
-
-        <div class="feedback-area">
-          <label style="font-weight:600; color:#0b2a4a; font-size:0.85rem;">✍️ Your Feedback</label>
-          <textarea id="feedbackText" placeholder="Share your thoughts, suggestions, or feedback..."></textarea>
-        </div>
-
-        <div style="margin-top:10px;">
-          <label style="font-weight:600; color:#0b2a4a; font-size:0.85rem;">⭐ Rating</label>
-          <select id="feedbackRating">
-            <option value="5">⭐⭐⭐⭐⭐ - Excellent</option>
-            <option value="4">⭐⭐⭐⭐ - Very Good</option>
-            <option value="3" selected>⭐⭐⭐ - Good</option>
-            <option value="2">⭐⭐ - Fair</option>
-            <option value="1">⭐ - Poor</option>
-          </select>
-        </div>
-
-        <button class="submit-feedback-btn" id="submitFeedbackBtn">📤 Submit Feedback</button>
-        <div id="feedbackResult" class="judge-result"></div>
-
-        <div style="margin-top:14px; border-top:2px dashed #d4af37; padding-top:12px;">
-          <h4 style="color:#0b2a4a; font-size:0.85rem;">📋 Recent Feedback</h4>
-          <div id="feedbackList">
-            <div class="feedback-display">
-              <span class="empty-feedback">No feedback submitted yet</span>
-            </div>
-          </div>
-        </div>
+      <div class="app-footer">
+        <strong>📍</strong> scan QR · <strong>schoolname.in/expo</strong>
       </div>
-    </div>
-
-    <!-- QR PAGE -->
-    <div id="page-qr" class="page-content">
-      <div class="qr-section">
-        <h3><i>📱</i> Scan to open this page</h3>
-        <div id="qrcode"></div>
-        <div class="qr-hint" id="qrStatus">Generating QR code...</div>
-        <div class="deploy-notice" id="deployNotice">⚠️ Deploy to a server for QR to work on all devices</div>
-      </div>
-    </div>
-
-    <div class="footer-note">
-      <strong>📍</strong> scan QR · <strong>schoolname.in/expo</strong>
     </div>
   </div>
 
@@ -1031,103 +1199,172 @@
     (function() {
       "use strict";
 
-      // ============================================================
-      //  DATABASE: STUDENTS ORGANIZED IN GROUPS
-      // ============================================================
+      // =============================================================
+      //  EMAILJS CONFIGURATION - REPLACE WITH YOUR CREDENTIALS
+      //  Sign up at: https://www.emailjs.com/
+      // =============================================================
+      // const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";
+      // const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
+      // const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
+
+      // For demo, we'll use a working configuration - but you MUST replace these
+      // with your own EmailJS credentials for it to work.
+      const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";
+      const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
+      const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
+
+      // =============================================================
+      //  DATABASE
+      // =============================================================
       var studentData = [
-        { admissionNo: 1001, studentName: "Rahul Sharma", class: "IX", section: "A", venue: "Physics Lab", project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-        { admissionNo: 1002, studentName: "Priya Patel", class: "IX", section: "A", venue: "Physics Lab", project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-        { admissionNo: 1003, studentName: "Amit Kumar", class: "IX", section: "A", venue: "Physics Lab", project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-        { admissionNo: 1004, studentName: "Sneha Reddy", class: "IX", section: "A", venue: "Physics Lab", project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-        { admissionNo: 1005, studentName: "Vikram Singh", class: "IX", section: "A", venue: "Physics Lab", project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-        { admissionNo: 1006, studentName: "Ananya Sharma", class: "X", section: "B", venue: "Hall A", project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
-        { admissionNo: 1007, studentName: "Rohit Verma", class: "X", section: "B", venue: "Hall A", project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
-        { admissionNo: 1008, studentName: "Kavya Nair", class: "X", section: "B", venue: "Hall A", project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
-        { admissionNo: 1009, studentName: "Arjun Mehta", class: "X", section: "B", venue: "Hall A", project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
-        { admissionNo: 1010, studentName: "Diya Patel", class: "XI", section: "C", venue: "Chemistry Lab", project: "Green Energy Hydrogen Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-        { admissionNo: 1011, studentName: "Kiran Rao", class: "XI", section: "C", venue: "Chemistry Lab", project: "Green Energy Hydrogen Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-        { admissionNo: 1012, studentName: "Suresh Iyer", class: "XI", section: "C", venue: "Chemistry Lab", project: "Green Energy Hydrogen Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-        { admissionNo: 1013, studentName: "Lata Krishnan", class: "XI", section: "C", venue: "Chemistry Lab", project: "Green Energy Hydrogen Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-        { admissionNo: 1014, studentName: "Manoj Singh", class: "XI", section: "C", venue: "Chemistry Lab", project: "Green Energy Hydrogen Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-        { admissionNo: 1015, studentName: "Neha Sharma", class: "XI", section: "C", venue: "Chemistry Lab", project: "Green Energy Hydrogen Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-        { admissionNo: 1016, studentName: "Aarav Mehta", class: "X", section: "A", venue: "Robotics Arena", project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-        { admissionNo: 1017, studentName: "Ishita Roy", class: "X", section: "A", venue: "Robotics Arena", project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-        { admissionNo: 1018, studentName: "Vivek Jain", class: "X", section: "A", venue: "Robotics Arena", project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-        { admissionNo: 1019, studentName: "Pooja Desai", class: "X", section: "A", venue: "Robotics Arena", project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-        { admissionNo: 1020, studentName: "Ravi Kumar", class: "X", section: "A", venue: "Robotics Arena", project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-        { admissionNo: 1021, studentName: "Aditya Singh", class: "IX", section: "B", venue: "Makerspace", project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
-        { admissionNo: 1022, studentName: "Meera Nair", class: "IX", section: "B", venue: "Makerspace", project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
-        { admissionNo: 1023, studentName: "Karan Joshi", class: "IX", section: "B", venue: "Makerspace", project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
-        { admissionNo: 1024, studentName: "Anjali Menon", class: "IX", section: "B", venue: "Makerspace", project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
-        { admissionNo: 1025, studentName: "Priya Kaur", class: "VIII", section: "C", venue: "Biology Lab", project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-        { admissionNo: 1026, studentName: "Gaurav Singh", class: "VIII", section: "C", venue: "Biology Lab", project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-        { admissionNo: 1027, studentName: "Ritu Sharma", class: "VIII", section: "C", venue: "Biology Lab", project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-        { admissionNo: 1028, studentName: "Deepak Patel", class: "VIII", section: "C", venue: "Biology Lab", project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-        { admissionNo: 1029, studentName: "Suman Reddy", class: "VIII", section: "C", venue: "Biology Lab", project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-        { admissionNo: 1030, studentName: "Arjun Kumar", class: "XII", section: "A", venue: "Auditorium", project: "Smart Lighting System", description: "Motion and light sensor based automation", teacher: "Mr. Mehta" },
-        { admissionNo: 1031, studentName: "Sara Khan", class: "XII", section: "A", venue: "Auditorium", project: "Smart Lighting System", description: "Motion and light sensor based automation", teacher: "Mr. Mehta" },
-        { admissionNo: 1032, studentName: "Rahul Saxena", class: "XII", section: "A", venue: "Auditorium", project: "Smart Lighting System", description: "Motion and light sensor based automation", teacher: "Mr. Mehta" },
-        { admissionNo: 1033, studentName: "Nisha Reddy", class: "XII", section: "A", venue: "Auditorium", project: "Smart Lighting System", description: "Motion and light sensor based automation", teacher: "Mr. Mehta" },
-        { admissionNo: 1034, studentName: "Vijay Singh", class: "XII", section: "A", venue: "Auditorium", project: "Smart Lighting System", description: "Motion and light sensor based automation", teacher: "Mr. Mehta" },
-        { admissionNo: 1035, studentName: "Kavita Sharma", class: "XII", section: "A", venue: "Auditorium", project: "Smart Lighting System", description: "Motion and light sensor based automation", teacher: "Mr. Mehta" },
-        { admissionNo: 1036, studentName: "Sai Reddy", class: "IX", section: "A", venue: "Library", project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
-        { admissionNo: 1037, studentName: "Maya Krishnan", class: "IX", section: "A", venue: "Library", project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
-        { admissionNo: 1038, studentName: "Rajesh Nair", class: "IX", section: "A", venue: "Library", project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
-        { admissionNo: 1039, studentName: "Shreya Patel", class: "IX", section: "A", venue: "Library", project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
-        { admissionNo: 1040, studentName: "Vivaan Singh", class: "XI", section: "B", venue: "STEM Lab", project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
-        { admissionNo: 1041, studentName: "Ankit Reddy", class: "XI", section: "B", venue: "STEM Lab", project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
-        { admissionNo: 1042, studentName: "Sneha Menon", class: "XI", section: "B", venue: "STEM Lab", project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
-        { admissionNo: 1043, studentName: "Kishore Kumar", class: "XI", section: "B", venue: "STEM Lab", project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
-        { admissionNo: 1044, studentName: "Divya Sharma", class: "XI", section: "B", venue: "STEM Lab", project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
-        { admissionNo: 1045, studentName: "Diya Patel", class: "VII", section: "B", venue: "Art Gallery", project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art", teacher: "Mrs. Gupta" },
-        { admissionNo: 1046, studentName: "Rohan Verma", class: "VII", section: "B", venue: "Art Gallery", project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art", teacher: "Mrs. Gupta" },
-        { admissionNo: 1047, studentName: "Pari Singh", class: "VII", section: "B", venue: "Art Gallery", project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art", teacher: "Mrs. Gupta" },
-        { admissionNo: 1048, studentName: "Arnav Iyer", class: "VII", section: "B", venue: "Art Gallery", project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art", teacher: "Mrs. Gupta" },
-        { admissionNo: 1049, studentName: "Ishita Reddy", class: "VII", section: "B", venue: "Art Gallery", project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art", teacher: "Mrs. Gupta" },
-        { admissionNo: 1050, studentName: "Krishna Nair", class: "VII", section: "B", venue: "Art Gallery", project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art", teacher: "Mrs. Gupta" }
+        { admissionNo: 1001, studentName: "Rahul Sharma", class: "IX", section: "A", venue: "Physics Lab",
+          project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
+        { admissionNo: 1002, studentName: "Priya Patel", class: "IX", section: "A", venue: "Physics Lab",
+          project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
+        { admissionNo: 1003, studentName: "Amit Kumar", class: "IX", section: "A", venue: "Physics Lab",
+          project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
+        { admissionNo: 1004, studentName: "Sneha Reddy", class: "IX", section: "A", venue: "Physics Lab",
+          project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
+        { admissionNo: 1005, studentName: "Vikram Singh", class: "IX", section: "A", venue: "Physics Lab",
+          project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
+        { admissionNo: 1006, studentName: "Ananya Sharma", class: "X", section: "B", venue: "Hall A",
+          project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
+        { admissionNo: 1007, studentName: "Rohit Verma", class: "X", section: "B", venue: "Hall A",
+          project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
+        { admissionNo: 1008, studentName: "Kavya Nair", class: "X", section: "B", venue: "Hall A",
+          project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
+        { admissionNo: 1009, studentName: "Arjun Mehta", class: "X", section: "B", venue: "Hall A",
+          project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
+        { admissionNo: 1010, studentName: "Diya Patel", class: "XI", section: "C", venue: "Chemistry Lab",
+          project: "Green Energy Hydrogen Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
+        { admissionNo: 1011, studentName: "Kiran Rao", class: "XI", section: "C", venue: "Chemistry Lab",
+          project: "Green Energy Hydrogen Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
+        { admissionNo: 1012, studentName: "Suresh Iyer", class: "XI", section: "C", venue: "Chemistry Lab",
+          project: "Green Energy Hydrogen Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
+        { admissionNo: 1013, studentName: "Lata Krishnan", class: "XI", section: "C", venue: "Chemistry Lab",
+          project: "Green Energy Hydrogen Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
+        { admissionNo: 1014, studentName: "Manoj Singh", class: "XI", section: "C", venue: "Chemistry Lab",
+          project: "Green Energy Hydrogen Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
+        { admissionNo: 1015, studentName: "Neha Sharma", class: "XI", section: "C", venue: "Chemistry Lab",
+          project: "Green Energy Hydrogen Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
+        { admissionNo: 1016, studentName: "Aarav Mehta", class: "X", section: "A", venue: "Robotics Arena",
+          project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
+        { admissionNo: 1017, studentName: "Ishita Roy", class: "X", section: "A", venue: "Robotics Arena",
+          project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
+        { admissionNo: 1018, studentName: "Vivek Jain", class: "X", section: "A", venue: "Robotics Arena",
+          project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
+        { admissionNo: 1019, studentName: "Pooja Desai", class: "X", section: "A", venue: "Robotics Arena",
+          project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
+        { admissionNo: 1020, studentName: "Ravi Kumar", class: "X", section: "A", venue: "Robotics Arena",
+          project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
+        { admissionNo: 1021, studentName: "Aditya Singh", class: "IX", section: "B", venue: "Makerspace",
+          project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
+        { admissionNo: 1022, studentName: "Meera Nair", class: "IX", section: "B", venue: "Makerspace",
+          project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
+        { admissionNo: 1023, studentName: "Karan Joshi", class: "IX", section: "B", venue: "Makerspace",
+          project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
+        { admissionNo: 1024, studentName: "Anjali Menon", class: "IX", section: "B", venue: "Makerspace",
+          project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
+        { admissionNo: 1025, studentName: "Priya Kaur", class: "VIII", section: "C", venue: "Biology Lab",
+          project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
+        { admissionNo: 1026, studentName: "Gaurav Singh", class: "VIII", section: "C", venue: "Biology Lab",
+          project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
+        { admissionNo: 1027, studentName: "Ritu Sharma", class: "VIII", section: "C", venue: "Biology Lab",
+          project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
+        { admissionNo: 1028, studentName: "Deepak Patel", class: "VIII", section: "C", venue: "Biology Lab",
+          project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
+        { admissionNo: 1029, studentName: "Suman Reddy", class: "VIII", section: "C", venue: "Biology Lab",
+          project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
+        { admissionNo: 1030, studentName: "Arjun Kumar", class: "XII", section: "A", venue: "Auditorium",
+          project: "Smart Lighting System", description: "Motion and light sensor based automation",
+          teacher: "Mr. Mehta" },
+        { admissionNo: 1031, studentName: "Sara Khan", class: "XII", section: "A", venue: "Auditorium",
+          project: "Smart Lighting System", description: "Motion and light sensor based automation",
+          teacher: "Mr. Mehta" },
+        { admissionNo: 1032, studentName: "Rahul Saxena", class: "XII", section: "A", venue: "Auditorium",
+          project: "Smart Lighting System", description: "Motion and light sensor based automation",
+          teacher: "Mr. Mehta" },
+        { admissionNo: 1033, studentName: "Nisha Reddy", class: "XII", section: "A", venue: "Auditorium",
+          project: "Smart Lighting System", description: "Motion and light sensor based automation",
+          teacher: "Mr. Mehta" },
+        { admissionNo: 1034, studentName: "Vijay Singh", class: "XII", section: "A", venue: "Auditorium",
+          project: "Smart Lighting System", description: "Motion and light sensor based automation",
+          teacher: "Mr. Mehta" },
+        { admissionNo: 1035, studentName: "Kavita Sharma", class: "XII", section: "A", venue: "Auditorium",
+          project: "Smart Lighting System", description: "Motion and light sensor based automation",
+          teacher: "Mr. Mehta" },
+        { admissionNo: 1036, studentName: "Sai Reddy", class: "IX", section: "A", venue: "Library",
+          project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
+        { admissionNo: 1037, studentName: "Maya Krishnan", class: "IX", section: "A", venue: "Library",
+          project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
+        { admissionNo: 1038, studentName: "Rajesh Nair", class: "IX", section: "A", venue: "Library",
+          project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
+        { admissionNo: 1039, studentName: "Shreya Patel", class: "IX", section: "A", venue: "Library",
+          project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
+        { admissionNo: 1040, studentName: "Vivaan Singh", class: "XI", section: "B", venue: "STEM Lab",
+          project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
+        { admissionNo: 1041, studentName: "Ankit Reddy", class: "XI", section: "B", venue: "STEM Lab",
+          project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
+        { admissionNo: 1042, studentName: "Sneha Menon", class: "XI", section: "B", venue: "STEM Lab",
+          project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
+        { admissionNo: 1043, studentName: "Kishore Kumar", class: "XI", section: "B", venue: "STEM Lab",
+          project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
+        { admissionNo: 1044, studentName: "Divya Sharma", class: "XI", section: "B", venue: "STEM Lab",
+          project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
+        { admissionNo: 1045, studentName: "Diya Patel", class: "VII", section: "B", venue: "Art Gallery",
+          project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art",
+          teacher: "Mrs. Gupta" },
+        { admissionNo: 1046, studentName: "Rohan Verma", class: "VII", section: "B", venue: "Art Gallery",
+          project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art",
+          teacher: "Mrs. Gupta" },
+        { admissionNo: 1047, studentName: "Pari Singh", class: "VII", section: "B", venue: "Art Gallery",
+          project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art",
+          teacher: "Mrs. Gupta" },
+        { admissionNo: 1048, studentName: "Arnav Iyer", class: "VII", section: "B", venue: "Art Gallery",
+          project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art",
+          teacher: "Mrs. Gupta" },
+        { admissionNo: 1049, studentName: "Ishita Reddy", class: "VII", section: "B", venue: "Art Gallery",
+          project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art",
+          teacher: "Mrs. Gupta" },
+        { admissionNo: 1050, studentName: "Krishna Nair", class: "VII", section: "B", venue: "Art Gallery",
+          project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art",
+          teacher: "Mrs. Gupta" }
       ];
 
-      // ============================================================
-      //  JUDGE ACCESS CODE
-      // ============================================================
       var JUDGE_CODE = "EXPO2026";
-
-      // ============================================================
-      //  EMAIL CONFIGURATION - CHANGE THIS TO YOUR EMAIL
-      // ============================================================
       var EMAIL_TO = "prithviraj130808@gmail.com";
-
-      // ============================================================
-      //  STORAGE FOR JUDGEMENTS & FEEDBACK (localStorage)
-      // ============================================================
       var judgements = JSON.parse(localStorage.getItem('groupJudgements')) || {};
       var feedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
 
-      // ============================================================
-      //  HELPERS: GROUP IDENTIFICATION
-      // ============================================================
+      // =============================================================
+      //  TOAST
+      // =============================================================
+      var toastEl = document.getElementById('toast');
+      var toastTimeout;
 
-      function getGroupKey(student) {
-        return student.venue + '|||' + student.project;
+      function showToast(message, type) {
+        clearTimeout(toastTimeout);
+        toastEl.textContent = message;
+        toastEl.className = 'toast';
+        if (type) toastEl.classList.add(type);
+        toastEl.classList.add('show');
+        toastTimeout = setTimeout(function() {
+          toastEl.classList.remove('show');
+        }, 4000);
       }
 
-      function getGroupName(student) {
-        return student.venue + ' - ' + student.project;
-      }
+      // =============================================================
+      //  HELPERS
+      // =============================================================
+      function getGroupKey(s) { return s.venue + '|||' + s.project; }
 
       function getAllGroups() {
         var groups = {};
         studentData.forEach(function(s) {
           var key = getGroupKey(s);
           if (!groups[key]) {
-            groups[key] = {
-              key: key,
-              venue: s.venue,
-              project: s.project,
-              description: s.description,
-              teacher: s.teacher,
-              members: []
-            };
+            groups[key] = { key: key, venue: s.venue, project: s.project, description: s.description,
+              teacher: s.teacher, members: [] };
           }
           groups[key].members.push(s);
         });
@@ -1139,52 +1376,9 @@
         return groups.find(function(g) { return g.key === key; }) || null;
       }
 
-      function getGroupByAdmission(admissionNo) {
-        var student = studentData.find(function(s) { return s.admissionNo === admissionNo; });
-        if (!student) return null;
-        return getGroupByKey(getGroupKey(student));
+      function getVenuesForStudent(admissionNo) {
+        return studentData.filter(function(entry) { return entry.admissionNo === admissionNo; });
       }
-
-      // ============================================================
-      //  EMAIL SENDING FUNCTION using mailto
-      // ============================================================
-
-      function sendEmail(subject, body) {
-        var mailtoLink = 'mailto:' + EMAIL_TO +
-          '?subject=' + encodeURIComponent(subject) +
-          '&body=' + encodeURIComponent(body);
-
-        var win = window.open(mailtoLink, '_blank');
-
-        if (!win || win.closed || typeof win.closed === 'undefined') {
-          var fullMessage = 'To: ' + EMAIL_TO + '\n\nSubject: ' + subject + '\n\n' + body;
-          if (navigator.clipboard) {
-            navigator.clipboard.writeText(fullMessage).then(function() {
-              alert(
-                '📧 Email content copied to clipboard!\n\nPlease paste it into your email client and send to:\n' +
-                EMAIL_TO +
-                '\n\nSubject: ' + subject);
-            }).catch(function() {
-              alert('📧 Please send an email to: ' + EMAIL_TO +
-                '\n\nSubject: ' + subject +
-                '\n\nBody:\n' + body);
-            });
-          } else {
-            alert('📧 Please send an email to: ' + EMAIL_TO +
-              '\n\nSubject: ' + subject +
-              '\n\nBody:\n' + body);
-          }
-        }
-      }
-
-      // ============================================================
-      //  CORE LOGIC
-      // ============================================================
-
-      var uniqueStudents = new Set();
-      studentData.forEach(function(s) { uniqueStudents.add(s.admissionNo); });
-      document.getElementById('recordCount').textContent = '📊 ' + uniqueStudents.size + ' students · ' + studentData.length +
-        ' projects';
 
       function getGroupMembers(admissionNo) {
         var student = studentData.find(function(s) { return s.admissionNo === admissionNo; });
@@ -1194,487 +1388,428 @@
         });
       }
 
-      function getVenuesForStudent(admissionNo) {
-        return studentData.filter(function(entry) { return entry.admissionNo === admissionNo; });
+      function getStudentName(admissionNo) {
+        var student = studentData.find(function(s) { return s.admissionNo === admissionNo; });
+        return student ? student.studentName : null;
       }
 
-      var inputEl = document.getElementById('uniqueIdInput');
-      var lookupBtn = document.getElementById('lookupBtn');
-      var uniqueIdDisplay = document.getElementById('uniqueIdDisplay');
-      var venueContainer = document.getElementById('venueContainer');
+      // =============================================================
+      //  EMAIL SENDING - Using EmailJS (background, no popups)
+      // =============================================================
 
-      var currentLookupId = null;
-
-      function renderStudent(admissionNo) {
-        currentLookupId = admissionNo;
-
-        if (studentData.length === 0) {
-          venueContainer.innerHTML =
-            '<div class="empty-state"><span>📊</span>Loading data...</div>';
-          uniqueIdDisplay.textContent = '—';
+      function sendEmailDirect(subject, body) {
+        // Check if EmailJS is configured
+        if (EMAILJS_PUBLIC_KEY === "YOUR_PUBLIC_KEY" || EMAILJS_SERVICE_ID === "YOUR_SERVICE_ID" || EMAILJS_TEMPLATE_ID ===
+          "YOUR_TEMPLATE_ID") {
+          showToast('⚠️ EmailJS not configured. Please set your credentials in the code.', 'error');
           return;
         }
 
-        if (admissionNo !== null && admissionNo !== undefined && !isNaN(admissionNo)) {
-          uniqueIdDisplay.textContent = admissionNo;
-        } else {
-          uniqueIdDisplay.textContent = '—';
+        showToast('📧 Sending email...', 'info');
+
+        try {
+          emailjs.init(EMAILJS_PUBLIC_KEY);
+
+          var templateParams = {
+            to_email: EMAIL_TO,
+            subject: subject,
+            message: body
+          };
+
+          emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+            .then(function(response) {
+              showToast('✅ Email sent successfully to ' + EMAIL_TO, 'success');
+            })
+            .catch(function(error) {
+              console.error('EmailJS error:', error);
+              showToast('❌ Failed to send email. Please check your EmailJS configuration.', 'error');
+            });
+        } catch (error) {
+          console.error('EmailJS init error:', error);
+          showToast('❌ Email service error. Please check your credentials.', 'error');
         }
-
-        if (!admissionNo || isNaN(admissionNo)) {
-          venueContainer.innerHTML =
-            '<div class="empty-state">' +
-            '<span>🔍</span>' +
-            'Enter a valid ID <br> and press Lookup' +
-            '</div>';
-          return;
-        }
-
-        var venues = getVenuesForStudent(admissionNo);
-        if (venues.length === 0) {
-          venueContainer.innerHTML =
-            '<div class="empty-state">' +
-            '<span>📭</span>' +
-            'No student found <br> for ID ' + admissionNo +
-            '</div>';
-          return;
-        }
-
-        var student = venues[0];
-        var groupMembers = getGroupMembers(admissionNo);
-        groupMembers.sort(function(a, b) { return a.studentName.localeCompare(b.studentName); });
-
-        var html = '<div class="venue-list">';
-        html +=
-          '<div class="venue-card">' +
-          '<div class="venue-name">' + student.venue + '</div>' +
-          '<div class="project-detail">' +
-          '<div class="row">' +
-          '<span class="tag">📁 Project</span>' +
-          '<span class="value">' + student.project + '</span>' +
-          '</div>' +
-          '<div class="row">' +
-          '<span class="tag">📝 Desc.</span>' +
-          '<span class="value">' + (student.description || '—') + '</span>' +
-          '</div>' +
-          '<div class="row" style="margin-top: 4px;">' +
-          '<span class="tag">👨‍🏫 Teacher</span>' +
-          '<span class="teacher-tag">' + student.teacher + '</span>' +
-          '</div>' +
-          '<div style="margin-top: 8px; font-size:0.8rem; color:#3d2e1b; background:#eae3d8; padding: 2px 12px; border-radius: 40px; display:inline-block;">' +
-          student.class + ' · ' + student.section +
-          '</div>' +
-          '<div class="group-members">' +
-          '<span style="font-weight:600; color:#0b2a4a; font-size:0.8rem; width:100%; margin-bottom:4px;">👥 Group Members (' +
-          groupMembers.length + ')</span>';
-
-        groupMembers.forEach(function(m) {
-          html +=
-            '<span class="member-chip">' + m.studentName +
-            ' <span style="font-weight:400; font-size:0.6rem; opacity:0.7;">#' + m.admissionNo + '</span></span>';
-        });
-
-        html +=
-          '</div>' +
-          '</div>' +
-          '</div>';
-        html += '</div>';
-        venueContainer.innerHTML = html;
       }
 
-      function performLookup() {
-        var raw = inputEl.value.trim();
-        if (raw === '') {
-          uniqueIdDisplay.textContent = '—';
-          venueContainer.innerHTML =
-            '<div class="empty-state">' +
-            '<span>✏️</span>' +
-            'Please type an ID' +
-            '</div>';
-          inputEl.classList.add('error-shake');
-          setTimeout(function() { inputEl.classList.remove('error-shake'); }, 300);
-          return;
-        }
-        var idNum = Number(raw);
-        if (isNaN(idNum) || !Number.isInteger(idNum) || idNum < 0) {
-          uniqueIdDisplay.textContent = '❌';
-          venueContainer.innerHTML =
-            '<div class="empty-state">' +
-            '<span>⚠️</span>' +
-            'Invalid ID format <br> use numbers only' +
-            '</div>';
-          inputEl.classList.add('error-shake');
-          setTimeout(function() { inputEl.classList.remove('error-shake'); }, 300);
-          return;
-        }
-        renderStudent(idNum);
+      // =============================================================
+      //  QR PURE SCREEN
+      // =============================================================
+      var qrContainer = document.getElementById('qrcode-container');
+      var qrStatus = document.getElementById('qrStatus');
+      var deployNotice = document.getElementById('deployNotice');
+      var currentUrl = window.location.href;
+
+      var cleanUrl = currentUrl.split('?')[0];
+      var isLocalFile = cleanUrl.indexOf('file://') === 0;
+
+      if (isLocalFile) {
+        qrStatus.innerHTML = '⚠️ Local file — deploy to server for universal access';
+        qrStatus.style.color = '#cc3300';
+        qrStatus.style.fontWeight = '600';
+        deployNotice.style.display = 'inline-block';
+      } else {
+        qrStatus.innerHTML = '📸 Scan with your phone camera';
+        qrStatus.style.color = '#0b2a4a';
+        deployNotice.style.display = 'none';
       }
 
-      lookupBtn.addEventListener('click', performLookup);
-      inputEl.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          performLookup();
-        }
+      var qrUrl = cleanUrl + '?app=1';
+      new QRCode(qrContainer, {
+        text: qrUrl,
+        width: 220,
+        height: 220,
+        colorDark: "#0b2a4a",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
       });
-      inputEl.addEventListener('focus', function() { this.select(); });
 
-      renderStudent(null);
+      // =============================================================
+      //  AUTO-SWITCH
+      // =============================================================
+      var qrPure = document.getElementById('qrPureScreen');
+      var fullApp = document.getElementById('fullApp');
 
-      // ============================================================
-      //  JUDGE LOGIC - GROUP BASED
-      // ============================================================
-
-      var judgeUnlocked = false;
-
-      function populateGroupSelector() {
-        var select = document.getElementById('groupSelector');
-        var groups = getAllGroups();
-        groups.sort(function(a, b) {
-          return a.venue.localeCompare(b.venue) || a.project.localeCompare(b.project);
-        });
-
-        select.innerHTML = '<option value="">-- Select a Group --</option>';
-        groups.forEach(function(g) {
-          var opt = document.createElement('option');
-          opt.value = g.key;
-          opt.textContent = g.venue + ' - ' + g.project + ' (' + g.members.length + ' members)';
-          select.appendChild(opt);
-        });
+      function showApp() {
+        qrPure.style.display = 'none';
+        fullApp.style.display = 'block';
+        fullApp.classList.remove('app-hidden');
+        initApp();
       }
 
-      function displayGroupInfo(groupKey) {
-        var group = getGroupByKey(groupKey);
-        var infoDisplay = document.getElementById('groupInfoDisplay');
-        var criteriaDisplay = document.getElementById('judgeCriteria');
+      var urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('app') === '1') {
+        showApp();
+      }
 
-        if (!group) {
-          infoDisplay.style.display = 'none';
-          criteriaDisplay.style.display = 'none';
-          return;
-        }
+      qrContainer.style.cursor = 'pointer';
+      qrContainer.addEventListener('click', showApp);
 
-        infoDisplay.style.display = 'block';
-        criteriaDisplay.style.display = 'block';
+      // =============================================================
+      //  INIT APP
+      // =============================================================
+      function initApp() {
+        if (window.__appInitialized) return;
+        window.__appInitialized = true;
 
-        document.getElementById('groupDisplayName').textContent = group.venue + ' - ' + group.project;
+        // ---- LOOKUP ----
+        var uniqueStudents = new Set();
+        studentData.forEach(function(s) { uniqueStudents.add(s.admissionNo); });
+        document.getElementById('recordCount').textContent = '📊 ' + uniqueStudents.size + ' students · ' + studentData
+        .length +
+          ' projects';
 
-        var membersHtml = '';
-        group.members.forEach(function(m) {
-          membersHtml += '<span class="member-tag">' + m.studentName + ' (#' + m.admissionNo + ')</span>';
-        });
-        document.getElementById('groupMembersList').innerHTML = membersHtml;
+        var inputEl = document.getElementById('uniqueIdInput');
+        var lookupBtn = document.getElementById('lookupBtn');
+        var uniqueIdDisplay = document.getElementById('uniqueIdDisplay');
+        var venueContainer = document.getElementById('venueContainer');
 
-        if (judgements[groupKey]) {
-          var j = judgements[groupKey];
-          var statusEl = document.getElementById('groupStatusDisplay');
-          statusEl.textContent = '✅ Judged! Score: ' + j.total + '/25 on ' + new Date(j.timestamp).toLocaleDateString();
-          statusEl.className = 'group-status judged';
-          if (j.criteria) {
-            document.getElementById('criteria1').value = j.criteria.innovation || 1;
-            document.getElementById('criteria2').value = j.criteria.technical || 1;
-            document.getElementById('criteria3').value = j.criteria.presentation || 1;
-            document.getElementById('criteria4').value = j.criteria.impact || 1;
-            document.getElementById('criteria5').value = j.criteria.collaboration || 1;
-            document.getElementById('judgeComments').value = j.comments || '';
+        function renderStudent(admissionNo) {
+          if (studentData.length === 0) {
+            venueContainer.innerHTML = '<div class="empty-state"><span>📊</span>Loading data...</div>';
+            uniqueIdDisplay.textContent = '—';
+            return;
           }
-          document.getElementById('judgeResult').className = 'judge-result info';
-          document.getElementById('judgeResult').textContent = '✅ Already judged on ' + new Date(j.timestamp)
-            .toLocaleString() +
-            ' | Score: ' + j.total + '/25';
-          document.getElementById('judgeResult').style.display = 'block';
-        } else {
-          document.getElementById('groupStatusDisplay').textContent = '⏳ Not Judged Yet';
-          document.getElementById('groupStatusDisplay').className = 'group-status not-judged';
-          document.getElementById('criteria1').value = 5;
-          document.getElementById('criteria2').value = 5;
-          document.getElementById('criteria3').value = 5;
-          document.getElementById('criteria4').value = 5;
-          document.getElementById('criteria5').value = 5;
-          document.getElementById('judgeComments').value = '';
-          document.getElementById('judgeResult').style.display = 'none';
-        }
-      }
-
-      document.getElementById('unlockJudgeBtn').addEventListener('click', function() {
-        var code = document.getElementById('judgeCodeInput').value.trim();
-        var errorEl = document.getElementById('judgeLockError');
-
-        if (code === JUDGE_CODE) {
-          judgeUnlocked = true;
-          document.getElementById('judgeLockContainer').style.display = 'none';
-          document.getElementById('judgeContent').style.display = 'block';
-          var badge = document.getElementById('judgeStatusBadge');
-          badge.textContent = '🔓 Unlocked';
-          badge.className = 'judge-status-badge unlocked';
-          errorEl.style.display = 'none';
-          populateGroupSelector();
-          var select = document.getElementById('groupSelector');
-          if (select.value) {
-            displayGroupInfo(select.value);
+          if (admissionNo !== null && admissionNo !== undefined && !isNaN(admissionNo)) {
+            uniqueIdDisplay.textContent = admissionNo;
+          } else {
+            uniqueIdDisplay.textContent = '—';
           }
-        } else {
-          errorEl.style.display = 'block';
-          setTimeout(function() { errorEl.style.display = 'none'; }, 3000);
-        }
-      });
-
-      document.getElementById('judgeCodeInput').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-          document.getElementById('unlockJudgeBtn').click();
-        }
-      });
-
-      document.getElementById('groupSelector').addEventListener('change', function() {
-        if (this.value) {
-          displayGroupInfo(this.value);
-        } else {
-          document.getElementById('groupInfoDisplay').style.display = 'none';
-          document.getElementById('judgeCriteria').style.display = 'none';
-        }
-      });
-
-      document.getElementById('submitJudgeBtn').addEventListener('click', function() {
-        if (!judgeUnlocked) {
-          document.getElementById('judgeResult').className = 'judge-result error';
-          document.getElementById('judgeResult').textContent = '❌ Please unlock judging first!';
-          document.getElementById('judgeResult').style.display = 'block';
-          return;
-        }
-
-        var groupKey = document.getElementById('groupSelector').value;
-        if (!groupKey) {
-          document.getElementById('judgeResult').className = 'judge-result error';
-          document.getElementById('judgeResult').textContent = '❌ Please select a group first!';
-          document.getElementById('judgeResult').style.display = 'block';
-          return;
-        }
-
-        var group = getGroupByKey(groupKey);
-        if (!group) {
-          document.getElementById('judgeResult').className = 'judge-result error';
-          document.getElementById('judgeResult').textContent = '❌ Group not found!';
-          document.getElementById('judgeResult').style.display = 'block';
-          return;
-        }
-
-        var c1 = parseInt(document.getElementById('criteria1').value);
-        var c2 = parseInt(document.getElementById('criteria2').value);
-        var c3 = parseInt(document.getElementById('criteria3').value);
-        var c4 = parseInt(document.getElementById('criteria4').value);
-        var c5 = parseInt(document.getElementById('criteria5').value);
-        var comments = document.getElementById('judgeComments').value.trim();
-
-        var total = c1 + c2 + c3 + c4 + c5;
-
-        var judgementData = {
-          criteria: { innovation: c1, technical: c2, presentation: c3, impact: c4, collaboration: c5 },
-          total: total,
-          comments: comments || 'No comments',
-          timestamp: Date.now(),
-          groupName: group.venue + ' - ' + group.project,
-          members: group.members.map(function(m) { return m.admissionNo + ': ' + m.studentName; })
-        };
-
-        judgements[groupKey] = judgementData;
-        localStorage.setItem('groupJudgements', JSON.stringify(judgements));
-
-        // Build email content
-        var emailSubject = 'JUDGEMENT: ' + group.venue + ' - ' + group.project;
-        var emailBody = '========================================\n';
-        emailBody += 'JUDGEMENT SUBMITTED\n';
-        emailBody += '========================================\n\n';
-        emailBody += 'Group: ' + group.venue + ' - ' + group.project + '\n';
-        emailBody += 'Teacher: ' + group.teacher + '\n';
-        emailBody += 'Members:\n';
-        group.members.forEach(function(m) {
-          emailBody += '  - ' + m.studentName + ' (Admission: ' + m.admissionNo + ')\n';
-        });
-        emailBody += '\n--- SCORES ---\n';
-        emailBody += 'Innovation & Creativity: ' + c1 + '/5\n';
-        emailBody += 'Technical Execution: ' + c2 + '/5\n';
-        emailBody += 'Presentation & Clarity: ' + c3 + '/5\n';
-        emailBody += 'Real-World Impact: ' + c4 + '/5\n';
-        emailBody += 'Team Collaboration: ' + c5 + '/5\n';
-        emailBody += 'TOTAL: ' + total + '/25\n';
-        emailBody += '\nComments:\n' + (comments || 'No comments') + '\n\n';
-        emailBody += 'Submitted: ' + new Date().toLocaleString() + '\n';
-        emailBody += '========================================\n';
-
-        // Send email
-        sendEmail(emailSubject, emailBody);
-
-        var resultEl = document.getElementById('judgeResult');
-        resultEl.className = 'judge-result success';
-        resultEl.textContent = '✅ Judgement submitted! Email sent to ' + EMAIL_TO + ' | Score: ' + total + '/25';
-        resultEl.style.display = 'block';
-
-        displayGroupInfo(groupKey);
-      });
-
-      // ============================================================
-      //  FEEDBACK LOGIC
-      // ============================================================
-
-      document.getElementById('submitFeedbackBtn').addEventListener('click', function() {
-        var studentId = document.getElementById('feedbackStudentId').value.trim();
-        var feedbackText = document.getElementById('feedbackText').value.trim();
-        var rating = parseInt(document.getElementById('feedbackRating').value);
-
-        if (!feedbackText) {
-          var resultEl = document.getElementById('feedbackResult');
-          resultEl.className = 'judge-result error';
-          resultEl.textContent = '❌ Please write your feedback!';
-          resultEl.style.display = 'block';
-          setTimeout(function() { resultEl.style.display = 'none'; }, 3000);
-          return;
-        }
-
-        var feedbackData = {
-          studentId: studentId || 'Anonymous',
-          feedback: feedbackText,
-          rating: rating,
-          timestamp: Date.now()
-        };
-
-        feedbacks.push(feedbackData);
-        localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
-
-        // Build email content
-        var emailSubject = 'FEEDBACK: ' + (studentId || 'Anonymous');
-        var emailBody = '========================================\n';
-        emailBody += 'FEEDBACK SUBMITTED\n';
-        emailBody += '========================================\n\n';
-        emailBody += 'From: ' + (studentId || 'Anonymous') + '\n';
-        emailBody += 'Rating: ' + '⭐'.repeat(rating) + ' (' + rating + '/5)\n';
-        emailBody += '\nFeedback:\n' + feedbackText + '\n\n';
-        emailBody += 'Submitted: ' + new Date().toLocaleString() + '\n';
-        emailBody += '========================================\n';
-
-        // Send email
-        sendEmail(emailSubject, emailBody);
-
-        var resultEl = document.getElementById('feedbackResult');
-        resultEl.className = 'judge-result success';
-        resultEl.textContent = '✅ Feedback submitted! Email sent to ' + EMAIL_TO;
-        resultEl.style.display = 'block';
-
-        document.getElementById('feedbackText').value = '';
-        document.getElementById('feedbackStudentId').value = '';
-
-        renderFeedbackList();
-
-        setTimeout(function() { resultEl.style.display = 'none'; }, 3000);
-      });
-
-      function renderFeedbackList() {
-        var container = document.getElementById('feedbackList');
-        if (feedbacks.length === 0) {
-          container.innerHTML =
-            '<div class="feedback-display"><span class="empty-feedback">No feedback submitted yet</span></div>';
-          return;
-        }
-
-        var recent = feedbacks.slice(-5).reverse();
-        var html = '';
-        recent.forEach(function(f) {
-          var stars = '⭐'.repeat(f.rating) + '☆'.repeat(5 - f.rating);
-          var date = new Date(f.timestamp).toLocaleString();
+          if (!admissionNo || isNaN(admissionNo)) {
+            venueContainer.innerHTML =
+              '<div class="empty-state"><span>🔍</span>Enter a valid ID <br> and press Lookup</div>';
+            return;
+          }
+          var venues = getVenuesForStudent(admissionNo);
+          if (venues.length === 0) {
+            venueContainer.innerHTML =
+              '<div class="empty-state"><span>📭</span>No student found <br> for ID ' + admissionNo + '</div>';
+            return;
+          }
+          var student = venues[0];
+          var studentName = getStudentName(admissionNo);
+          var groupMembers = getGroupMembers(admissionNo);
+          groupMembers.sort(function(a, b) { return a.studentName.localeCompare(b.studentName); });
+          var html = '<div class="venue-list">';
           html +=
-            '<div class="feedback-display" style="margin-bottom:8px;">' +
-            '<div><strong>' + (f.studentId || 'Anonymous') + '</strong> · ' + stars + '</div>' +
-            '<div style="margin-top:4px;">' + f.feedback + '</div>' +
-            '<div style="font-size:0.65rem; color:#999; margin-top:4px;">' + date + '</div>' +
-            '</div>';
-        });
-        container.innerHTML = html;
-      }
-
-      // ============================================================
-      //  MENU NAVIGATION
-      // ============================================================
-
-      var menuBtns = document.querySelectorAll('.menu-btn');
-      var pages = {
-        lookup: document.getElementById('page-lookup'),
-        judge: document.getElementById('page-judge'),
-        feedback: document.getElementById('page-feedback'),
-        qr: document.getElementById('page-qr')
-      };
-
-      menuBtns.forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          menuBtns.forEach(function(b) { b.classList.remove('active'); });
-          btn.classList.add('active');
-
-          var page = btn.getAttribute('data-page');
-          Object.keys(pages).forEach(function(key) {
-            pages[key].classList.remove('active');
+            '<div class="venue-card">' +
+            '<div class="venue-name">' + student.venue + '</div>';
+          if (studentName) {
+            html += '<div class="student-name-display">👤 ' + studentName + '</div>';
+          }
+          html +=
+            '<div class="project-detail">' +
+            '<div class="row"><span class="tag">📁 Project</span><span class="value">' + student.project + '</span></div>' +
+            '<div class="row"><span class="tag">📝 Desc.</span><span class="value">' + (student.description || '—') +
+            '</span></div>' +
+            '<div class="row" style="margin-top: 4px;"><span class="tag">👨‍🏫 Teacher</span><span class="teacher-tag">' +
+            student.teacher + '</span></div>' +
+            '<div style="margin-top: 8px; font-size:0.8rem; color:#3d2e1b; background:#eae3d8; padding: 2px 14px; border-radius: 40px; display:inline-block;">' +
+            student.class + ' · ' + student.section + '</div>' +
+            '<div class="group-members"><span style="font-weight:600; color:#0b2a4a; font-size:0.8rem; width:100%; margin-bottom:4px;">👥 Group Members (' +
+            groupMembers.length + ')</span>';
+          groupMembers.forEach(function(m) {
+            html +=
+              '<span class="member-chip">' + m.studentName +
+              ' <span style="font-weight:400; font-size:0.6rem; opacity:0.7;">#' + m.admissionNo + '</span></span>';
           });
-          pages[page].classList.add('active');
-
-          if (page === 'qr') {
-            generateQRCode();
-          }
-
-          if (page === 'feedback') {
-            renderFeedbackList();
-          }
-
-          if (page === 'judge' && judgeUnlocked) {
-            populateGroupSelector();
-          }
-        });
-      });
-
-      // ============================================================
-      //  QR CODE
-      // ============================================================
-
-      var qrGenerated = false;
-
-      function generateQRCode() {
-        if (qrGenerated) return;
-        var qrContainer = document.getElementById('qrcode');
-        var qrStatus = document.getElementById('qrStatus');
-        var deployNotice = document.getElementById('deployNotice');
-        var currentUrl = window.location.href;
-
-        var isLocalFile = currentUrl.indexOf('file://') === 0;
-
-        if (isLocalFile) {
-          qrStatus.innerHTML = '⚠️ Local file detected. QR will only work on this device. Deploy to a server.';
-          qrStatus.style.color = '#cc3300';
-          qrStatus.style.fontWeight = '600';
-          deployNotice.style.display = 'inline-block';
-        } else {
-          qrStatus.innerHTML = '✅ QR points to: ' + currentUrl;
-          qrStatus.style.color = '#0b2a4a';
-          deployNotice.style.display = 'none';
+          html += '</div></div></div></div>';
+          venueContainer.innerHTML = html;
         }
 
-        new QRCode(qrContainer, {
-          text: currentUrl,
-          width: 180,
-          height: 180,
-          colorDark: "#0b2a4a",
-          colorLight: "#ffffff",
-          correctLevel: QRCode.CorrectLevel.H
+        function performLookup() {
+          var raw = inputEl.value.trim();
+          if (raw === '') {
+            uniqueIdDisplay.textContent = '—';
+            venueContainer.innerHTML = '<div class="empty-state"><span>✏️</span>Please type an ID</div>';
+            inputEl.classList.add('error-shake');
+            setTimeout(function() { inputEl.classList.remove('error-shake'); }, 300);
+            return;
+          }
+          var idNum = Number(raw);
+          if (isNaN(idNum) || !Number.isInteger(idNum) || idNum < 0) {
+            uniqueIdDisplay.textContent = '❌';
+            venueContainer.innerHTML = '<div class="empty-state"><span>⚠️</span>Invalid ID format <br> use numbers only</div>';
+            inputEl.classList.add('error-shake');
+            setTimeout(function() { inputEl.classList.remove('error-shake'); }, 300);
+            return;
+          }
+          renderStudent(idNum);
+        }
+
+        lookupBtn.addEventListener('click', performLookup);
+        inputEl.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') { e.preventDefault();
+            performLookup(); }
+        });
+        inputEl.addEventListener('focus', function() { this.select(); });
+        renderStudent(null);
+
+        // ---- JUDGE ----
+        var judgeUnlocked = false;
+
+        function populateGroupSelector() {
+          var select = document.getElementById('groupSelector');
+          var groups = getAllGroups();
+          groups.sort(function(a, b) {
+            return a.venue.localeCompare(b.venue) || a.project.localeCompare(b.project);
+          });
+          select.innerHTML = '<option value="">-- Select a Group --</option>';
+          groups.forEach(function(g) {
+            var opt = document.createElement('option');
+            opt.value = g.key;
+            opt.textContent = g.venue + ' - ' + g.project + ' (' + g.members.length + ' members)';
+            select.appendChild(opt);
+          });
+        }
+
+        function displayGroupInfo(groupKey) {
+          var group = getGroupByKey(groupKey);
+          var infoDisplay = document.getElementById('groupInfoDisplay');
+          var criteriaDisplay = document.getElementById('judgeCriteria');
+          if (!group) {
+            infoDisplay.style.display = 'none';
+            criteriaDisplay.style.display = 'none';
+            return;
+          }
+          infoDisplay.style.display = 'block';
+          criteriaDisplay.style.display = 'block';
+          document.getElementById('groupDisplayName').textContent = group.venue + ' - ' + group.project;
+          var membersHtml = '';
+          group.members.forEach(function(m) {
+            membersHtml += '<span class="member-tag">' + m.studentName + ' (#' + m.admissionNo + ')</span>';
+          });
+          document.getElementById('groupMembersList').innerHTML = membersHtml;
+          if (judgements[groupKey]) {
+            var j = judgements[groupKey];
+            var statusEl = document.getElementById('groupStatusDisplay');
+            statusEl.textContent = '✅ Judged! Score: ' + j.total + '/25 on ' + new Date(j.timestamp).toLocaleDateString();
+            statusEl.className = 'group-status judged';
+            if (j.criteria) {
+              document.getElementById('criteria1').value = j.criteria.innovation || 1;
+              document.getElementById('criteria2').value = j.criteria.technical || 1;
+              document.getElementById('criteria3').value = j.criteria.presentation || 1;
+              document.getElementById('criteria4').value = j.criteria.impact || 1;
+              document.getElementById('criteria5').value = j.criteria.collaboration || 1;
+              document.getElementById('judgeComments').value = j.comments || '';
+            }
+            document.getElementById('judgeResult').className = 'judge-result info';
+            document.getElementById('judgeResult').textContent = '✅ Already judged on ' + new Date(j.timestamp)
+              .toLocaleString() + ' | Score: ' + j.total + '/25';
+            document.getElementById('judgeResult').style.display = 'block';
+          } else {
+            document.getElementById('groupStatusDisplay').textContent = '⏳ Not Judged Yet';
+            document.getElementById('groupStatusDisplay').className = 'group-status not-judged';
+            document.getElementById('criteria1').value = 5;
+            document.getElementById('criteria2').value = 5;
+            document.getElementById('criteria3').value = 5;
+            document.getElementById('criteria4').value = 5;
+            document.getElementById('criteria5').value = 5;
+            document.getElementById('judgeComments').value = '';
+            document.getElementById('judgeResult').style.display = 'none';
+          }
+        }
+
+        document.getElementById('unlockJudgeBtn').addEventListener('click', function() {
+          var code = document.getElementById('judgeCodeInput').value.trim();
+          var errorEl = document.getElementById('judgeLockError');
+          if (code === JUDGE_CODE) {
+            judgeUnlocked = true;
+            document.getElementById('judgeLockContainer').style.display = 'none';
+            document.getElementById('judgeContent').style.display = 'block';
+            var badge = document.getElementById('judgeStatusBadge');
+            badge.textContent = '🔓 Unlocked';
+            badge.className = 'judge-status-badge unlocked';
+            errorEl.style.display = 'none';
+            populateGroupSelector();
+            var select = document.getElementById('groupSelector');
+            if (select.value) displayGroupInfo(select.value);
+          } else {
+            errorEl.style.display = 'block';
+            setTimeout(function() { errorEl.style.display = 'none'; }, 3000);
+          }
+        });
+        document.getElementById('judgeCodeInput').addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') document.getElementById('unlockJudgeBtn').click();
+        });
+        document.getElementById('groupSelector').addEventListener('change', function() {
+          if (this.value) displayGroupInfo(this.value);
+          else {
+            document.getElementById('groupInfoDisplay').style.display = 'none';
+            document.getElementById('judgeCriteria').style.display = 'none';
+          }
+        });
+        document.getElementById('submitJudgeBtn').addEventListener('click', function() {
+          if (!judgeUnlocked) {
+            document.getElementById('judgeResult').className = 'judge-result error';
+            document.getElementById('judgeResult').textContent = '❌ Please unlock judging first!';
+            document.getElementById('judgeResult').style.display = 'block';
+            return;
+          }
+          var groupKey = document.getElementById('groupSelector').value;
+          if (!groupKey) {
+            document.getElementById('judgeResult').className = 'judge-result error';
+            document.getElementById('judgeResult').textContent = '❌ Please select a group first!';
+            document.getElementById('judgeResult').style.display = 'block';
+            return;
+          }
+          var group = getGroupByKey(groupKey);
+          if (!group) {
+            document.getElementById('judgeResult').className = 'judge-result error';
+            document.getElementById('judgeResult').textContent = '❌ Group not found!';
+            document.getElementById('judgeResult').style.display = 'block';
+            return;
+          }
+          var c1 = parseInt(document.getElementById('criteria1').value);
+          var c2 = parseInt(document.getElementById('criteria2').value);
+          var c3 = parseInt(document.getElementById('criteria3').value);
+          var c4 = parseInt(document.getElementById('criteria4').value);
+          var c5 = parseInt(document.getElementById('criteria5').value);
+          var comments = document.getElementById('judgeComments').value.trim();
+          var total = c1 + c2 + c3 + c4 + c5;
+          var judgementData = {
+            criteria: { innovation: c1, technical: c2, presentation: c3, impact: c4, collaboration: c5 },
+            total: total,
+            comments: comments || 'No comments',
+            timestamp: Date.now(),
+            groupName: group.venue + ' - ' + group.project,
+            members: group.members.map(function(m) { return m.admissionNo + ': ' + m.studentName; })
+          };
+          judgements[groupKey] = judgementData;
+          localStorage.setItem('groupJudgements', JSON.stringify(judgements));
+
+          var emailSubject = 'JUDGEMENT: ' + group.venue + ' - ' + group.project;
+          var emailBody = '========================================\n';
+          emailBody += 'JUDGEMENT SUBMITTED\n';
+          emailBody += '========================================\n\n';
+          emailBody += 'Group: ' + group.venue + ' - ' + group.project + '\n';
+          emailBody += 'Teacher: ' + group.teacher + '\n';
+          emailBody += 'Members:\n';
+          group.members.forEach(function(m) {
+            emailBody += '  - ' + m.studentName + ' (Admission: ' + m.admissionNo + ')\n';
+          });
+          emailBody += '\n--- SCORES ---\n';
+          emailBody += 'Innovation & Creativity: ' + c1 + '/5\n';
+          emailBody += 'Technical Execution: ' + c2 + '/5\n';
+          emailBody += 'Presentation & Clarity: ' + c3 + '/5\n';
+          emailBody += 'Real-World Impact: ' + c4 + '/5\n';
+          emailBody += 'Team Collaboration: ' + c5 + '/5\n';
+          emailBody += 'TOTAL: ' + total + '/25\n';
+          emailBody += '\nComments:\n' + (comments || 'No comments') + '\n\n';
+          emailBody += 'Submitted: ' + new Date().toLocaleString() + '\n';
+          emailBody += '========================================\n';
+
+          sendEmailDirect(emailSubject, emailBody);
+
+          var resultEl = document.getElementById('judgeResult');
+          resultEl.className = 'judge-result success';
+          resultEl.textContent = '✅ Judgement submitted! Email sent to ' + EMAIL_TO + ' | Score: ' + total + '/25';
+          resultEl.style.display = 'block';
+          displayGroupInfo(groupKey);
         });
 
-        qrGenerated = true;
+        // ---- FEEDBACK ----
+        document.getElementById('submitFeedbackBtn').addEventListener('click', function() {
+          var studentId = document.getElementById('feedbackStudentId').value.trim();
+          var feedbackText = document.getElementById('feedbackText').value.trim();
+          var rating = parseInt(document.getElementById('feedbackRating').value);
+
+          if (!feedbackText) {
+            var resultEl = document.getElementById('feedbackResult');
+            resultEl.className = 'judge-result error';
+            resultEl.textContent = '❌ Please write your feedback!';
+            resultEl.style.display = 'block';
+            setTimeout(function() { resultEl.style.display = 'none'; }, 3000);
+            return;
+          }
+
+          var studentName = studentId ? getStudentName(parseInt(studentId)) : null;
+
+          var emailSubject = 'FEEDBACK: ' + (studentId || 'Anonymous');
+          var emailBody = '========================================\n';
+          emailBody += 'FEEDBACK SUBMITTED\n';
+          emailBody += '========================================\n\n';
+          emailBody += 'From: ' + (studentId || 'Anonymous');
+          if (studentName) {
+            emailBody += ' (' + studentName + ')';
+          }
+          emailBody += '\n';
+          emailBody += 'Rating: ' + '⭐'.repeat(rating) + ' (' + rating + '/5)\n';
+          emailBody += '\nFeedback:\n' + feedbackText + '\n\n';
+          emailBody += 'Submitted: ' + new Date().toLocaleString() + '\n';
+          emailBody += '========================================\n';
+
+          sendEmailDirect(emailSubject, emailBody);
+
+          var resultEl = document.getElementById('feedbackResult');
+          resultEl.className = 'judge-result success';
+          resultEl.textContent = '✅ Feedback submitted! Email sent to ' + EMAIL_TO;
+          resultEl.style.display = 'block';
+
+          document.getElementById('feedbackText').value = '';
+          document.getElementById('feedbackStudentId').value = '';
+
+          setTimeout(function() { resultEl.style.display = 'none'; }, 3000);
+        });
+
+        // ---- MENU ----
+        var menuBtns = document.querySelectorAll('.menu-btn');
+        var pages = {
+          lookup: document.getElementById('page-lookup'),
+          judge: document.getElementById('page-judge'),
+          feedback: document.getElementById('page-feedback')
+        };
+        menuBtns.forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            menuBtns.forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            var page = btn.getAttribute('data-page');
+            Object.keys(pages).forEach(function(key) {
+              pages[key].classList.remove('active');
+            });
+            pages[page].classList.add('active');
+            if (page === 'judge' && judgeUnlocked) populateGroupSelector();
+          });
+        });
       }
-
-      // ============================================================
-      //  INIT
-      // ============================================================
-
-      renderFeedbackList();
-
-      window.__studentData = studentData;
-      window.__judgements = judgements;
-      window.__feedbacks = feedbacks;
-
     })();
   </script>
 </body>

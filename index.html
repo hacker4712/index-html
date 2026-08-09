@@ -18,7 +18,6 @@
     }
     :root {
       --ms-navy: #0a1a3a;
-      --ms-pink: #EC0678;
       --ms-maroon: #451013;
       --ms-gold: #c9a84c;
       --ms-gold-light: #e8d5a3;
@@ -26,6 +25,7 @@
       --ms-white: #ffffff;
       --ms-charcoal: #2d2d2d;
       --ms-warm-gold: #b8943c;
+      --ms-pink: #EC0678;
       --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     body {
@@ -77,7 +77,7 @@
       letter-spacing: -0.5px;
     }
     .qr-pure .brand span {
-      background: var(--ms-pink);
+      background: var(--ms-maroon);
       color: var(--ms-white);
       font-weight: 700;
       font-size: 0.7rem;
@@ -97,8 +97,8 @@
       background: var(--ms-white);
       padding: 16px;
       border-radius: 24px;
-      border: 2px solid var(--ms-pink);
-      box-shadow: 0 8px 0 var(--ms-maroon), 0 8px 24px rgba(236, 6, 120, 0.2);
+      border: 2px solid var(--ms-maroon);
+      box-shadow: 0 8px 0 var(--ms-warm-gold), 0 8px 24px rgba(69, 16, 19, 0.15);
       margin: 0 auto 16px;
       transition: var(--transition-smooth);
       position: relative;
@@ -107,7 +107,7 @@
     }
     #qrcode-container:hover {
       transform: translateY(-2px);
-      box-shadow: 0 10px 0 var(--ms-maroon), 0 12px 32px rgba(236, 6, 120, 0.25);
+      box-shadow: 0 10px 0 var(--ms-warm-gold), 0 12px 32px rgba(69, 16, 19, 0.2);
     }
     #qrcode-container img,
     #qrcode-container canvas {
@@ -198,7 +198,7 @@
     }
     .school-logo-expo {
       display: inline-block;
-      background: var(--ms-pink);
+      background: var(--ms-maroon);
       color: var(--ms-white);
       font-family: 'Inter', sans-serif;
       font-size: 0.55rem;
@@ -212,7 +212,7 @@
     }
     .school-logo-expo:hover {
       transform: scale(1.05);
-      box-shadow: 0 4px 12px rgba(236, 6, 120, 0.3);
+      box-shadow: 0 4px 12px rgba(69, 16, 19, 0.3);
     }
     .app-header {
       display: flex;
@@ -220,7 +220,7 @@
       justify-content: space-between;
       margin-bottom: 14px;
       padding-bottom: 10px;
-      border-bottom: 2px solid var(--ms-pink);
+      border-bottom: 2px solid var(--ms-maroon);
       animation: slideDown 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
     }
     .app-header h1 {
@@ -230,10 +230,10 @@
       letter-spacing: -0.3px;
     }
     .app-header h1 i {
-      color: var(--ms-pink);
+      color: var(--ms-gold);
     }
     .app-header .badge {
-      background: var(--ms-pink);
+      background: var(--ms-maroon);
       color: var(--ms-white);
       font-weight: 700;
       font-size: 0.6rem;
@@ -248,7 +248,7 @@
       background: var(--ms-cream);
       padding: 4px;
       border-radius: 50px;
-      border: 2px solid var(--ms-pink);
+      border: 2px solid var(--ms-maroon);
       animation: slideDown 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
     }
     .menu-btn {
@@ -267,12 +267,12 @@
       overflow: hidden;
     }
     .menu-btn.active {
-      background: var(--ms-pink);
+      background: var(--ms-maroon);
       color: var(--ms-white);
-      box-shadow: 0 4px 16px rgba(236, 6, 120, 0.25);
+      box-shadow: 0 4px 16px rgba(69, 16, 19, 0.2);
     }
     .menu-btn:hover:not(.active) {
-      background: rgba(236, 6, 120, 0.12);
+      background: rgba(69, 16, 19, 0.08);
       transform: translateY(-1px);
     }
     .menu-btn:active {
@@ -314,8 +314,8 @@
       transition: var(--transition-smooth);
     }
     .input-section:focus-within {
-      border-color: var(--ms-pink);
-      box-shadow: 0 0 0 4px rgba(236, 6, 120, 0.1);
+      border-color: var(--ms-maroon);
+      box-shadow: 0 0 0 4px rgba(69, 16, 19, 0.08);
     }
     .input-label {
       display: block;
@@ -325,7 +325,7 @@
       margin-bottom: 8px;
     }
     .input-label i {
-      color: var(--ms-pink);
+      color: var(--ms-gold);
       margin-right: 6px;
     }
     .input-row {
@@ -350,11 +350,11 @@
     }
     #uniqueIdInput:focus {
       outline: none;
-      border-color: var(--ms-pink);
-      box-shadow: 0 0 0 4px rgba(236, 6, 120, 0.12);
+      border-color: var(--ms-maroon);
+      box-shadow: 0 0 0 4px rgba(69, 16, 19, 0.08);
     }
     #lookupBtn {
-      background: var(--ms-pink);
+      background: var(--ms-maroon);
       border: none;
       color: var(--ms-white);
       font-weight: 700;
@@ -362,7 +362,7 @@
       padding: 14px 24px;
       border-radius: 50px;
       cursor: pointer;
-      box-shadow: 0 4px 0 var(--ms-maroon);
+      box-shadow: 0 4px 0 var(--ms-warm-gold);
       white-space: nowrap;
       min-width: 80px;
       height: 48px;
@@ -372,7 +372,7 @@
     }
     #lookupBtn:active {
       transform: translateY(3px);
-      box-shadow: 0 1px 0 var(--ms-maroon);
+      box-shadow: 0 1px 0 var(--ms-warm-gold);
     }
     .stats-badge {
       background: var(--ms-gold-light);
@@ -394,7 +394,7 @@
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 6px 10px;
-      border-left: 6px solid var(--ms-pink);
+      border-left: 6px solid var(--ms-maroon);
       border: 1px solid var(--ms-gold-light);
       border-left-width: 6px;
       transition: var(--transition-smooth);
@@ -424,14 +424,14 @@
       background: var(--ms-white);
       border-radius: 24px;
       padding: 18px 18px 16px;
-      box-shadow: 0 6px 0 var(--ms-pink);
-      border: 1px solid var(--ms-pink);
+      box-shadow: 0 6px 0 var(--ms-maroon);
+      border: 1px solid var(--ms-maroon);
       transition: var(--transition-smooth);
       animation: fadeSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .venue-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 0 var(--ms-pink), 0 8px 24px rgba(236, 6, 120, 0.15);
+      box-shadow: 0 8px 0 var(--ms-maroon), 0 8px 24px rgba(69, 16, 19, 0.1);
     }
     .venue-name {
       font-weight: 700;
@@ -440,7 +440,7 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      border-bottom: 2px dashed var(--ms-pink);
+      border-bottom: 2px dashed var(--ms-maroon);
       padding-bottom: 8px;
       margin-bottom: 10px;
     }
@@ -482,7 +482,7 @@
       font-size: 0.85rem;
     }
     .teacher-tag {
-      background: var(--ms-pink);
+      background: var(--ms-maroon);
       color: var(--ms-white);
       padding: 4px 16px;
       border-radius: 50px;
@@ -497,7 +497,7 @@
       gap: 4px 8px;
       margin-top: 8px;
       padding: 8px 0 4px;
-      border-top: 1px solid var(--ms-pink);
+      border-top: 1px solid var(--ms-maroon);
     }
     .group-members .member-chip {
       background: var(--ms-maroon);
@@ -544,7 +544,7 @@
     }
     .judge-section:hover,
     .feedback-section:hover {
-      border-color: var(--ms-pink);
+      border-color: var(--ms-maroon);
     }
     .judge-section h3,
     .feedback-section h3 {
@@ -552,7 +552,7 @@
       font-size: 0.95rem;
       font-weight: 700;
       margin-bottom: 12px;
-      border-bottom: 2px solid var(--ms-pink);
+      border-bottom: 2px solid var(--ms-maroon);
       padding-bottom: 8px;
       display: flex;
       align-items: center;
@@ -596,11 +596,11 @@
     }
     .judge-code-input input:focus {
       outline: none;
-      border-color: var(--ms-pink);
-      box-shadow: 0 0 0 4px rgba(236, 6, 120, 0.12);
+      border-color: var(--ms-maroon);
+      box-shadow: 0 0 0 4px rgba(69, 16, 19, 0.08);
     }
     .judge-code-input button {
-      background: var(--ms-pink);
+      background: var(--ms-maroon);
       border: none;
       color: var(--ms-white);
       font-weight: 700;
@@ -608,13 +608,13 @@
       border-radius: 50px;
       cursor: pointer;
       font-size: 0.85rem;
-      box-shadow: 0 4px 0 var(--ms-maroon);
+      box-shadow: 0 4px 0 var(--ms-warm-gold);
       height: 44px;
       transition: var(--transition-smooth);
     }
     .judge-code-input button:active {
       transform: translateY(3px);
-      box-shadow: 0 1px 0 var(--ms-maroon);
+      box-shadow: 0 1px 0 var(--ms-warm-gold);
     }
     .judge-result {
       margin-top: 10px;
@@ -656,15 +656,15 @@
     }
     .group-selector select:focus {
       outline: none;
-      border-color: var(--ms-pink);
-      box-shadow: 0 0 0 4px rgba(236, 6, 120, 0.12);
+      border-color: var(--ms-maroon);
+      box-shadow: 0 0 0 4px rgba(69, 16, 19, 0.08);
     }
     .group-info {
       background: var(--ms-cream);
       border-radius: 16px;
       padding: 12px 16px;
       margin: 10px 0;
-      border: 1px solid var(--ms-pink);
+      border: 1px solid var(--ms-maroon);
       transition: var(--transition-smooth);
     }
     .group-info .group-name {
@@ -718,7 +718,7 @@
       transition: var(--transition-smooth);
     }
     .criteria-item:hover {
-      border-color: var(--ms-pink);
+      border-color: var(--ms-maroon);
       background: var(--ms-white);
     }
     .criteria-item label {
@@ -742,14 +742,14 @@
     }
     .criteria-item select:focus {
       outline: none;
-      border-color: var(--ms-pink);
-      box-shadow: 0 0 0 4px rgba(236, 6, 120, 0.1);
+      border-color: var(--ms-maroon);
+      box-shadow: 0 0 0 4px rgba(69, 16, 19, 0.08);
     }
     .submit-judge-btn,
     .submit-feedback-btn {
       background: var(--ms-maroon);
       color: var(--ms-cream);
-      border: 2px solid var(--ms-pink);
+      border: 2px solid var(--ms-gold);
       padding: 12px 20px;
       border-radius: 50px;
       font-weight: 700;
@@ -782,7 +782,7 @@
       border-radius: 16px;
       margin-top: 8px;
       text-align: center;
-      border: 1px solid var(--ms-pink);
+      border: 1px solid var(--ms-maroon);
     }
     .email-notice strong {
       color: var(--ms-maroon);
@@ -801,8 +801,8 @@
     }
     .feedback-area textarea:focus {
       outline: none;
-      border-color: var(--ms-pink);
-      box-shadow: 0 0 0 4px rgba(236, 6, 120, 0.12);
+      border-color: var(--ms-maroon);
+      box-shadow: 0 0 0 4px rgba(69, 16, 19, 0.08);
     }
     #feedbackStudentId {
       flex: 1;
@@ -818,8 +818,8 @@
     }
     #feedbackStudentId:focus {
       outline: none;
-      border-color: var(--ms-pink);
-      box-shadow: 0 0 0 4px rgba(236, 6, 120, 0.12);
+      border-color: var(--ms-maroon);
+      box-shadow: 0 0 0 4px rgba(69, 16, 19, 0.08);
     }
     #feedbackRating {
       width: 100%;
@@ -836,15 +836,15 @@
     }
     #feedbackRating:focus {
       outline: none;
-      border-color: var(--ms-pink);
-      box-shadow: 0 0 0 4px rgba(236, 6, 120, 0.12);
+      border-color: var(--ms-maroon);
+      box-shadow: 0 0 0 4px rgba(69, 16, 19, 0.08);
     }
     .form-info {
       margin-top: 12px;
       padding: 10px 14px;
       background: #e8f0fe;
       border-radius: 12px;
-      border-left: 4px solid var(--ms-pink);
+      border-left: 4px solid var(--ms-maroon);
       font-size: 0.7rem;
       color: var(--ms-charcoal);
     }
@@ -852,7 +852,7 @@
       color: var(--ms-maroon);
     }
     .form-info a {
-      color: var(--ms-pink);
+      color: var(--ms-maroon);
       text-decoration: none;
       font-weight: 600;
     }
@@ -877,7 +877,7 @@
       color: var(--ms-cream);
       padding: 14px 28px;
       border-radius: 50px;
-      border: 2px solid var(--ms-pink);
+      border: 2px solid var(--ms-gold);
       font-weight: 600;
       font-size: 0.85rem;
       box-shadow: 0 8px 32px rgba(10, 26, 58, 0.25);
@@ -902,7 +902,7 @@
     }
     .toast.info {
       background: var(--ms-maroon);
-      border-color: var(--ms-pink);
+      border-color: var(--ms-gold);
     }
     .error-shake {
       animation: shake 0.3s ease;
@@ -965,7 +965,7 @@
         <div class="school-logo-wrapper">
           <div class="school-logo-main">
             <div class="school-logo-icon">
-              <!-- FULL MODERN SCHOOL SVG LOGO -->
+              <!-- MODERN SCHOOL SVG LOGO (FULL) -->
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 340" width="100%" height="100%">
                 <path d="M0 0 C1.31700543 -0.00384115 2.63401086 -0.00768229 3.99092555 -0.01163983 C5.46654182 -0.01085949 6.94215804 -0.00998069 8.4177742 -0.00901413 C9.97439944 -0.0115962 11.53102402 -0.01460891 13.08764768 -0.01801753 C17.38134351 -0.02610951 21.67502265 -0.02787832 25.9687252 -0.028615 C30.59325614 -0.03046176 35.21777833 -0.0380072 39.84230423 -0.04475021 C49.96209944 -0.05834992 60.0818907 -0.06436088 70.20169353 -0.06876087 C76.51720324 -0.07152068 82.8327114 -0.07575756 89.14822006 -0.08026505 C106.62412164 -0.09246013 124.10002199 -0.10275879 141.57592773 -0.10614014 C143.25469389 -0.10646949 143.25469389 -0.10646949 144.96737452 -0.10680549 C146.0892759 -0.10702377 147.21117729 -0.10724204 148.36707568 -0.10746694 C150.64058733 -0.10791041 152.91409898 -0.10835697 155.18761063 -0.10880661 C156.8792319 -0.10913875 156.8792319 -0.10913875 158.60502735 -0.10947761 C176.88173551 -0.11342625 195.15840382 -0.13088124 213.43509659 -0.15416613 C232.18661625 -0.17786368 250.9381159 -0.19034127 269.68965077 -0.19150805 C280.22311907 -0.19242575 290.75653545 -0.19820162 301.28998947 -0.21632767 C310.25917785 -0.23170716 319.22829828 -0.23686188 328.19749734 -0.22858956 C332.77540813 -0.22467534 337.35318199 -0.22565019 341.93107605 -0.23964691 C346.12074801 -0.25233972 350.3101795 -0.25122918 354.4998509 -0.2390562 C356.0167138 -0.23709115 357.53359347 -0.24021476 359.05043277 -0.24890056 C361.1109919 -0.25995413 363.17069652 -0.25253322 365.23123169 -0.24050903 C366.3761435 -0.24110612 367.52105531 -0.24170321 368.70066142 -0.24231839 C373.49087723 0.32305267 376.76790109 2.00149192 380.11729813 5.44392776 C383.99115485 11.39306487 384.1751388 17.00214617 384.16807938 23.87752151 C384.1723645 24.80686005 384.17664963 25.73619858 384.18106461 26.69369888 C384.18678967 28.65283267 384.18732165 30.61198771 384.18297195 32.57112503 C384.17981204 35.55579012 384.20329391 38.53946314 384.22862625 41.52400589 C384.23089955 43.43350986 384.2316026 45.34301647 384.23057938 47.25252151 C384.23978912 48.1381427 384.24899887 49.02376389 384.2584877 49.93622208 C384.20752653 56.81688681 383.04318789 61.5547162 378.49229813 66.94392776 C373.96921858 70.71316072 370.21132605 71.38147083 364.39668751 71.38590336 C363.08067572 71.39173555 361.76466394 71.39756775 360.40877301 71.40357667 C358.94984361 71.39994354 357.49091468 71.39611917 356.03198624 71.39212418 C354.48102031 71.39514444 352.93005586 71.39903329 351.37909406 71.40371674 C347.11495713 71.41402156 342.85090405 71.41180862 338.58676016 71.40753615 C333.98886237 71.40507344 329.390985 71.4140774 324.79309464 71.42157364 C315.78466939 71.43433516 306.77627393 71.43611254 297.76784117 71.43377338 C290.44726022 71.43199175 283.12668834 71.43373652 275.80610847 71.43799782 C274.76498244 71.43859301 273.7238564 71.4391882 272.65118108 71.43980142 C270.53627114 71.44101315 268.4213612 71.44222728 266.30645125 71.4434438 C246.46463169 71.45432485 226.62282912 71.45215412 206.78100859 71.44605895 C188.62088563 71.44088878 170.4608163 71.45214689 152.30070395 71.47115717 C133.66208707 71.49051908 115.02349557 71.4987945 96.38486856 71.49503392 C85.91740081 71.49311943 75.44997871 71.4956335 64.98251915 71.50974846 C56.07195481 71.52164222 47.16146422 71.52308969 38.25089891 71.51095829 C33.70334951 71.50505561 29.15593515 71.50400844 24.60839462 71.51596069 C20.44659225 71.52677216 16.28503843 71.52377292 12.12324791 71.50969901 C10.61657125 71.50703897 9.1098754 71.50945939 7.60321749 71.51743487 C5.55674967 71.5275171 3.51021198 71.51734224 1.46374989 71.50615788 C0.32653982 71.50621289 -0.81067025 71.50626791 -1.98234123 71.50632459 C-6.23561285 71.00017999 -9.60113116 69.52839487 -12.77723312 66.63142776 C-15.97994964 62.51824 -17.2503256 59.73427402 -17.29383469 54.57161331 C-17.30344223 53.65023071 -17.31304977 52.72884811 -17.32294846 51.77954483 C-17.32719833 50.78578339 -17.33144821 49.79202194 -17.33582687 48.76814651 C-17.34152695 47.74340729 -17.34722702 46.71866806 -17.35309982 45.66287613 C-17.36254902 43.49330554 -17.36908348 41.32372059 -17.37293625 39.15413284 C-17.38263352 35.84227181 -17.41365469 32.53103355 -17.44520187 29.21931839 C-17.45173293 27.11059811 -17.456983 25.0018734 -17.46082687 22.89314651 C-17.47317368 21.90545776 -17.48552048 20.91776901 -17.49824142 19.9001503 C-17.47858801 13.8043279 -16.94984334 9.1492816 -12.59754562 4.48689651 C-7.91411147 0.90544687 -5.86998857 0.00639445 0 0 Z " fill="#EC0678" transform="translate(1641.1327018737793,246.86857223510742)"/>
                 <path d="M0 0 C1.16781006 0.00523682 2.33562012 0.01047363 3.53881836 0.01586914 C4.79887695 0.0190918 6.05893555 0.02231445 7.35717773 0.02563477 C8.6976732 0.03399136 10.03816799 0.04245632 11.37866211 0.05102539 C12.72306153 0.05603879 14.06746271 0.06060197 15.41186523 0.06469727 C18.71334151 0.07653051 22.01473014 0.09301568 25.31616211 0.11352539 C28.07601435 7.25158995 30.4682897 14.49883126 32.85131836 21.76977539 C33.29381913 23.11660357 33.73640218 24.46340472 34.17906189 25.81018066 C35.10895435 28.64074197 36.0375714 31.47171779 36.96533203 34.30297852 C37.89323038 37.13429906 38.8228635 39.96503859 39.75439453 42.79516602 C46.46306482 63.1772745 52.97360009 83.61451056 59.31616211 104.11352539 C59.65362457 103.08860992 59.99108704 102.06369446 60.33877563 101.00772095 C63.54468361 91.2711253 66.75094195 81.53464509 69.95752907 71.79827309 C71.6054025 66.79468969 73.25315943 61.791068 74.90063477 56.78735352 C76.49540302 51.94373636 78.09049732 47.10022669 79.68580246 42.25678635 C80.28941447 40.42400179 80.89291588 38.5911808 81.49629593 36.75831985 C83.1617777 31.69929289 84.82999568 26.6411831 86.50122833 21.58405304 C87.34797081 19.01709515 88.19035938 16.44873055 89.03265381 13.88031006 C89.57933263 12.22151307 90.12614133 10.56275888 90.6730957 8.90405273 C90.92507029 8.13219446 91.17704487 7.36033619 91.43665504 6.56508827 C93.20259607 1.22709143 93.20259607 1.22709143 94.31616211 0.11352539 C96.38878287 0.02585427 98.46436505 0.00656666 100.53881836 0.01586914 C101.79887695 0.0190918 103.05893555 0.02231445 104.35717773 0.02563477 C105.6976732 0.03399136 107.03816799 0.04245632 108.37866211 0.05102539 C109.72306153 0.05603879 111.06746271 0.06060197 112.41186523 0.06469727 C115.71334151 0.07653051 119.01473014 0.09301568 122.31616211 0.11352539 C123.03264429 4.70529407 123.4791273 9.18669696 123.62623596 13.83056641 C123.6696814 15.14268097 123.71312683 16.45479553 123.75788879 17.80667114 C123.80155707 19.24358906 123.84514888 20.68050931 123.88867188 22.11743164 C123.93775039 23.64404342 123.98716729 25.17064436 124.03689575 26.69723511 C124.17051109 30.82928417 124.29932395 34.96147032 124.42720151 39.09370041 C124.56201048 43.42534442 124.70105478 47.75685258 124.83958435 52.08837891 C125.07158184 59.36132968 125.30069493 66.63436658 125.52783203 73.9074707 C125.81905697 83.23231819 126.11487954 92.55701375 126.41221714 101.88166809 C126.66825665 109.91185425 126.92234664 117.94210192 127.17603946 125.97236252 C127.25744687 128.54718279 127.3390881 131.12199558 127.42074776 133.69680786 C127.54909917 137.74823739 127.67623701 141.79970335 127.80244827 145.8512001 C127.84883387 147.3350555 127.89558759 148.81889944 127.9427433 150.30273056 C128.00722042 152.33394926 128.07017989 154.36521597 128.1330719 156.39648438 C128.1686448 157.53133774 128.2042177 158.6661911 128.24086857 159.83543396 C128.31954144 163.26065298 128.31616211 166.68740299 128.31616211 170.11352539 C118.74616211 170.11352539 109.17616211 170.11352539 99.31616211 170.11352539 C98.19138955 155.49148213 98.19138955 155.49148213 98.03491211 149.49755859 C98.01686523 148.84182358 97.99881836 148.18608856 97.98022461 147.51048279 C97.94225154 146.11552506 97.90572776 144.72052718 97.87060547 143.32549477 C97.81447392 141.09729223 97.75423957 138.86922993 97.69311523 136.64115906 C97.5638734 131.90287354 97.43983118 127.16445909 97.31616211 122.42602539 C97.15281571 116.19286095 96.98695266 109.95977182 96.81616211 103.72680664 C96.79586945 102.98324039 96.77557678 102.23967415 96.75466919 101.47357559 C96.45650632 90.67543055 96.05014482 79.89194441 95.31616211 69.11352539 C95.1187291 69.74118805 94.92129608 70.36885071 94.71788025 71.01553345 C92.62485201 77.66926434 90.53131153 84.32283391 88.4375 90.97631836 C87.66068128 93.44502871 86.88398448 95.91377743 86.10742188 98.38256836 C81.20473438 113.96848763 76.27886036 129.54660207 71.31616211 145.11352539 C63.39616211 145.11352539 55.47616211 145.11352539 47.31616211 145.11352539 C41.68896521 127.62992603 36.19946867 110.11104831 30.81616211 92.55102539 C28.34116211 84.48665039 25.86616211 76.42227539 23.31616211 68.11352539 C22.32616211 101.77352539 21.33616211 135.43352539 20.31616211 170.11352539 C10.74616211 170.11352539 1.17616211 170.11352539 -8.68383789 170.11352539 C-8.80707712 155.65154494 -8.35975834 141.21687881 -7.90905309 126.76300573 C-7.79849795 123.20330911 -7.69051025 119.64353438 -7.58213806 116.08377075 C-7.39971576 110.10437811 -7.21536459 104.12504739 -7.02978516 98.14575195 C-6.81719004 91.2954001 -6.60745494 84.44496541 -6.39932352 77.59447658 C-6.19691713 70.93415345 -5.99261772 64.27388966 -5.78744316 57.61365128 C-5.70118199 54.81285388 -5.61550963 52.01203949 -5.53035164 49.21120834 C-5.13505793 36.23425372 -4.72663947 23.2577075 -4.18554688 10.28588867 C-4.14998467 9.36082457 -4.11442247 8.43576046 -4.07778263 7.48266411 C-3.75333194 0.15876461 -3.75333194 0.15876461 0 0 Z " fill="#451013" transform="translate(427.683837890625,48.886474609375)"/>

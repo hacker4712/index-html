@@ -1427,7 +1427,7 @@
 
       // =============================================================
       //  GOOGLE FORMS CONFIGURATION
-      //  Feedback Form Entry IDs (from your form URL):
+      //  Feedback Form Entry IDs (from your pre-filled link):
       //  entry.1974581951 = Student ID
       //  entry.691585525 = Feedback
       //  entry.46711172  = Rating
@@ -1441,7 +1441,7 @@
 
       // =============================================================
       //  JUDGEMENT FORM CONFIGURATION
-      //  Create a separate Google Form for judgements and add its URL and entry IDs below
+      //  Create a separate Google Form for judgements
       // =============================================================
       const JUDGEMENT_FORM_URL = "https://docs.google.com/forms/d/e/YOUR_JUDGEMENT_FORM_ID/viewform";
       const JUDGEMENT_ENTRY_GROUP = "entry.111111111";
@@ -1457,9 +1457,9 @@
       const JUDGEMENT_ENTRY_COMMENTS = "entry.123123123";
 
       // =============================================================
-      //  STUDENT DATABASE - Loaded from Google Sheets
+      //  STUDENT DATABASE - Loaded from Google Sheets CSV
       // =============================================================
-      const GOOGLE_SHEETS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/YOUR_SHEET_ID/pub?output=csv";
+      const GOOGLE_SHEETS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSMV8q5pjuZ4WBK-qHcNjaf5xCtklGx0gGsoBTmFfx4E3Gd1ICZLdrGkMMnr7VUdbO7DIC800sjdXy1/pub?output=csv";
       var studentData = [];
 
       // =============================================================
@@ -1568,7 +1568,7 @@
       }
 
       // =============================================================
-      //  SAMPLE DATA (Fallback)
+      //  SAMPLE DATA (Fallback if CSV fails)
       // =============================================================
       function loadSampleData() {
         studentData = [

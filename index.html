@@ -1023,6 +1023,7 @@
             <div id="groupInfoDisplay" style="display:none;">
               <div class="group-info">
                 <div class="group-name" id="groupDisplayName">Group Name</div>
+                <div style="font-size:0.8rem; color:var(--ms-charcoal); margin:4px 0;" id="groupDescriptionDisplay">Description</div>
                 <div class="group-members-list" id="groupMembersList"></div>
                 <div class="group-status" id="groupStatusDisplay">Status: Not Judged</div>
               </div>
@@ -1095,14 +1096,13 @@
       "use strict";
 
       // =============================================================
-      //  GOOGLE FORMS CONFIGURATION (JUDGEMENT + FEEDBACK)
+      //  GOOGLE FORMS CONFIGURATION
       // =============================================================
       const FEEDBACK_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSd0G_L0glHGw5WlGTcYotztShjXpDjxvaDQ9oP_yfnCfFriWg/formResponse";
       const FEEDBACK_ENTRY_STUDENT_ID = "entry.1974581951";
       const FEEDBACK_ENTRY_FEEDBACK = "entry.691585525";
       const FEEDBACK_ENTRY_RATING = "entry.46711172";
 
-      // Judgement form (your provided form)
       const JUDGEMENT_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSchIwrq2rnzPtZUDhW-ravsqZQQA9RuYANR86shHS99lLbclQ/formResponse";
       const JUDGEMENT_ENTRY_VENUE = "entry.209944553";
       const JUDGEMENT_ENTRY_STUDENT_NAME = "entry.2146860099";
@@ -1396,7 +1396,7 @@
       }
 
       // =============================================================
-      //  SUBMIT TO GOOGLE FORMS - Using URL parameters
+      //  SUBMIT TO GOOGLE FORMS
       // =============================================================
       function submitToGoogleForm(formUrl, params) {
         var url = formUrl + '?' + params.toString();
@@ -1583,6 +1583,7 @@
           infoDisplay.style.display = 'block';
           criteriaDisplay.style.display = 'block';
           document.getElementById('groupDisplayName').textContent = group.venue + ' - ' + group.project;
+          document.getElementById('groupDescriptionDisplay').textContent = '📝 ' + (group.description || 'No description');
           var membersHtml = '';
           group.members.forEach(function(m) {
             membersHtml += '<span class="member-tag">' + m.studentName + ' (#' + m.admissionNo + ')</span>';
@@ -1591,7 +1592,9 @@
           if (judgements[groupKey]) {
             var j = judgements[groupKey];
             var statusEl = document.getElementById('groupStatusDisplay');
-            statusEl.textContent = '✅ Judged! Score: ' + j.total + '/25 on ' + new Date(j.timestamp).toLocaleDateString();
+            // Show percentage out of 10
+            var percentage = Math.round((j.total / 25) * 10);
+            statusEl.textContent = '✅ Judged! Score: ' + percentage + '/10 on ' + new Date(j.timestamp).toLocaleDateString();
             statusEl.className = 'group-status judged';
             if (j.criteria) {
               document.getElementById('criteria1').value = j.criteria.innovation || 1;
@@ -1603,7 +1606,7 @@
             }
             document.getElementById('judgeResult').className = 'judge-result info';
             document.getElementById('judgeResult').textContent = '✅ Already judged on ' + new Date(j.timestamp)
-              .toLocaleString() + ' | Score: ' + j.total + '/25';
+              .toLocaleString() + ' | Score: ' + percentage + '/10';
             document.getElementById('judgeResult').style.display = 'block';
           } else {
             document.getElementById('groupStatusDisplay').textContent = '⏳ Not Judged Yet';
@@ -1650,7 +1653,7 @@
           }
         });
 
-        // ---- SUBMIT JUDGEMENT (UPDATED with your form) ----
+        // ---- SUBMIT JUDGEMENT ----
         document.getElementById('submitJudgeBtn').addEventListener('click', function() {
           if (!judgeUnlocked) {
             document.getElementById('judgeResult').className = 'judge-result error';
@@ -1679,11 +1682,13 @@
           var c5 = parseInt(document.getElementById('criteria5').value);
           var comments = document.getElementById('judgeComments').value.trim();
           var total = c1 + c2 + c3 + c4 + c5;
+          var percentage = Math.round((total / 25) * 10);
 
           // Save locally
           var judgementData = {
             criteria: { innovation: c1, technical: c2, presentation: c3, impact: c4, collaboration: c5 },
             total: total,
+            percentage: percentage,
             comments: comments || 'No comments',
             timestamp: Date.now(),
             groupName: group.venue + ' - ' + group.project,
@@ -1692,7 +1697,7 @@
           judgements[groupKey] = judgementData;
           localStorage.setItem('groupJudgements', JSON.stringify(judgements));
 
-          // Build params using your form entries
+          // Build params
           var params = new URLSearchParams();
           var memberNames = group.members.map(m => m.studentName + ' (#' + m.admissionNo + ')').join(', ');
           params.append(JUDGEMENT_ENTRY_VENUE, group.venue);
@@ -1705,13 +1710,12 @@
           params.append(JUDGEMENT_ENTRY_IMPACT, c4);
           params.append(JUDGEMENT_ENTRY_COLLABORATION, c5);
           params.append(JUDGEMENT_ENTRY_COMMENTS, comments || 'No comments');
-          params.append(JUDGEMENT_ENTRY_TOTAL, total);
+          params.append(JUDGEMENT_ENTRY_TOTAL, percentage); // Store percentage out of 10
 
           submitToGoogleForm(JUDGEMENT_FORM_URL, params)
             .then(function() {
               document.getElementById('judgeResult').className = 'judge-result success';
-              document.getElementById('judgeResult').textContent = '✅ Judgement submitted! Saved to Google Sheets. Score: ' +
-                total + '/25';
+              document.getElementById('judgeResult').textContent = '✅ Judgement submitted! Score: ' + percentage + '/10';
               document.getElementById('judgeResult').style.display = 'block';
               displayGroupInfo(groupKey);
               showToast('✅ Judgement saved to Google Sheets!', 'success');

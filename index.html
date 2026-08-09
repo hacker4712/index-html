@@ -43,7 +43,6 @@
       padding: 16px;
     }
 
-    /* ===== QR PURE SCREEN ===== */
     .qr-pure {
       max-width: 420px;
       width: 100%;
@@ -156,7 +155,6 @@
       color: var(--ms-navy);
     }
 
-    /* ===== FULL APP ===== */
     .app-hidden {
       display: none;
     }
@@ -171,7 +169,6 @@
       animation: fadeScaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    /* ===== MODERN SCHOOL LOGO ===== */
     .school-logo-container {
       display: flex;
       align-items: center;
@@ -465,6 +462,91 @@
       display: inline-block;
       margin-top: 6px;
       transition: var(--transition-smooth);
+    }
+
+    .csv-upload-section {
+      background: var(--ms-cream);
+      border-radius: 24px;
+      padding: 16px;
+      margin-top: 16px;
+      border: 2px dashed var(--ms-gold-light);
+      transition: var(--transition-smooth);
+      animation: fadeSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .csv-upload-section:hover {
+      border-color: var(--ms-gold);
+      background: var(--ms-white);
+    }
+    .csv-upload-section label {
+      display: block;
+      font-weight: 600;
+      color: var(--ms-navy);
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+    }
+    .csv-upload-section label i {
+      color: var(--ms-gold);
+      margin-right: 6px;
+    }
+    .csv-upload-section .csv-input-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .csv-upload-section input[type="file"] {
+      flex: 1;
+      min-width: 140px;
+      padding: 10px 14px;
+      border: 2px solid var(--ms-gold-light);
+      border-radius: 50px;
+      font-size: 0.85rem;
+      background: var(--ms-white);
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      height: 44px;
+    }
+    .csv-upload-section input[type="file"]:hover {
+      border-color: var(--ms-gold);
+    }
+    .csv-upload-section .upload-btn {
+      background: var(--ms-gold);
+      color: var(--ms-navy);
+      border: none;
+      padding: 10px 24px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      box-shadow: 0 4px 0 var(--ms-warm-gold);
+      height: 44px;
+      white-space: nowrap;
+    }
+    .csv-upload-section .upload-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 var(--ms-warm-gold);
+    }
+    .csv-upload-section .upload-btn:hover {
+      background: var(--ms-gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 var(--ms-warm-gold), 0 8px 20px rgba(201, 168, 76, 0.2);
+    }
+    .csv-upload-section .csv-stats {
+      font-size: 0.75rem;
+      color: var(--ms-charcoal);
+      margin-top: 10px;
+      padding: 10px 14px;
+      background: var(--ms-white);
+      border-radius: 16px;
+      border: 1px solid var(--ms-gold-light);
+      display: none;
+      animation: fadeSlideIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .csv-upload-section .csv-stats.show {
+      display: block;
+    }
+    .csv-upload-section .csv-stats strong {
+      color: var(--ms-navy);
     }
 
     .unique-id-box {
@@ -971,7 +1053,6 @@
       color: var(--ms-navy);
     }
 
-    /* Toast */
     .toast {
       position: fixed;
       bottom: 24px;
@@ -1052,6 +1133,17 @@
         padding: 12px 18px;
         height: 44px;
         min-width: 70px;
+      }
+      .csv-upload-section input[type="file"] {
+        height: 40px;
+        font-size: 0.8rem;
+        padding: 8px 12px;
+        min-width: 100px;
+      }
+      .csv-upload-section .upload-btn {
+        height: 40px;
+        font-size: 0.8rem;
+        padding: 8px 16px;
       }
       .venue-name {
         font-size: 1.05rem;
@@ -1254,6 +1346,19 @@
             Type an ID and press Lookup
           </div>
         </div>
+
+        <!-- CSV Upload Section -->
+        <div class="csv-upload-section">
+          <label><i>📊</i> Import Students from CSV</label>
+          <div class="csv-input-row">
+            <input type="file" id="csvFileInput" accept=".csv" />
+            <button class="upload-btn" id="uploadCsvBtn">📤 Import</button>
+          </div>
+          <div class="csv-stats" id="csvStats"></div>
+          <div style="font-size:0.65rem; color:var(--ms-charcoal); margin-top: 6px; opacity:0.7;">
+            Format: admissionNo,studentName,class,section,venue,project,description,teacher
+          </div>
+        </div>
       </div>
 
       <!-- JUDGE -->
@@ -1418,127 +1523,228 @@
       const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
 
       // =============================================================
-      //  DATABASE
+      //  STUDENT DATABASE - 50+ Test Students
       // =============================================================
-      var studentData = [
-        { admissionNo: 1001, studentName: "Rahul Sharma", class: "IX", section: "A", venue: "Physics Lab",
-          project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-        { admissionNo: 1002, studentName: "Priya Patel", class: "IX", section: "A", venue: "Physics Lab",
-          project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-        { admissionNo: 1003, studentName: "Amit Kumar", class: "IX", section: "A", venue: "Physics Lab",
-          project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-        { admissionNo: 1004, studentName: "Sneha Reddy", class: "IX", section: "A", venue: "Physics Lab",
-          project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-        { admissionNo: 1005, studentName: "Vikram Singh", class: "IX", section: "A", venue: "Physics Lab",
-          project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-        { admissionNo: 1006, studentName: "Ananya Sharma", class: "X", section: "B", venue: "Hall A",
-          project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
-        { admissionNo: 1007, studentName: "Rohit Verma", class: "X", section: "B", venue: "Hall A",
-          project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
-        { admissionNo: 1008, studentName: "Kavya Nair", class: "X", section: "B", venue: "Hall A",
-          project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
-        { admissionNo: 1009, studentName: "Arjun Mehta", class: "X", section: "B", venue: "Hall A",
-          project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
-        { admissionNo: 1010, studentName: "Diya Patel", class: "XI", section: "C", venue: "Chemistry Lab",
-          project: "Green Energy Hydrogen Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-        { admissionNo: 1011, studentName: "Kiran Rao", class: "XI", section: "C", venue: "Chemistry Lab",
-          project: "Green Energy Hydrogen Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-        { admissionNo: 1012, studentName: "Suresh Iyer", class: "XI", section: "C", venue: "Chemistry Lab",
-          project: "Green Energy Hydrogen Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-        { admissionNo: 1013, studentName: "Lata Krishnan", class: "XI", section: "C", venue: "Chemistry Lab",
-          project: "Green Energy Hydrogen Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-        { admissionNo: 1014, studentName: "Manoj Singh", class: "XI", section: "C", venue: "Chemistry Lab",
-          project: "Green Energy Hydrogen Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-        { admissionNo: 1015, studentName: "Neha Sharma", class: "XI", section: "C", venue: "Chemistry Lab",
-          project: "Green Energy Hydrogen Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-        { admissionNo: 1016, studentName: "Aarav Mehta", class: "X", section: "A", venue: "Robotics Arena",
-          project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-        { admissionNo: 1017, studentName: "Ishita Roy", class: "X", section: "A", venue: "Robotics Arena",
-          project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-        { admissionNo: 1018, studentName: "Vivek Jain", class: "X", section: "A", venue: "Robotics Arena",
-          project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-        { admissionNo: 1019, studentName: "Pooja Desai", class: "X", section: "A", venue: "Robotics Arena",
-          project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-        { admissionNo: 1020, studentName: "Ravi Kumar", class: "X", section: "A", venue: "Robotics Arena",
-          project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-        { admissionNo: 1021, studentName: "Aditya Singh", class: "IX", section: "B", venue: "Makerspace",
-          project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
-        { admissionNo: 1022, studentName: "Meera Nair", class: "IX", section: "B", venue: "Makerspace",
-          project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
-        { admissionNo: 1023, studentName: "Karan Joshi", class: "IX", section: "B", venue: "Makerspace",
-          project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
-        { admissionNo: 1024, studentName: "Anjali Menon", class: "IX", section: "B", venue: "Makerspace",
-          project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
-        { admissionNo: 1025, studentName: "Priya Kaur", class: "VIII", section: "C", venue: "Biology Lab",
-          project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-        { admissionNo: 1026, studentName: "Gaurav Singh", class: "VIII", section: "C", venue: "Biology Lab",
-          project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-        { admissionNo: 1027, studentName: "Ritu Sharma", class: "VIII", section: "C", venue: "Biology Lab",
-          project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-        { admissionNo: 1028, studentName: "Deepak Patel", class: "VIII", section: "C", venue: "Biology Lab",
-          project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-        { admissionNo: 1029, studentName: "Suman Reddy", class: "VIII", section: "C", venue: "Biology Lab",
-          project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-        { admissionNo: 1030, studentName: "Arjun Kumar", class: "XII", section: "A", venue: "Auditorium",
-          project: "Smart Lighting System", description: "Motion and light sensor based automation",
-          teacher: "Mr. Mehta" },
-        { admissionNo: 1031, studentName: "Sara Khan", class: "XII", section: "A", venue: "Auditorium",
-          project: "Smart Lighting System", description: "Motion and light sensor based automation",
-          teacher: "Mr. Mehta" },
-        { admissionNo: 1032, studentName: "Rahul Saxena", class: "XII", section: "A", venue: "Auditorium",
-          project: "Smart Lighting System", description: "Motion and light sensor based automation",
-          teacher: "Mr. Mehta" },
-        { admissionNo: 1033, studentName: "Nisha Reddy", class: "XII", section: "A", venue: "Auditorium",
-          project: "Smart Lighting System", description: "Motion and light sensor based automation",
-          teacher: "Mr. Mehta" },
-        { admissionNo: 1034, studentName: "Vijay Singh", class: "XII", section: "A", venue: "Auditorium",
-          project: "Smart Lighting System", description: "Motion and light sensor based automation",
-          teacher: "Mr. Mehta" },
-        { admissionNo: 1035, studentName: "Kavita Sharma", class: "XII", section: "A", venue: "Auditorium",
-          project: "Smart Lighting System", description: "Motion and light sensor based automation",
-          teacher: "Mr. Mehta" },
-        { admissionNo: 1036, studentName: "Sai Reddy", class: "IX", section: "A", venue: "Library",
-          project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
-        { admissionNo: 1037, studentName: "Maya Krishnan", class: "IX", section: "A", venue: "Library",
-          project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
-        { admissionNo: 1038, studentName: "Rajesh Nair", class: "IX", section: "A", venue: "Library",
-          project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
-        { admissionNo: 1039, studentName: "Shreya Patel", class: "IX", section: "A", venue: "Library",
-          project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
-        { admissionNo: 1040, studentName: "Vivaan Singh", class: "XI", section: "B", venue: "STEM Lab",
-          project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
-        { admissionNo: 1041, studentName: "Ankit Reddy", class: "XI", section: "B", venue: "STEM Lab",
-          project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
-        { admissionNo: 1042, studentName: "Sneha Menon", class: "XI", section: "B", venue: "STEM Lab",
-          project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
-        { admissionNo: 1043, studentName: "Kishore Kumar", class: "XI", section: "B", venue: "STEM Lab",
-          project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
-        { admissionNo: 1044, studentName: "Divya Sharma", class: "XI", section: "B", venue: "STEM Lab",
-          project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
-        { admissionNo: 1045, studentName: "Diya Patel", class: "VII", section: "B", venue: "Art Gallery",
-          project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art",
-          teacher: "Mrs. Gupta" },
-        { admissionNo: 1046, studentName: "Rohan Verma", class: "VII", section: "B", venue: "Art Gallery",
-          project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art",
-          teacher: "Mrs. Gupta" },
-        { admissionNo: 1047, studentName: "Pari Singh", class: "VII", section: "B", venue: "Art Gallery",
-          project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art",
-          teacher: "Mrs. Gupta" },
-        { admissionNo: 1048, studentName: "Arnav Iyer", class: "VII", section: "B", venue: "Art Gallery",
-          project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art",
-          teacher: "Mrs. Gupta" },
-        { admissionNo: 1049, studentName: "Ishita Reddy", class: "VII", section: "B", venue: "Art Gallery",
-          project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art",
-          teacher: "Mrs. Gupta" },
-        { admissionNo: 1050, studentName: "Krishna Nair", class: "VII", section: "B", venue: "Art Gallery",
-          project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art",
-          teacher: "Mrs. Gupta" }
-      ];
+      var studentData = [];
 
-      var JUDGE_CODE = "EXPO2026";
-      var EMAIL_TO = "prithviraj130808@gmail.com";
-      var judgements = JSON.parse(localStorage.getItem('groupJudgements')) || {};
-      var feedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
+      function generateTestStudents() {
+        const venues = ['Physics Lab', 'Chemistry Lab', 'Biology Lab', 'Robotics Arena', 'Makerspace', 'STEM Lab', 'Auditorium', 'Library', 'Art Gallery'];
+        const projects = {
+          'Physics Lab': ['Solar Car', 'Electric Motor', 'Magnetic Levitation', 'Quantum Physics Demo'],
+          'Chemistry Lab': ['Green Energy Cell', 'Hydrogen Fuel Cell', 'Chemical Analysis', 'Polymer Synthesis'],
+          'Biology Lab': ['Hydroponics System', 'DNA Extraction', 'Microbiology Study', 'Plant Tissue Culture'],
+          'Robotics Arena': ['Line Follower Robot', 'Autonomous Drone', 'Robotic Arm', 'Obstacle Avoidance'],
+          'Makerspace': ['3D Printed Prosthetics', 'Smart Home Device', 'Wearable Tech', 'IoT Project'],
+          'STEM Lab': ['AI Chatbot', 'Machine Learning', 'Data Analytics', 'Cybersecurity Demo'],
+          'Auditorium': ['Smart Lighting System', 'Audio Visual Setup', 'Green Energy Display', 'Climate Change Model'],
+          'Library': ['Digital Library', 'Book Recommendation AI', 'Historical Archive', 'Literary Analysis'],
+          'Art Gallery': ['Recycled Art Sculpture', 'Digital Painting', 'Photography Exhibition', 'Mixed Media Art']
+        };
+        const teachers = {
+          'Physics Lab': ['Mr. Verma', 'Ms. Singh', 'Mr. Kumar'],
+          'Chemistry Lab': ['Mr. Gupta', 'Ms. Sharma', 'Mr. Patel'],
+          'Biology Lab': ['Mrs. Rao', 'Ms. Nair', 'Mr. Iyer'],
+          'Robotics Arena': ['Ms. Nair', 'Mr. Patel', 'Mr. Mehta'],
+          'Makerspace': ['Mr. Iyer', 'Ms. Desai', 'Mr. Kumar'],
+          'STEM Lab': ['Mr. Patel', 'Ms. Singh', 'Mr. Gupta'],
+          'Auditorium': ['Mr. Mehta', 'Ms. Sharma', 'Mr. Verma'],
+          'Library': ['Ms. Desai', 'Mr. Iyer', 'Mrs. Rao'],
+          'Art Gallery': ['Mrs. Gupta', 'Ms. Nair', 'Mr. Patel']
+        };
+        const classes = ['VIII', 'IX', 'X', 'XI', 'XII'];
+        const sections = ['A', 'B', 'C'];
+        const firstNames = ['Aarav', 'Vivaan', 'Aditya', 'Vihaan', 'Arjun', 'Sai', 'Pranav', 'Dhruv', 'Krishna', 'Shaurya',
+          'Aayush', 'Reyansh', 'Kabir', 'Jai', 'Atharva', 'Rudra', 'Aarush', 'Anay', 'Dev', 'Ishaan', 'Rahul', 'Amit',
+          'Vikram', 'Karan', 'Arnav', 'Rohan', 'Suresh', 'Manoj', 'Rajesh', 'Deepak', 'Anjali', 'Priya', 'Sneha', 'Kavya',
+          'Ritu', 'Divya', 'Neha', 'Meera', 'Ananya', 'Ishita', 'Pooja', 'Diya', 'Maya', 'Nisha', 'Sara', 'Lata', 'Shreya',
+          'Suman', 'Illa', 'Saumya', 'Kiran', 'Asha', 'Leela', 'Radha', 'Uma', 'Vani', 'Yash', 'Zara', 'Aadi', 'Bhavya'
+        ];
+        const lastNames = ['Sharma', 'Patel', 'Kumar', 'Singh', 'Reddy', 'Nair', 'Iyer', 'Gupta', 'Mehta', 'Joshi', 'Verma',
+          'Jain', 'Rao', 'Menon', 'Kaur', 'Desai', 'Khan', 'Saxena', 'Roy', 'Agarwal', 'Pandey', 'Trivedi', 'Nigam',
+          'Krishnan', 'Deshmukh', 'Srinivas', 'Choudhary', 'Malhotra', 'Sethi', 'Bhatia'
+        ];
+
+        let students = [];
+        let id = 1001;
+
+        // Generate 50+ students spread across venues
+        for (let v = 0; v < venues.length; v++) {
+          const venue = venues[v];
+          const venueProjects = projects[venue] || ['General Project'];
+          const venueTeachers = teachers[venue] || ['Mr. Teacher'];
+
+          // Each venue has 1-3 projects with 3-7 students each
+          const numProjects = Math.min(venueProjects.length, 2 + Math.floor(Math.random() * 2));
+          const selectedProjects = venueProjects.slice(0, numProjects);
+
+          for (let p = 0; p < selectedProjects.length; p++) {
+            const project = selectedProjects[p];
+            const teacher = venueTeachers[p % venueTeachers.length];
+            const numStudents = 3 + Math.floor(Math.random() * 5); // 3-7 students per group
+
+            for (let s = 0; s < numStudents && id <= 1100; s++) {
+              const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+              const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+              const cls = classes[Math.floor(Math.random() * classes.length)];
+              const section = sections[Math.floor(Math.random() * sections.length)];
+              const desc = `${project} project by ${cls} grade students`;
+
+              students.push({
+                admissionNo: id++,
+                studentName: `${firstName} ${lastName}`,
+                class: cls,
+                section: section,
+                venue: venue,
+                project: project,
+                description: desc,
+                teacher: teacher
+              });
+            }
+          }
+        }
+
+        return students;
+      }
+
+      // Generate and store test data
+      function initTestData() {
+        const stored = localStorage.getItem('studentData');
+        if (stored) {
+          try {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              studentData = parsed;
+              return;
+            }
+          } catch (e) {}
+        }
+        studentData = generateTestStudents();
+        localStorage.setItem('studentData', JSON.stringify(studentData));
+      }
+
+      // =============================================================
+      //  CSV IMPORT FUNCTION
+      // =============================================================
+
+      function importCSVData(csvText) {
+        try {
+          const lines = csvText.split('\n').filter(line => line.trim());
+          if (lines.length < 2) {
+            showToast('❌ CSV file is empty or has no data rows.', 'error');
+            return null;
+          }
+
+          const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+
+          const fieldMap = {
+            'admissionno': 'admissionNo',
+            'admission': 'admissionNo',
+            'id': 'admissionNo',
+            'studentname': 'studentName',
+            'name': 'studentName',
+            'student': 'studentName',
+            'class': 'class',
+            'section': 'section',
+            'venue': 'venue',
+            'project': 'project',
+            'description': 'description',
+            'teacher': 'teacher'
+          };
+
+          const colMap = {};
+          headers.forEach((header, index) => {
+            const lowerHeader = header.toLowerCase().replace(/\s/g, '');
+            if (fieldMap[lowerHeader]) {
+              colMap[fieldMap[lowerHeader]] = index;
+            }
+          });
+
+          const requiredFields = ['admissionNo', 'studentName', 'class', 'section', 'venue', 'project', 'teacher'];
+          const missingFields = requiredFields.filter(f => !(f in colMap));
+          if (missingFields.length > 0) {
+            showToast(`❌ Missing columns: ${missingFields.join(', ')}. Check your CSV headers.`, 'error');
+            return null;
+          }
+
+          const newStudents = [];
+          for (let i = 1; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!line) continue;
+
+            const values = [];
+            let current = '';
+            let inQuotes = false;
+            for (let j = 0; j < line.length; j++) {
+              const char = line[j];
+              if (char === '"') {
+                inQuotes = !inQuotes;
+              } else if (char === ',' && !inQuotes) {
+                values.push(current.trim());
+                current = '';
+              } else {
+                current += char;
+              }
+            }
+            values.push(current.trim());
+
+            const student = {};
+            Object.keys(colMap).forEach(field => {
+              const index = colMap[field];
+              student[field] = values[index] || '';
+            });
+
+            if (student.admissionNo && student.studentName) {
+              student.admissionNo = parseInt(student.admissionNo);
+              if (!isNaN(student.admissionNo)) {
+                newStudents.push(student);
+              }
+            }
+          }
+
+          return newStudents;
+        } catch (error) {
+          console.error('CSV Import Error:', error);
+          showToast('❌ Error importing CSV: ' + error.message, 'error');
+          return null;
+        }
+      }
+
+      function sortStudentsByGroup(students) {
+        const classOrder = { 'VIII': 8, 'IX': 9, 'X': 10, 'XI': 11, 'XII': 12 };
+        return students.sort((a, b) => {
+          if (a.venue < b.venue) return -1;
+          if (a.venue > b.venue) return 1;
+          if (a.project < b.project) return -1;
+          if (a.project > b.project) return 1;
+          const aClass = classOrder[a.class] || 0;
+          const bClass = classOrder[b.class] || 0;
+          if (aClass !== bClass) return aClass - bClass;
+          return a.studentName.localeCompare(b.studentName);
+        });
+      }
+
+      function mergeStudentData(existingStudents, newStudents) {
+        const existingMap = new Map();
+        existingStudents.forEach(s => existingMap.set(s.admissionNo, s));
+
+        let addedCount = 0;
+        let duplicateCount = 0;
+
+        newStudents.forEach(student => {
+          if (!existingMap.has(student.admissionNo)) {
+            existingStudents.push(student);
+            existingMap.set(student.admissionNo, student);
+            addedCount++;
+          } else {
+            duplicateCount++;
+          }
+        });
+
+        sortStudentsByGroup(existingStudents);
+        localStorage.setItem('studentData', JSON.stringify(existingStudents));
+
+        return { addedCount, duplicateCount, totalCount: existingStudents.length };
+      }
 
       // =============================================================
       //  TOAST
@@ -1598,13 +1804,13 @@
       }
 
       // =============================================================
-      //  EMAIL SENDING - Using EmailJS
+      //  EMAIL SENDING
       // =============================================================
 
       function sendEmailDirect(subject, body) {
         if (EMAILJS_PUBLIC_KEY === "YOUR_PUBLIC_KEY" || EMAILJS_SERVICE_ID === "YOUR_SERVICE_ID" || EMAILJS_TEMPLATE_ID ===
           "YOUR_TEMPLATE_ID") {
-          showToast('⚠️ EmailJS not configured. Please set your credentials in the code.', 'error');
+          showToast('⚠️ EmailJS not configured. Please set your credentials.', 'error');
           return;
         }
 
@@ -1614,14 +1820,14 @@
           emailjs.init(EMAILJS_PUBLIC_KEY);
 
           var templateParams = {
-            to_email: EMAIL_TO,
+            to_email: "prithviraj130808@gmail.com",
             subject: subject,
             message: body
           };
 
           emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
             .then(function(response) {
-              showToast('✅ Email sent successfully to ' + EMAIL_TO, 'success');
+              showToast('✅ Email sent successfully to prithviraj130808@gmail.com', 'success');
             })
             .catch(function(error) {
               console.error('EmailJS error:', error);
@@ -1692,6 +1898,9 @@
       function initApp() {
         if (window.__appInitialized) return;
         window.__appInitialized = true;
+
+        // Initialize test data
+        initTestData();
 
         // ---- LOOKUP ----
         var uniqueStudents = new Set();
@@ -1786,8 +1995,57 @@
         inputEl.addEventListener('focus', function() { this.select(); });
         renderStudent(null);
 
+        // ---- CSV UPLOAD ----
+        document.getElementById('uploadCsvBtn').addEventListener('click', function() {
+          const fileInput = document.getElementById('csvFileInput');
+          const file = fileInput.files[0];
+
+          if (!file) {
+            showToast('⚠️ Please select a CSV file first.', 'error');
+            return;
+          }
+
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const csvText = e.target.result;
+            const newStudents = importCSVData(csvText);
+
+            if (newStudents && newStudents.length > 0) {
+              const result = mergeStudentData(studentData, newStudents);
+
+              const statsEl = document.getElementById('csvStats');
+              statsEl.className = 'csv-stats show';
+              statsEl.innerHTML = `
+                ✅ Imported <strong>${result.addedCount}</strong> new students<br>
+                ⚠️ ${result.duplicateCount} duplicates skipped<br>
+                📊 Total: <strong>${result.totalCount}</strong> students
+              `;
+
+              document.getElementById('recordCount').textContent = '📊 ' + new Set(studentData.map(s => s.admissionNo))
+                .size +
+                ' students · ' + studentData.length + ' projects';
+
+              showToast(`✅ Successfully imported ${result.addedCount} students!`, 'success');
+              fileInput.value = '';
+
+              if (currentLookupId) {
+                renderStudent(currentLookupId);
+              }
+            } else if (newStudents && newStudents.length === 0) {
+              showToast('⚠️ No valid student data found in the CSV.', 'error');
+            }
+          };
+
+          reader.onerror = function() {
+            showToast('❌ Error reading file. Please try again.', 'error');
+          };
+
+          reader.readAsText(file);
+        });
+
         // ---- JUDGE ----
         var judgeUnlocked = false;
+        var currentLookupId = null;
 
         function populateGroupSelector() {
           var select = document.getElementById('groupSelector');
@@ -1945,7 +2203,8 @@
 
           var resultEl = document.getElementById('judgeResult');
           resultEl.className = 'judge-result success';
-          resultEl.textContent = '✅ Judgement submitted! Email sent to ' + EMAIL_TO + ' | Score: ' + total + '/25';
+          resultEl.textContent = '✅ Judgement submitted! Email sent to prithviraj130808@gmail.com | Score: ' + total +
+            '/25';
           resultEl.style.display = 'block';
           displayGroupInfo(groupKey);
         });
@@ -1986,7 +2245,7 @@
 
           var resultEl = document.getElementById('feedbackResult');
           resultEl.className = 'judge-result success';
-          resultEl.textContent = '✅ Feedback submitted! Email sent to ' + EMAIL_TO;
+          resultEl.textContent = '✅ Feedback submitted! Email sent to prithviraj130808@gmail.com';
           resultEl.style.display = 'block';
 
           document.getElementById('feedbackText').value = '';
@@ -2015,6 +2274,14 @@
           });
         });
       }
+
+      // =============================================================
+      //  GLOBAL VARIABLES
+      // =============================================================
+      var JUDGE_CODE = "EXPO2026";
+      var judgements = JSON.parse(localStorage.getItem('groupJudgements')) || {};
+      var feedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
+
     })();
   </script>
 </body>

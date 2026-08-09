@@ -1427,12 +1427,8 @@
 
       // =============================================================
       //  GOOGLE FORMS CONFIGURATION
-      //  Feedback Form Entry IDs (from your pre-filled link):
-      //  entry.1974581951 = Student ID
-      //  entry.691585525 = Feedback
-      //  entry.46711172  = Rating
       // =============================================================
-      const FEEDBACK_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSd0G_L0glHGw5WlGTcYotztShjXpDjxvaDQ9oP_yfnCfFriWg/viewform";
+      const FEEDBACK_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSd0G_L0glHGw5WlGTcYotztShjXpDjxvaDQ9oP_yfnCfFriWg/formResponse";
       
       // Feedback Form Entry IDs
       const FEEDBACK_ENTRY_STUDENT_ID = "entry.1974581951";
@@ -1441,9 +1437,8 @@
 
       // =============================================================
       //  JUDGEMENT FORM CONFIGURATION
-      //  Create a separate Google Form for judgements
       // =============================================================
-      const JUDGEMENT_FORM_URL = "https://docs.google.com/forms/d/e/YOUR_JUDGEMENT_FORM_ID/viewform";
+      const JUDGEMENT_FORM_URL = "https://docs.google.com/forms/d/e/YOUR_JUDGEMENT_FORM_ID/formResponse";
       const JUDGEMENT_ENTRY_GROUP = "entry.111111111";
       const JUDGEMENT_ENTRY_VENUE = "entry.222222222";
       const JUDGEMENT_ENTRY_PROJECT = "entry.333333333";
@@ -1568,7 +1563,7 @@
       }
 
       // =============================================================
-      //  SAMPLE DATA (Fallback if CSV fails)
+      //  SAMPLE DATA (Fallback)
       // =============================================================
       function loadSampleData() {
         studentData = [
@@ -1702,13 +1697,16 @@
       }
 
       // =============================================================
-      //  SUBMIT TO GOOGLE FORMS
+      //  SUBMIT TO GOOGLE FORMS - Using URL parameters (working method)
       // =============================================================
-      function submitToGoogleForm(formUrl, formData) {
-        return fetch(formUrl, {
-          method: 'POST',
-          mode: 'no-cors',
-          body: formData
+      function submitToGoogleForm(formUrl, params) {
+        // Build the URL with parameters
+        var url = formUrl + '?' + params.toString();
+        
+        // Use fetch with no-cors mode - this will send the data but we can't read the response
+        return fetch(url, {
+          method: 'GET',
+          mode: 'no-cors'
         });
       }
 
@@ -2012,21 +2010,21 @@
           judgements[groupKey] = judgementData;
           localStorage.setItem('groupJudgements', JSON.stringify(judgements));
 
-          // Submit to Google Form
-          var formData = new FormData();
-          formData.append(JUDGEMENT_ENTRY_GROUP, group.venue + ' - ' + group.project);
-          formData.append(JUDGEMENT_ENTRY_VENUE, group.venue);
-          formData.append(JUDGEMENT_ENTRY_PROJECT, group.project);
-          formData.append(JUDGEMENT_ENTRY_TEACHER, group.teacher);
-          formData.append(JUDGEMENT_ENTRY_INNOVATION, c1);
-          formData.append(JUDGEMENT_ENTRY_TECHNICAL, c2);
-          formData.append(JUDGEMENT_ENTRY_PRESENTATION, c3);
-          formData.append(JUDGEMENT_ENTRY_IMPACT, c4);
-          formData.append(JUDGEMENT_ENTRY_COLLABORATION, c5);
-          formData.append(JUDGEMENT_ENTRY_TOTAL, total);
-          formData.append(JUDGEMENT_ENTRY_COMMENTS, comments);
+          // Submit to Google Form using URL parameters
+          var params = new URLSearchParams();
+          params.append(JUDGEMENT_ENTRY_GROUP, group.venue + ' - ' + group.project);
+          params.append(JUDGEMENT_ENTRY_VENUE, group.venue);
+          params.append(JUDGEMENT_ENTRY_PROJECT, group.project);
+          params.append(JUDGEMENT_ENTRY_TEACHER, group.teacher);
+          params.append(JUDGEMENT_ENTRY_INNOVATION, c1);
+          params.append(JUDGEMENT_ENTRY_TECHNICAL, c2);
+          params.append(JUDGEMENT_ENTRY_PRESENTATION, c3);
+          params.append(JUDGEMENT_ENTRY_IMPACT, c4);
+          params.append(JUDGEMENT_ENTRY_COLLABORATION, c5);
+          params.append(JUDGEMENT_ENTRY_TOTAL, total);
+          params.append(JUDGEMENT_ENTRY_COMMENTS, comments);
 
-          submitToGoogleForm(JUDGEMENT_FORM_URL, formData)
+          submitToGoogleForm(JUDGEMENT_FORM_URL, params)
             .then(function() {
               document.getElementById('judgeResult').className = 'judge-result success';
               document.getElementById('judgeResult').textContent = '✅ Judgement submitted! Saved to Google Sheets. Score: ' + total + '/25';
@@ -2058,13 +2056,13 @@
 
           var studentName = studentId ? getStudentName(parseInt(studentId)) : null;
 
-          // Submit to Google Form using the correct entry IDs
-          var formData = new FormData();
-          formData.append(FEEDBACK_ENTRY_STUDENT_ID, studentId || 'Anonymous');
-          formData.append(FEEDBACK_ENTRY_FEEDBACK, feedbackText);
-          formData.append(FEEDBACK_ENTRY_RATING, rating);
+          // Submit to Google Form using URL parameters (working method)
+          var params = new URLSearchParams();
+          params.append(FEEDBACK_ENTRY_STUDENT_ID, studentId || 'Anonymous');
+          params.append(FEEDBACK_ENTRY_FEEDBACK, feedbackText);
+          params.append(FEEDBACK_ENTRY_RATING, rating);
 
-          submitToGoogleForm(FEEDBACK_FORM_URL, formData)
+          submitToGoogleForm(FEEDBACK_FORM_URL, params)
             .then(function() {
               document.getElementById('feedbackResult').className = 'judge-result success';
               document.getElementById('feedbackResult').textContent = '✅ Feedback submitted! Saved to Google Sheets.';

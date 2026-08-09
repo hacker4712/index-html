@@ -35,7 +35,7 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background: var(--ms-cream);
+      background: #f5f0eb;
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -1406,96 +1406,201 @@
       "use strict";
 
       // =============================================================
-      //  EMAILJS CONFIGURATION - REPLACE WITH YOUR CREDENTIALS
-      //  Sign up at: https://www.emailjs.com/
+      //  EMAILJS CONFIGURATION
       // =============================================================
       const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";
       const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
       const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
 
       // =============================================================
-      //  STUDENT DATABASE - 50+ PRE-BUILT STUDENTS
-      //  TO ADD MORE: Copy the format below and paste new entries
-      //  { admissionNo: 1051, studentName: "Name", class: "X", section: "A", venue: "Physics Lab", project: "Solar Car", description: "Description", teacher: "Mr. Teacher" }
+      //  GOOGLE SHEETS CONFIGURATION
+      //  STEP 1: Publish your Google Sheet as CSV
+      //  STEP 2: Copy the published CSV URL below
       // =============================================================
-      var studentData = [
-        // ===== PHYSICS LAB - SOLAR CAR =====
-        { admissionNo: 1001, studentName: "Rahul Sharma", class: "IX", section: "A", venue: "Physics Lab", project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-        { admissionNo: 1002, studentName: "Priya Patel", class: "IX", section: "A", venue: "Physics Lab", project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-        { admissionNo: 1003, studentName: "Amit Kumar", class: "IX", section: "A", venue: "Physics Lab", project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-        { admissionNo: 1004, studentName: "Sneha Reddy", class: "IX", section: "A", venue: "Physics Lab", project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-        { admissionNo: 1005, studentName: "Vikram Singh", class: "IX", section: "A", venue: "Physics Lab", project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-
-        // ===== PHYSICS LAB - ELECTRIC MOTOR =====
-        { admissionNo: 1006, studentName: "Ananya Sharma", class: "X", section: "B", venue: "Physics Lab", project: "Electric Motor", description: "Working model of DC motor with magnetic fields", teacher: "Ms. Singh" },
-        { admissionNo: 1007, studentName: "Rohit Verma", class: "X", section: "B", venue: "Physics Lab", project: "Electric Motor", description: "Working model of DC motor with magnetic fields", teacher: "Ms. Singh" },
-        { admissionNo: 1008, studentName: "Kavya Nair", class: "X", section: "B", venue: "Physics Lab", project: "Electric Motor", description: "Working model of DC motor with magnetic fields", teacher: "Ms. Singh" },
-        { admissionNo: 1009, studentName: "Arjun Mehta", class: "X", section: "B", venue: "Physics Lab", project: "Electric Motor", description: "Working model of DC motor with magnetic fields", teacher: "Ms. Singh" },
-
-        // ===== CHEMISTRY LAB - GREEN ENERGY CELL =====
-        { admissionNo: 1010, studentName: "Diya Patel", class: "XI", section: "C", venue: "Chemistry Lab", project: "Green Energy Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-        { admissionNo: 1011, studentName: "Kiran Rao", class: "XI", section: "C", venue: "Chemistry Lab", project: "Green Energy Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-        { admissionNo: 1012, studentName: "Suresh Iyer", class: "XI", section: "C", venue: "Chemistry Lab", project: "Green Energy Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-        { admissionNo: 1013, studentName: "Lata Krishnan", class: "XI", section: "C", venue: "Chemistry Lab", project: "Green Energy Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-        { admissionNo: 1014, studentName: "Manoj Singh", class: "XI", section: "C", venue: "Chemistry Lab", project: "Green Energy Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-        { admissionNo: 1015, studentName: "Neha Sharma", class: "XI", section: "C", venue: "Chemistry Lab", project: "Green Energy Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-
-        // ===== ROBOTICS ARENA - LINE FOLLOWER ROBOT =====
-        { admissionNo: 1016, studentName: "Aarav Mehta", class: "X", section: "A", venue: "Robotics Arena", project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-        { admissionNo: 1017, studentName: "Ishita Roy", class: "X", section: "A", venue: "Robotics Arena", project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-        { admissionNo: 1018, studentName: "Vivek Jain", class: "X", section: "A", venue: "Robotics Arena", project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-        { admissionNo: 1019, studentName: "Pooja Desai", class: "X", section: "A", venue: "Robotics Arena", project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-        { admissionNo: 1020, studentName: "Ravi Kumar", class: "X", section: "A", venue: "Robotics Arena", project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-
-        // ===== MAKERSPACE - 3D PRINTED PROSTHETICS =====
-        { admissionNo: 1021, studentName: "Aditya Singh", class: "IX", section: "B", venue: "Makerspace", project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
-        { admissionNo: 1022, studentName: "Meera Nair", class: "IX", section: "B", venue: "Makerspace", project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
-        { admissionNo: 1023, studentName: "Karan Joshi", class: "IX", section: "B", venue: "Makerspace", project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
-        { admissionNo: 1024, studentName: "Anjali Menon", class: "IX", section: "B", venue: "Makerspace", project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
-
-        // ===== BIOLOGY LAB - HYDROPONICS SYSTEM =====
-        { admissionNo: 1025, studentName: "Priya Kaur", class: "VIII", section: "C", venue: "Biology Lab", project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-        { admissionNo: 1026, studentName: "Gaurav Singh", class: "VIII", section: "C", venue: "Biology Lab", project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-        { admissionNo: 1027, studentName: "Ritu Sharma", class: "VIII", section: "C", venue: "Biology Lab", project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-        { admissionNo: 1028, studentName: "Deepak Patel", class: "VIII", section: "C", venue: "Biology Lab", project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-        { admissionNo: 1029, studentName: "Suman Reddy", class: "VIII", section: "C", venue: "Biology Lab", project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-
-        // ===== AUDITORIUM - SMART LIGHTING SYSTEM =====
-        { admissionNo: 1030, studentName: "Arjun Kumar", class: "XII", section: "A", venue: "Auditorium", project: "Smart Lighting System", description: "Motion and light sensor based automation", teacher: "Mr. Mehta" },
-        { admissionNo: 1031, studentName: "Sara Khan", class: "XII", section: "A", venue: "Auditorium", project: "Smart Lighting System", description: "Motion and light sensor based automation", teacher: "Mr. Mehta" },
-        { admissionNo: 1032, studentName: "Rahul Saxena", class: "XII", section: "A", venue: "Auditorium", project: "Smart Lighting System", description: "Motion and light sensor based automation", teacher: "Mr. Mehta" },
-        { admissionNo: 1033, studentName: "Nisha Reddy", class: "XII", section: "A", venue: "Auditorium", project: "Smart Lighting System", description: "Motion and light sensor based automation", teacher: "Mr. Mehta" },
-        { admissionNo: 1034, studentName: "Vijay Singh", class: "XII", section: "A", venue: "Auditorium", project: "Smart Lighting System", description: "Motion and light sensor based automation", teacher: "Mr. Mehta" },
-        { admissionNo: 1035, studentName: "Kavita Sharma", class: "XII", section: "A", venue: "Auditorium", project: "Smart Lighting System", description: "Motion and light sensor based automation", teacher: "Mr. Mehta" },
-
-        // ===== LIBRARY - DIGITAL LIBRARY =====
-        { admissionNo: 1036, studentName: "Sai Reddy", class: "IX", section: "A", venue: "Library", project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
-        { admissionNo: 1037, studentName: "Maya Krishnan", class: "IX", section: "A", venue: "Library", project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
-        { admissionNo: 1038, studentName: "Rajesh Nair", class: "IX", section: "A", venue: "Library", project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
-        { admissionNo: 1039, studentName: "Shreya Patel", class: "IX", section: "A", venue: "Library", project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
-
-        // ===== STEM LAB - AI CHATBOT =====
-        { admissionNo: 1040, studentName: "Vivaan Singh", class: "XI", section: "B", venue: "STEM Lab", project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mr. Patel" },
-        { admissionNo: 1041, studentName: "Ankit Reddy", class: "XI", section: "B", venue: "STEM Lab", project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mr. Patel" },
-        { admissionNo: 1042, studentName: "Sneha Menon", class: "XI", section: "B", venue: "STEM Lab", project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mr. Patel" },
-        { admissionNo: 1043, studentName: "Kishore Kumar", class: "XI", section: "B", venue: "STEM Lab", project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mr. Patel" },
-        { admissionNo: 1044, studentName: "Divya Sharma", class: "XI", section: "B", venue: "STEM Lab", project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mr. Patel" },
-
-        // ===== ART GALLERY - RECYCLED ART SCULPTURE =====
-        { admissionNo: 1045, studentName: "Diya Patel", class: "VII", section: "B", venue: "Art Gallery", project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art", teacher: "Mrs. Gupta" },
-        { admissionNo: 1046, studentName: "Rohan Verma", class: "VII", section: "B", venue: "Art Gallery", project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art", teacher: "Mrs. Gupta" },
-        { admissionNo: 1047, studentName: "Pari Singh", class: "VII", section: "B", venue: "Art Gallery", project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art", teacher: "Mrs. Gupta" },
-        { admissionNo: 1048, studentName: "Arnav Iyer", class: "VII", section: "B", venue: "Art Gallery", project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art", teacher: "Mrs. Gupta" },
-        { admissionNo: 1049, studentName: "Ishita Reddy", class: "VII", section: "B", venue: "Art Gallery", project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art", teacher: "Mrs. Gupta" },
-        { admissionNo: 1050, studentName: "Krishna Nair", class: "VII", section: "B", venue: "Art Gallery", project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art", teacher: "Mrs. Gupta" },
-
-        // ===== ADD MORE STUDENTS BELOW =====
-        // { admissionNo: 1051, studentName: "New Student", class: "X", section: "A", venue: "Physics Lab", project: "New Project", description: "Description here", teacher: "Mr. Teacher" },
-        // { admissionNo: 1052, studentName: "Another Student", class: "XI", section: "B", venue: "Chemistry Lab", project: "Another Project", description: "Description here", teacher: "Ms. Teacher" },
-      ];
+      const GOOGLE_SHEETS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/YOUR_SHEET_ID/pub?output=csv";
 
       // =============================================================
-      //  SORT FUNCTION - Sorts by Venue → Project → Class → Name
+      //  STUDENT DATABASE - Loaded from Google Sheets
+      // =============================================================
+      var studentData = [];
+
+      // =============================================================
+      //  LOAD DATA FROM GOOGLE SHEETS
+      // =============================================================
+      function loadDataFromGoogleSheets() {
+        showToast('📥 Loading data from Google Sheets...', 'info');
+        
+        fetch(GOOGLE_SHEETS_CSV_URL)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to fetch CSV. Please check your Google Sheets URL.');
+            }
+            return response.text();
+          })
+          .then(csvText => {
+            const data = parseCSV(csvText);
+            if (data && data.length > 0) {
+              studentData = data;
+              sortStudentsByGroup(studentData);
+              updateUI();
+              showToast('✅ Data loaded successfully! ' + studentData.length + ' students found.', 'success');
+            } else {
+              showToast('⚠️ No data found in Google Sheets. Please check your sheet.', 'error');
+            }
+          })
+          .catch(error => {
+            console.error('Error loading data:', error);
+            showToast('❌ Failed to load data from Google Sheets. Please check the URL.', 'error');
+            // Fallback to sample data
+            loadSampleData();
+          });
+      }
+
+      // =============================================================
+      //  PARSE CSV FUNCTION
+      // =============================================================
+      function parseCSV(csvText) {
+        const lines = csvText.split('\n').filter(line => line.trim());
+        if (lines.length < 2) return [];
+
+        // Parse headers
+        const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, '').toLowerCase());
+        
+        // Map headers to field names
+        const fieldMap = {
+          'admissionno': 'admissionNo',
+          'admission': 'admissionNo',
+          'id': 'admissionNo',
+          'studentname': 'studentName',
+          'name': 'studentName',
+          'student': 'studentName',
+          'class': 'class',
+          'section': 'section',
+          'venue': 'venue',
+          'project': 'project',
+          'description': 'description',
+          'teacher': 'teacher'
+        };
+
+        const colMap = {};
+        headers.forEach((header, index) => {
+          const lowerHeader = header.replace(/\s/g, '');
+          if (fieldMap[lowerHeader]) {
+            colMap[fieldMap[lowerHeader]] = index;
+          }
+        });
+
+        // Check required fields
+        const requiredFields = ['admissionNo', 'studentName', 'class', 'section', 'venue', 'project', 'teacher'];
+        const missingFields = requiredFields.filter(f => !(f in colMap));
+        if (missingFields.length > 0) {
+          console.warn('Missing columns:', missingFields);
+          return [];
+        }
+
+        // Parse data rows
+        const result = [];
+        for (let i = 1; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (!line) continue;
+
+          // Handle quoted values
+          const values = [];
+          let current = '';
+          let inQuotes = false;
+          for (let j = 0; j < line.length; j++) {
+            const char = line[j];
+            if (char === '"') {
+              inQuotes = !inQuotes;
+            } else if (char === ',' && !inQuotes) {
+              values.push(current.trim());
+              current = '';
+            } else {
+              current += char;
+            }
+          }
+          values.push(current.trim());
+
+          const student = {};
+          Object.keys(colMap).forEach(field => {
+            const index = colMap[field];
+            student[field] = values[index] || '';
+          });
+
+          if (student.admissionNo && student.studentName) {
+            student.admissionNo = parseInt(student.admissionNo);
+            if (!isNaN(student.admissionNo)) {
+              result.push(student);
+            }
+          }
+        }
+
+        return result;
+      }
+
+      // =============================================================
+      //  SAMPLE DATA (Fallback)
+      // =============================================================
+      function loadSampleData() {
+        studentData = [
+          { admissionNo: 1001, studentName: "Rahul Sharma", class: "IX", section: "A", venue: "Physics Lab", project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
+          { admissionNo: 1002, studentName: "Priya Patel", class: "IX", section: "A", venue: "Physics Lab", project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
+          { admissionNo: 1003, studentName: "Amit Kumar", class: "IX", section: "A", venue: "Physics Lab", project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
+          { admissionNo: 1004, studentName: "Sneha Reddy", class: "IX", section: "A", venue: "Physics Lab", project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
+          { admissionNo: 1005, studentName: "Vikram Singh", class: "IX", section: "A", venue: "Physics Lab", project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
+          { admissionNo: 1006, studentName: "Ananya Sharma", class: "X", section: "B", venue: "Hall A", project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
+          { admissionNo: 1007, studentName: "Rohit Verma", class: "X", section: "B", venue: "Hall A", project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
+          { admissionNo: 1008, studentName: "Kavya Nair", class: "X", section: "B", venue: "Hall A", project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
+          { admissionNo: 1009, studentName: "Arjun Mehta", class: "X", section: "B", venue: "Hall A", project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
+          { admissionNo: 1010, studentName: "Diya Patel", class: "XI", section: "C", venue: "Chemistry Lab", project: "Green Energy Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
+          { admissionNo: 1011, studentName: "Kiran Rao", class: "XI", section: "C", venue: "Chemistry Lab", project: "Green Energy Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
+          { admissionNo: 1012, studentName: "Suresh Iyer", class: "XI", section: "C", venue: "Chemistry Lab", project: "Green Energy Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
+          { admissionNo: 1013, studentName: "Lata Krishnan", class: "XI", section: "C", venue: "Chemistry Lab", project: "Green Energy Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
+          { admissionNo: 1014, studentName: "Manoj Singh", class: "XI", section: "C", venue: "Chemistry Lab", project: "Green Energy Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
+          { admissionNo: 1015, studentName: "Neha Sharma", class: "XI", section: "C", venue: "Chemistry Lab", project: "Green Energy Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
+          { admissionNo: 1016, studentName: "Aarav Mehta", class: "X", section: "A", venue: "Robotics Arena", project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
+          { admissionNo: 1017, studentName: "Ishita Roy", class: "X", section: "A", venue: "Robotics Arena", project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
+          { admissionNo: 1018, studentName: "Vivek Jain", class: "X", section: "A", venue: "Robotics Arena", project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
+          { admissionNo: 1019, studentName: "Pooja Desai", class: "X", section: "A", venue: "Robotics Arena", project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
+          { admissionNo: 1020, studentName: "Ravi Kumar", class: "X", section: "A", venue: "Robotics Arena", project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
+          { admissionNo: 1021, studentName: "Aditya Singh", class: "IX", section: "B", venue: "Makerspace", project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
+          { admissionNo: 1022, studentName: "Meera Nair", class: "IX", section: "B", venue: "Makerspace", project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
+          { admissionNo: 1023, studentName: "Karan Joshi", class: "IX", section: "B", venue: "Makerspace", project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
+          { admissionNo: 1024, studentName: "Anjali Menon", class: "IX", section: "B", venue: "Makerspace", project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
+          { admissionNo: 1025, studentName: "Priya Kaur", class: "VIII", section: "C", venue: "Biology Lab", project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
+          { admissionNo: 1026, studentName: "Gaurav Singh", class: "VIII", section: "C", venue: "Biology Lab", project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
+          { admissionNo: 1027, studentName: "Ritu Sharma", class: "VIII", section: "C", venue: "Biology Lab", project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
+          { admissionNo: 1028, studentName: "Deepak Patel", class: "VIII", section: "C", venue: "Biology Lab", project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
+          { admissionNo: 1029, studentName: "Suman Reddy", class: "VIII", section: "C", venue: "Biology Lab", project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
+          { admissionNo: 1030, studentName: "Arjun Kumar", class: "XII", section: "A", venue: "Auditorium", project: "Smart Lighting System", description: "Motion and light sensor based automation", teacher: "Mr. Mehta" },
+          { admissionNo: 1031, studentName: "Sara Khan", class: "XII", section: "A", venue: "Auditorium", project: "Smart Lighting System", description: "Motion and light sensor based automation", teacher: "Mr. Mehta" },
+          { admissionNo: 1032, studentName: "Rahul Saxena", class: "XII", section: "A", venue: "Auditorium", project: "Smart Lighting System", description: "Motion and light sensor based automation", teacher: "Mr. Mehta" },
+          { admissionNo: 1033, studentName: "Nisha Reddy", class: "XII", section: "A", venue: "Auditorium", project: "Smart Lighting System", description: "Motion and light sensor based automation", teacher: "Mr. Mehta" },
+          { admissionNo: 1034, studentName: "Vijay Singh", class: "XII", section: "A", venue: "Auditorium", project: "Smart Lighting System", description: "Motion and light sensor based automation", teacher: "Mr. Mehta" },
+          { admissionNo: 1035, studentName: "Kavita Sharma", class: "XII", section: "A", venue: "Auditorium", project: "Smart Lighting System", description: "Motion and light sensor based automation", teacher: "Mr. Mehta" },
+          { admissionNo: 1036, studentName: "Sai Reddy", class: "IX", section: "A", venue: "Library", project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
+          { admissionNo: 1037, studentName: "Maya Krishnan", class: "IX", section: "A", venue: "Library", project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
+          { admissionNo: 1038, studentName: "Rajesh Nair", class: "IX", section: "A", venue: "Library", project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
+          { admissionNo: 1039, studentName: "Shreya Patel", class: "IX", section: "A", venue: "Library", project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
+          { admissionNo: 1040, studentName: "Vivaan Singh", class: "XI", section: "B", venue: "STEM Lab", project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
+          { admissionNo: 1041, studentName: "Ankit Reddy", class: "XI", section: "B", venue: "STEM Lab", project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
+          { admissionNo: 1042, studentName: "Sneha Menon", class: "XI", section: "B", venue: "STEM Lab", project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
+          { admissionNo: 1043, studentName: "Kishore Kumar", class: "XI", section: "B", venue: "STEM Lab", project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
+          { admissionNo: 1044, studentName: "Divya Sharma", class: "XI", section: "B", venue: "STEM Lab", project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
+          { admissionNo: 1045, studentName: "Diya Patel", class: "VII", section: "B", venue: "Art Gallery", project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art", teacher: "Mrs. Gupta" },
+          { admissionNo: 1046, studentName: "Rohan Verma", class: "VII", section: "B", venue: "Art Gallery", project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art", teacher: "Mrs. Gupta" },
+          { admissionNo: 1047, studentName: "Pari Singh", class: "VII", section: "B", venue: "Art Gallery", project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art", teacher: "Mrs. Gupta" },
+          { admissionNo: 1048, studentName: "Arnav Iyer", class: "VII", section: "B", venue: "Art Gallery", project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art", teacher: "Mrs. Gupta" },
+          { admissionNo: 1049, studentName: "Ishita Reddy", class: "VII", section: "B", venue: "Art Gallery", project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art", teacher: "Mrs. Gupta" },
+          { admissionNo: 1050, studentName: "Krishna Nair", class: "VII", section: "B", venue: "Art Gallery", project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art", teacher: "Mrs. Gupta" }
+        ];
+        sortStudentsByGroup(studentData);
+        updateUI();
+        showToast('📊 Loaded sample data: ' + studentData.length + ' students.', 'info');
+      }
+
+      // =============================================================
+      //  SORT FUNCTION
       // =============================================================
       function sortStudentsByGroup(students) {
         const classOrder = { 'VII': 7, 'VIII': 8, 'IX': 9, 'X': 10, 'XI': 11, 'XII': 12 };
@@ -1510,9 +1615,6 @@
           return a.studentName.localeCompare(b.studentName);
         });
       }
-
-      // Sort the data initially
-      sortStudentsByGroup(studentData);
 
       // =============================================================
       //  TOAST
@@ -1569,6 +1671,21 @@
       function getStudentName(admissionNo) {
         var student = studentData.find(function(s) { return s.admissionNo === admissionNo; });
         return student ? student.studentName : null;
+      }
+
+      // =============================================================
+      //  UPDATE UI
+      // =============================================================
+      function updateUI() {
+        var uniqueStudents = new Set();
+        studentData.forEach(function(s) { uniqueStudents.add(s.admissionNo); });
+        document.getElementById('recordCount').textContent = '📊 ' + uniqueStudents.size + ' students · ' + studentData.length + ' projects';
+        
+        // Re-render current lookup if any
+        var inputEl = document.getElementById('uniqueIdInput');
+        if (inputEl && inputEl.value) {
+          performLookup();
+        }
       }
 
       // =============================================================
@@ -1668,12 +1785,6 @@
         window.__appInitialized = true;
 
         // ---- LOOKUP ----
-        var uniqueStudents = new Set();
-        studentData.forEach(function(s) { uniqueStudents.add(s.admissionNo); });
-        document.getElementById('recordCount').textContent = '📊 ' + uniqueStudents.size + ' students · ' + studentData
-        .length +
-          ' projects';
-
         var inputEl = document.getElementById('uniqueIdInput');
         var lookupBtn = document.getElementById('lookupBtn');
         var uniqueIdDisplay = document.getElementById('uniqueIdDisplay');
@@ -1758,7 +1869,9 @@
             performLookup(); }
         });
         inputEl.addEventListener('focus', function() { this.select(); });
-        renderStudent(null);
+
+        // Update UI with initial data
+        updateUI();
 
         // ---- JUDGE ----
         var judgeUnlocked = false;
@@ -1998,6 +2111,11 @@
       var JUDGE_CODE = "EXPO2026";
       var judgements = JSON.parse(localStorage.getItem('groupJudgements')) || {};
       var feedbacks = JSON.parse(localStorage.getItem('feedbacks')) || {};
+
+      // Load data from Google Sheets when page loads
+      // If you want to use sample data instead, comment out the next line and uncomment the one after
+      loadDataFromGoogleSheets();
+      // loadSampleData();
 
     })();
   </script>

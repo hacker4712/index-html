@@ -10,7 +10,7 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
   <style>
     * {
       margin: 0;
@@ -18,6 +18,21 @@
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
     }
+
+    :root {
+      --ms-navy: #0a1a3a;
+      --ms-gold: #c9a84c;
+      --ms-gold-light: #e8d5a3;
+      --ms-cream: #f5f0eb;
+      --ms-white: #ffffff;
+      --ms-charcoal: #2d2d2d;
+      --ms-warm-gold: #b8943c;
+      --ms-shadow: rgba(10, 26, 58, 0.12);
+      --ms-shadow-hover: rgba(10, 26, 58, 0.2);
+      --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-bounce: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
     body {
       font-family: 'Inter', sans-serif;
       background: #f5f0eb;
@@ -28,43 +43,42 @@
       padding: 16px;
     }
 
-    /* ===== MODERN SCHOOL COLOR PALETTE ===== */
-    :root {
-      --ms-navy: #0a1a3a;
-      --ms-gold: #c9a84c;
-      --ms-gold-light: #e8d5a3;
-      --ms-cream: #f5f0eb;
-      --ms-white: #ffffff;
-      --ms-charcoal: #2d2d2d;
-      --ms-warm-gold: #b8943c;
-      --ms-pink: #ec0678;
-      --ms-red: #451013;
-      --ms-green: #2eb45f;
-      --ms-orange: #f6921c;
-      --ms-blue: #488ecc;
-    }
-
-    /* ===== QR PURE SCREEN ===== */
     .qr-pure {
       max-width: 420px;
       width: 100%;
-      background: var(--ms-cream);
-      border-radius: 40px;
-      padding: 32px 20px 28px;
+      background: var(--ms-white);
+      border-radius: 48px;
+      padding: 40px 24px 32px;
       text-align: center;
-      box-shadow: 0 16px 48px rgba(10, 26, 58, 0.25);
-      border: 2px solid var(--ms-gold);
+      box-shadow: 0 20px 60px rgba(10, 26, 58, 0.15);
+      border: 1px solid var(--ms-gold-light);
+      animation: fadeScaleIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .qr-pure::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -30%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(201, 168, 76, 0.06) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
     }
     .qr-pure .brand {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      margin-bottom: 4px;
+      gap: 10px;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
     }
     .qr-pure .brand h1 {
       font-size: 2rem;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--ms-navy);
       letter-spacing: -0.5px;
     }
@@ -73,83 +87,96 @@
       color: var(--ms-navy);
       font-weight: 700;
       font-size: 0.7rem;
-      padding: 4px 12px;
+      padding: 4px 14px;
       border-radius: 40px;
     }
     .qr-pure .sub {
       font-size: 0.95rem;
       color: var(--ms-charcoal);
-      margin-bottom: 20px;
-      opacity: 0.8;
+      margin-bottom: 24px;
+      opacity: 0.7;
+      position: relative;
+      z-index: 1;
     }
     #qrcode-container {
       display: inline-block;
       background: var(--ms-white);
       padding: 16px;
       border-radius: 24px;
-      border: 3px solid var(--ms-gold);
-      box-shadow: 0 8px 0 var(--ms-warm-gold);
-      margin: 0 auto 12px;
+      border: 2px solid var(--ms-gold);
+      box-shadow: 0 8px 0 var(--ms-warm-gold), 0 8px 24px rgba(201, 168, 76, 0.2);
+      margin: 0 auto 16px;
+      transition: var(--transition-smooth);
+      position: relative;
+      z-index: 1;
+    }
+    #qrcode-container:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 0 var(--ms-warm-gold), 0 12px 32px rgba(201, 168, 76, 0.25);
     }
     #qrcode-container img,
     #qrcode-container canvas {
       display: block;
       width: 220px;
       height: 220px;
+      border-radius: 12px;
     }
     .qr-hint {
       font-size: 0.85rem;
       color: var(--ms-charcoal);
-      margin-top: 6px;
+      margin-top: 8px;
       font-weight: 500;
+      position: relative;
+      z-index: 1;
     }
     .deploy-notice {
-      background: var(--ms-gold);
+      background: var(--ms-gold-light);
       color: var(--ms-navy);
       border-radius: 40px;
       padding: 6px 16px;
       font-size: 0.7rem;
       font-weight: 600;
       display: inline-block;
-      margin-top: 8px;
+      margin-top: 10px;
+      position: relative;
+      z-index: 1;
     }
     .qr-footer {
-      margin-top: 18px;
+      margin-top: 20px;
       font-size: 0.65rem;
       color: var(--ms-charcoal);
-      border-top: 1px solid var(--ms-gold);
-      padding-top: 14px;
-      opacity: 0.7;
+      border-top: 1px solid var(--ms-gold-light);
+      padding-top: 16px;
+      opacity: 0.6;
+      position: relative;
+      z-index: 1;
     }
     .qr-footer strong {
       color: var(--ms-navy);
     }
 
-    /* ===== FULL APP ===== */
     .app-hidden {
       display: none;
     }
     .app-card {
       max-width: 480px;
       width: 100%;
-      background: var(--ms-cream);
-      border-radius: 32px 32px 28px 28px;
-      padding: 18px 16px 24px;
-      box-shadow: 0 12px 40px rgba(10, 26, 58, 0.2);
-      border: 1px solid var(--ms-gold);
+      background: var(--ms-white);
+      border-radius: 32px;
+      padding: 20px 18px 24px;
+      box-shadow: 0 12px 48px rgba(10, 26, 58, 0.1);
+      border: 1px solid var(--ms-gold-light);
+      animation: fadeScaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    /* ===== MODERN SCHOOL LOGO - EXACT SVG ===== */
     .school-logo-container {
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 12px 8px;
-      margin-bottom: 16px;
-      background: var(--ms-white);
-      border-radius: 16px;
-      border: 1px solid var(--ms-gold-light);
-      box-shadow: 0 2px 12px rgba(10, 26, 58, 0.06);
+      padding: 8px 4px 12px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--ms-gold-light);
+      animation: slideDown 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .school-logo-wrapper {
       display: flex;
@@ -160,10 +187,8 @@
     .school-logo-main {
       display: flex;
       align-items: center;
-      gap: 12px;
-      width: 100%;
       justify-content: center;
-      flex-wrap: wrap;
+      width: 100%;
     }
     .school-logo-icon {
       flex-shrink: 0;
@@ -171,47 +196,15 @@
       align-items: center;
       justify-content: center;
       max-width: 100%;
+      transition: var(--transition-smooth);
+    }
+    .school-logo-icon:hover {
+      transform: scale(1.02);
     }
     .school-logo-icon svg {
       width: 100%;
-      max-width: 200px;
+      max-width: 220px;
       height: auto;
-    }
-    .school-logo-text {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .school-logo-text .school-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--ms-navy);
-      letter-spacing: 1.5px;
-      line-height: 1.1;
-      text-transform: uppercase;
-    }
-    .school-logo-text .school-name .gold {
-      color: var(--ms-gold);
-    }
-    .school-logo-text .school-tagline {
-      font-family: 'Playfair Display', serif;
-      font-size: 0.75rem;
-      font-weight: 400;
-      font-style: italic;
-      color: var(--ms-charcoal);
-      letter-spacing: 2px;
-      margin-top: 1px;
-      opacity: 0.8;
-    }
-    .school-logo-text .school-tagline .gold {
-      color: var(--ms-gold);
-    }
-    .school-logo-divider {
-      width: 60px;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--ms-gold), transparent);
-      margin: 4px auto 0;
     }
     .school-logo-expo {
       display: inline-block;
@@ -220,24 +213,30 @@
       font-family: 'Inter', sans-serif;
       font-size: 0.55rem;
       font-weight: 800;
-      padding: 2px 14px;
+      padding: 3px 16px;
       border-radius: 40px;
       margin-top: 4px;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.8px;
       text-transform: uppercase;
+      transition: var(--transition-smooth);
+    }
+    .school-logo-expo:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(201, 168, 76, 0.3);
     }
 
     .app-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 16px;
-      padding-bottom: 8px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
       border-bottom: 2px solid var(--ms-gold);
+      animation: slideDown 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
     }
     .app-header h1 {
-      font-size: 1.3rem;
-      font-weight: 700;
+      font-size: 1.2rem;
+      font-weight: 800;
       color: var(--ms-navy);
       letter-spacing: -0.3px;
     }
@@ -248,19 +247,21 @@
       background: var(--ms-gold);
       color: var(--ms-navy);
       font-weight: 700;
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       padding: 4px 14px;
       border-radius: 40px;
+      transition: var(--transition-smooth);
     }
 
     .top-menu {
       display: flex;
       gap: 4px;
       margin-bottom: 16px;
-      background: var(--ms-white);
+      background: var(--ms-cream);
       padding: 4px;
       border-radius: 50px;
       border: 2px solid var(--ms-gold);
+      animation: slideDown 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
     }
     .menu-btn {
       flex: 1;
@@ -268,54 +269,119 @@
       border: none;
       border-radius: 40px;
       font-weight: 700;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       cursor: pointer;
-      transition: 0.2s;
+      transition: var(--transition-smooth);
       background: transparent;
       color: var(--ms-navy);
       text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .menu-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 40px;
+      background: var(--ms-gold);
+      opacity: 0;
+      transition: var(--transition-smooth);
+      z-index: 0;
     }
     .menu-btn.active {
       background: var(--ms-gold);
       color: var(--ms-navy);
-      box-shadow: 0 2px 8px rgba(201, 168, 76, 0.3);
+      box-shadow: 0 4px 16px rgba(201, 168, 76, 0.25);
     }
-    .menu-btn:hover {
-      background: rgba(201, 168, 76, 0.2);
+    .menu-btn.active::after {
+      opacity: 0;
+    }
+    .menu-btn:hover:not(.active) {
+      background: rgba(201, 168, 76, 0.12);
+      transform: translateY(-1px);
+    }
+    .menu-btn:active {
+      transform: scale(0.96);
+    }
+    .menu-btn span {
+      position: relative;
+      z-index: 1;
     }
 
     .page-content {
       display: none;
-      animation: fadeIn 0.25s ease;
+      animation: fadeSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .page-content.active {
       display: block;
     }
-    @keyframes fadeIn {
+
+    @keyframes fadeScaleIn {
       from {
         opacity: 0;
-        transform: translateY(6px);
+        transform: scale(0.92);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
       }
       to {
         opacity: 1;
         transform: translateY(0);
       }
     }
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes pulse {
+      0%,
+      100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.03);
+      }
+    }
+    @keyframes shimmer {
+      0% {
+        background-position: -200% 0;
+      }
+      100% {
+        background-position: 200% 0;
+      }
+    }
 
     .input-section {
-      background: var(--ms-white);
+      background: var(--ms-cream);
       border-radius: 24px;
-      padding: 16px 14px 14px;
+      padding: 18px 16px 16px;
       margin-bottom: 14px;
-      box-shadow: 0 2px 8px rgba(10, 26, 58, 0.06);
       border: 1px solid var(--ms-gold-light);
+      transition: var(--transition-smooth);
+    }
+    .input-section:focus-within {
+      border-color: var(--ms-gold);
+      box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.1);
     }
     .input-label {
       display: block;
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: var(--ms-navy);
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
     .input-label i {
       color: var(--ms-gold);
@@ -330,33 +396,52 @@
     #uniqueIdInput {
       flex: 1;
       min-width: 140px;
-      padding: 14px 14px;
-      font-size: 1rem;
+      padding: 14px 16px;
+      font-size: 0.95rem;
       font-weight: 600;
-      background: var(--ms-cream);
-      border: 2px solid var(--ms-gold);
+      background: var(--ms-white);
+      border: 2px solid var(--ms-gold-light);
       border-radius: 50px;
       color: var(--ms-navy);
-      height: 52px;
+      height: 48px;
+      transition: var(--transition-smooth);
+      font-family: 'Inter', monospace;
     }
     #uniqueIdInput:focus {
-      outline: 3px solid var(--ms-gold);
-      outline-offset: 2px;
-      border-color: var(--ms-gold-light);
+      outline: none;
+      border-color: var(--ms-gold);
+      box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.12);
+    }
+    #uniqueIdInput::placeholder {
+      color: #aaa;
+      font-weight: 400;
     }
     #lookupBtn {
       background: var(--ms-gold);
       border: none;
       color: var(--ms-navy);
       font-weight: 700;
-      font-size: 1rem;
-      padding: 14px 22px;
+      font-size: 0.95rem;
+      padding: 14px 24px;
       border-radius: 50px;
       cursor: pointer;
       box-shadow: 0 4px 0 var(--ms-warm-gold);
       white-space: nowrap;
       min-width: 80px;
-      height: 52px;
+      height: 48px;
+      transition: var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+    }
+    #lookupBtn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      background-size: 200% 100%;
+      animation: shimmer 2s infinite;
+      pointer-events: none;
     }
     #lookupBtn:active {
       transform: translateY(3px);
@@ -364,22 +449,25 @@
     }
     #lookupBtn:hover {
       background: var(--ms-gold-light);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 0 var(--ms-warm-gold), 0 8px 20px rgba(201, 168, 76, 0.25);
     }
     .stats-badge {
-      background: var(--ms-gold);
+      background: var(--ms-gold-light);
       color: var(--ms-navy);
       padding: 3px 14px;
       border-radius: 40px;
       font-weight: 600;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       display: inline-block;
       margin-top: 6px;
+      transition: var(--transition-smooth);
     }
 
     .unique-id-box {
       background: var(--ms-white);
       border-radius: 40px;
-      padding: 10px 16px;
+      padding: 10px 18px;
       margin: 10px 0 16px;
       display: flex;
       align-items: center;
@@ -389,20 +477,22 @@
       border-left: 6px solid var(--ms-gold);
       border: 1px solid var(--ms-gold-light);
       border-left-width: 6px;
+      transition: var(--transition-smooth);
     }
     .unique-id-box .label {
       font-weight: 600;
       color: var(--ms-navy);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
     .unique-id-box .id-value {
       background: var(--ms-navy);
       color: var(--ms-cream);
-      padding: 6px 18px;
+      padding: 6px 20px;
       border-radius: 50px;
       font-weight: 700;
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-family: 'Inter', monospace;
+      transition: var(--transition-smooth);
     }
 
     .venue-list {
@@ -414,13 +504,19 @@
     .venue-card {
       background: var(--ms-white);
       border-radius: 24px;
-      padding: 16px 16px 14px;
+      padding: 18px 18px 16px;
       box-shadow: 0 6px 0 var(--ms-gold);
       border: 1px solid var(--ms-gold);
+      transition: var(--transition-smooth);
+      animation: fadeSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .venue-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 0 var(--ms-gold), 0 8px 24px rgba(201, 168, 76, 0.15);
     }
     .venue-name {
       font-weight: 700;
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       color: var(--ms-navy);
       display: flex;
       align-items: center;
@@ -431,32 +527,33 @@
     }
     .venue-name::before {
       content: "📍";
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       margin-right: 4px;
     }
     .student-name-display {
       background: var(--ms-navy);
       color: var(--ms-cream);
-      padding: 6px 16px;
+      padding: 6px 18px;
       border-radius: 40px;
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 0.95rem;
       display: inline-block;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      transition: var(--transition-smooth);
     }
     .project-detail .row {
       display: flex;
       flex-wrap: wrap;
       align-items: baseline;
-      gap: 4px 6px;
-      font-size: 0.95rem;
-      padding: 3px 0;
+      gap: 4px 8px;
+      font-size: 0.9rem;
+      padding: 4px 0;
     }
     .project-detail .row .tag {
       font-weight: 600;
       color: var(--ms-charcoal);
       min-width: 65px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
     }
     .project-detail .row .value {
       font-weight: 600;
@@ -464,7 +561,8 @@
       background: var(--ms-cream);
       padding: 2px 14px;
       border-radius: 40px;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      transition: var(--transition-smooth);
     }
     .teacher-tag {
       background: var(--ms-gold);
@@ -472,16 +570,17 @@
       padding: 4px 16px;
       border-radius: 50px;
       font-weight: 700;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       display: inline-block;
       margin-top: 4px;
+      transition: var(--transition-smooth);
     }
     .group-members {
       display: flex;
       flex-wrap: wrap;
       gap: 4px 8px;
-      margin-top: 6px;
-      padding: 6px 0;
+      margin-top: 8px;
+      padding: 8px 0 4px;
       border-top: 1px solid var(--ms-gold);
     }
     .group-members .member-chip {
@@ -489,48 +588,58 @@
       color: var(--ms-cream);
       padding: 4px 14px;
       border-radius: 40px;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 600;
       display: inline-flex;
       align-items: center;
-      gap: 3px;
+      gap: 4px;
+      transition: var(--transition-smooth);
+    }
+    .group-members .member-chip:hover {
+      transform: scale(1.05);
     }
     .group-members .member-chip::before {
       content: "👤";
-      font-size: 0.8rem;
+      font-size: 0.75rem;
     }
     .empty-state {
-      background: var(--ms-white);
+      background: var(--ms-cream);
       border-radius: 24px;
-      padding: 28px 16px;
+      padding: 32px 16px;
       text-align: center;
       color: var(--ms-navy);
       font-weight: 500;
-      font-size: 1rem;
-      border: 2px dashed var(--ms-gold);
+      font-size: 0.95rem;
+      border: 2px dashed var(--ms-gold-light);
+      transition: var(--transition-smooth);
     }
     .empty-state span {
-      font-size: 2.2rem;
+      font-size: 2.4rem;
       display: block;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
     .judge-section,
     .feedback-section {
       background: var(--ms-white);
       border-radius: 24px;
-      padding: 16px 14px;
+      padding: 18px 16px;
       margin-bottom: 14px;
       border: 1px solid var(--ms-gold-light);
+      transition: var(--transition-smooth);
+    }
+    .judge-section:hover,
+    .feedback-section:hover {
+      border-color: var(--ms-gold);
     }
     .judge-section h3,
     .feedback-section h3 {
       color: var(--ms-navy);
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 700;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       border-bottom: 2px solid var(--ms-gold);
-      padding-bottom: 6px;
+      padding-bottom: 8px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -540,14 +649,16 @@
     .judge-status-badge {
       background: var(--ms-gold);
       color: var(--ms-navy);
-      padding: 2px 12px;
+      padding: 2px 14px;
       border-radius: 40px;
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       font-weight: 700;
+      transition: var(--transition-smooth);
     }
     .judge-status-badge.unlocked {
       background: #28a745;
       color: white;
+      animation: pulse 2s infinite;
     }
     .judge-status-badge.locked {
       background: var(--ms-gold);
@@ -563,43 +674,51 @@
     }
     .judge-code-input input {
       flex: 1;
-      padding: 12px 14px;
-      border: 2px solid var(--ms-gold);
+      padding: 12px 16px;
+      border: 2px solid var(--ms-gold-light);
       border-radius: 50px;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 600;
       color: var(--ms-navy);
       min-width: 120px;
-      height: 48px;
+      height: 44px;
       background: var(--ms-cream);
+      transition: var(--transition-smooth);
     }
     .judge-code-input input:focus {
-      outline: 3px solid var(--ms-gold);
-      outline-offset: 2px;
+      outline: none;
+      border-color: var(--ms-gold);
+      box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.12);
     }
     .judge-code-input button {
       background: var(--ms-gold);
       border: none;
       color: var(--ms-navy);
       font-weight: 700;
-      padding: 12px 20px;
+      padding: 12px 22px;
       border-radius: 50px;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       box-shadow: 0 4px 0 var(--ms-warm-gold);
-      height: 48px;
+      height: 44px;
+      transition: var(--transition-smooth);
     }
     .judge-code-input button:active {
       transform: translateY(3px);
       box-shadow: 0 1px 0 var(--ms-warm-gold);
     }
+    .judge-code-input button:hover {
+      background: var(--ms-gold-light);
+      transform: translateY(-1px);
+    }
     .judge-result {
       margin-top: 10px;
-      padding: 10px 14px;
+      padding: 12px 16px;
       border-radius: 16px;
       font-weight: 600;
       display: none;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      animation: fadeSlideIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .judge-result.success {
       background: #d4edda;
@@ -619,56 +738,65 @@
 
     .group-selector select {
       width: 100%;
-      padding: 12px 14px;
-      border: 2px solid var(--ms-gold);
+      padding: 12px 16px;
+      border: 2px solid var(--ms-gold-light);
       border-radius: 50px;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 600;
       color: var(--ms-navy);
       background: var(--ms-cream);
       cursor: pointer;
-      height: 48px;
+      height: 44px;
+      transition: var(--transition-smooth);
+      appearance: auto;
     }
     .group-selector select:focus {
-      outline: 3px solid var(--ms-gold);
-      outline-offset: 2px;
+      outline: none;
+      border-color: var(--ms-gold);
+      box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.12);
     }
 
     .group-info {
       background: var(--ms-cream);
       border-radius: 16px;
-      padding: 10px 14px;
-      margin: 8px 0;
+      padding: 12px 16px;
+      margin: 10px 0;
       border: 1px solid var(--ms-gold);
+      transition: var(--transition-smooth);
     }
     .group-info .group-name {
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: var(--ms-navy);
     }
     .group-info .group-members-list {
       display: flex;
       flex-wrap: wrap;
-      gap: 3px 6px;
-      margin-top: 4px;
+      gap: 4px 8px;
+      margin-top: 6px;
     }
     .group-info .group-members-list .member-tag {
       background: var(--ms-white);
-      padding: 2px 10px;
+      padding: 2px 12px;
       border-radius: 40px;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: var(--ms-navy);
       font-weight: 500;
       border: 1px solid var(--ms-gold-light);
+      transition: var(--transition-smooth);
+    }
+    .group-info .group-members-list .member-tag:hover {
+      border-color: var(--ms-gold);
     }
     .group-status {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: var(--ms-charcoal);
-      margin-top: 4px;
-      padding: 4px 10px;
+      margin-top: 6px;
+      padding: 4px 12px;
       background: var(--ms-white);
       border-radius: 20px;
       display: inline-block;
+      transition: var(--transition-smooth);
     }
     .group-status.judged {
       background: #d4edda;
@@ -682,33 +810,41 @@
     .criteria-item {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       margin: 6px 0;
       background: var(--ms-cream);
-      padding: 6px 12px;
+      padding: 8px 14px;
       border-radius: 40px;
-      border: 1px solid var(--ms-gold);
+      border: 1px solid var(--ms-gold-light);
+      transition: var(--transition-smooth);
+    }
+    .criteria-item:hover {
+      border-color: var(--ms-gold);
+      background: var(--ms-white);
     }
     .criteria-item label {
       flex: 1;
       font-weight: 600;
       color: var(--ms-navy);
-      font-size: 0.85rem;
+      font-size: 0.8rem;
     }
     .criteria-item select {
-      padding: 4px 10px;
+      padding: 4px 12px;
       border-radius: 30px;
-      border: 2px solid var(--ms-gold);
+      border: 2px solid var(--ms-gold-light);
       font-weight: 600;
       background: var(--ms-white);
       color: var(--ms-navy);
-      font-size: 0.85rem;
-      min-width: 56px;
-      height: 36px;
+      font-size: 0.8rem;
+      min-width: 52px;
+      height: 34px;
+      transition: var(--transition-smooth);
+      cursor: pointer;
     }
     .criteria-item select:focus {
-      outline: 3px solid var(--ms-gold);
-      outline-offset: 2px;
+      outline: none;
+      border-color: var(--ms-gold);
+      box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.1);
     }
 
     .submit-judge-btn,
@@ -719,13 +855,26 @@
       padding: 12px 20px;
       border-radius: 50px;
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       cursor: pointer;
       width: 100%;
-      margin-top: 10px;
-      transition: 0.2s;
+      margin-top: 12px;
+      transition: var(--transition-smooth);
       box-shadow: 0 4px 0 #061a2e;
-      height: 50px;
+      height: 46px;
+      position: relative;
+      overflow: hidden;
+    }
+    .submit-judge-btn::after,
+    .submit-feedback-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+      background-size: 200% 100%;
+      animation: shimmer 3s infinite;
+      pointer-events: none;
     }
     .submit-judge-btn:active,
     .submit-feedback-btn:active {
@@ -735,15 +884,17 @@
     .submit-judge-btn:hover,
     .submit-feedback-btn:hover {
       background: #1a2d5a;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #061a2e, 0 8px 24px rgba(10, 26, 58, 0.2);
     }
 
     .email-notice {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: var(--ms-charcoal);
       background: var(--ms-gold-light);
-      padding: 6px 12px;
+      padding: 8px 14px;
       border-radius: 16px;
-      margin-top: 6px;
+      margin-top: 8px;
       text-align: center;
       border: 1px solid var(--ms-gold);
     }
@@ -753,86 +904,93 @@
 
     .feedback-area textarea {
       width: 100%;
-      padding: 12px 14px;
-      border: 2px solid var(--ms-gold);
+      padding: 12px 16px;
+      border: 2px solid var(--ms-gold-light);
       border-radius: 16px;
       font-family: 'Inter', sans-serif;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       resize: vertical;
       min-height: 80px;
       background: var(--ms-cream);
+      transition: var(--transition-smooth);
     }
     .feedback-area textarea:focus {
-      outline: 3px solid var(--ms-gold);
-      outline-offset: 2px;
+      outline: none;
+      border-color: var(--ms-gold);
+      box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.12);
     }
     #feedbackStudentId {
       flex: 1;
       min-width: 120px;
-      padding: 12px 14px;
-      border: 2px solid var(--ms-gold);
+      padding: 12px 16px;
+      border: 2px solid var(--ms-gold-light);
       border-radius: 50px;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: var(--ms-navy);
-      height: 46px;
+      height: 42px;
       background: var(--ms-cream);
+      transition: var(--transition-smooth);
     }
     #feedbackStudentId:focus {
-      outline: 3px solid var(--ms-gold);
-      outline-offset: 2px;
+      outline: none;
+      border-color: var(--ms-gold);
+      box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.12);
     }
     #feedbackRating {
       width: 100%;
-      padding: 10px 14px;
-      border: 2px solid var(--ms-gold);
+      padding: 10px 16px;
+      border: 2px solid var(--ms-gold-light);
       border-radius: 50px;
       font-weight: 600;
       color: var(--ms-navy);
       background: var(--ms-cream);
-      margin-top: 3px;
-      height: 46px;
+      margin-top: 4px;
+      height: 42px;
+      transition: var(--transition-smooth);
+      cursor: pointer;
     }
     #feedbackRating:focus {
-      outline: 3px solid var(--ms-gold);
-      outline-offset: 2px;
+      outline: none;
+      border-color: var(--ms-gold);
+      box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.12);
     }
 
     .app-footer {
-      margin-top: 18px;
+      margin-top: 20px;
       text-align: center;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       color: var(--ms-charcoal);
-      border-top: 1px solid var(--ms-gold);
-      padding-top: 14px;
-      opacity: 0.7;
+      border-top: 1px solid var(--ms-gold-light);
+      padding-top: 16px;
+      opacity: 0.6;
     }
     .app-footer strong {
       color: var(--ms-navy);
     }
 
-    /* Toast */
     .toast {
       position: fixed;
-      bottom: 20px;
+      bottom: 24px;
       left: 50%;
-      transform: translateX(-50%);
+      transform: translateX(-50%) translateY(80px);
       background: var(--ms-navy);
       color: var(--ms-cream);
-      padding: 12px 24px;
+      padding: 14px 28px;
       border-radius: 50px;
       border: 2px solid var(--ms-gold);
       font-weight: 600;
-      font-size: 0.9rem;
-      box-shadow: 0 4px 16px rgba(10, 26, 58, 0.3);
+      font-size: 0.85rem;
+      box-shadow: 0 8px 32px rgba(10, 26, 58, 0.25);
       z-index: 1000;
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
       pointer-events: none;
       max-width: 90%;
       text-align: center;
     }
     .toast.show {
       opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
     .toast.success {
       background: #155724;
@@ -850,7 +1008,8 @@
     /* Mobile */
     @media (max-width: 480px) {
       .qr-pure {
-        padding: 24px 16px 20px;
+        padding: 28px 16px 24px;
+        border-radius: 32px;
       }
       #qrcode-container img,
       #qrcode-container canvas {
@@ -861,112 +1020,115 @@
         font-size: 1.6rem;
       }
       .app-card {
-        padding: 14px 12px 18px;
-      }
-      .school-logo-container {
-        padding: 8px 4px;
+        padding: 16px 14px 20px;
+        border-radius: 24px;
       }
       .school-logo-icon svg {
-        max-width: 150px;
+        max-width: 170px;
       }
-      .school-logo-text .school-name {
-        font-size: 1.2rem;
-        letter-spacing: 1px;
-      }
-      .school-logo-text .school-tagline {
-        font-size: 0.65rem;
-        letter-spacing: 1.5px;
+      .school-logo-expo {
+        font-size: 0.5rem;
+        padding: 2px 12px;
       }
       .app-header h1 {
-        font-size: 1.1rem;
+        font-size: 1.05rem;
       }
       .menu-btn {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         padding: 8px 4px;
       }
       #uniqueIdInput {
-        font-size: 0.95rem;
-        padding: 12px 12px;
-        height: 46px;
+        font-size: 0.9rem;
+        padding: 12px 14px;
+        height: 44px;
         min-width: 100px;
       }
       #lookupBtn {
-        font-size: 0.95rem;
-        padding: 12px 16px;
-        height: 46px;
+        font-size: 0.9rem;
+        padding: 12px 18px;
+        height: 44px;
         min-width: 70px;
       }
       .venue-name {
-        font-size: 1.1rem;
+        font-size: 1.05rem;
       }
       .project-detail .row {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
       }
       .project-detail .row .value {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         padding: 2px 10px;
       }
       .group-members .member-chip {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         padding: 3px 10px;
       }
       .unique-id-box .id-value {
-        font-size: 1rem;
+        font-size: 0.95rem;
         padding: 4px 14px;
       }
       .criteria-item {
         padding: 4px 10px;
-        gap: 4px;
+        gap: 6px;
       }
       .criteria-item label {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
       }
       .criteria-item select {
-        font-size: 0.8rem;
-        min-width: 48px;
-        height: 32px;
-        padding: 2px 6px;
+        font-size: 0.75rem;
+        min-width: 44px;
+        height: 30px;
+        padding: 2px 8px;
       }
       .judge-code-input input {
-        height: 44px;
-        font-size: 0.9rem;
+        height: 40px;
+        font-size: 0.85rem;
+        padding: 10px 14px;
       }
       .judge-code-input button {
-        height: 44px;
-        font-size: 0.85rem;
-        padding: 10px 16px;
+        height: 40px;
+        font-size: 0.8rem;
+        padding: 10px 18px;
       }
       .group-selector select {
-        height: 44px;
-        font-size: 0.85rem;
+        height: 40px;
+        font-size: 0.8rem;
       }
       .submit-judge-btn,
       .submit-feedback-btn {
-        height: 44px;
-        font-size: 0.85rem;
+        height: 42px;
+        font-size: 0.8rem;
         padding: 10px 16px;
       }
       #feedbackStudentId {
-        height: 42px;
-        font-size: 0.85rem;
+        height: 40px;
+        font-size: 0.8rem;
+        padding: 10px 14px;
       }
       #feedbackRating {
-        height: 42px;
-        font-size: 0.85rem;
+        height: 40px;
+        font-size: 0.8rem;
+        padding: 8px 14px;
       }
       .feedback-area textarea {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         min-height: 60px;
-        padding: 10px 12px;
+        padding: 10px 14px;
       }
       .student-name-display {
-        font-size: 0.9rem;
-        padding: 4px 12px;
+        font-size: 0.85rem;
+        padding: 4px 14px;
+      }
+      .toast {
+        font-size: 0.8rem;
+        padding: 12px 20px;
+        bottom: 16px;
       }
     }
     @media (max-width: 380px) {
       .qr-pure {
-        padding: 16px 10px;
+        padding: 20px 12px 16px;
+        border-radius: 24px;
       }
       #qrcode-container img,
       #qrcode-container canvas {
@@ -974,52 +1136,43 @@
         height: 150px;
       }
       .app-card {
-        padding: 10px 8px 14px;
-      }
-      .school-logo-container {
-        padding: 6px 2px;
+        padding: 12px 10px 16px;
+        border-radius: 20px;
       }
       .school-logo-icon svg {
-        max-width: 120px;
-      }
-      .school-logo-text .school-name {
-        font-size: 1rem;
-        letter-spacing: 0.5px;
-      }
-      .school-logo-text .school-tagline {
-        font-size: 0.55rem;
-        letter-spacing: 1px;
+        max-width: 140px;
       }
       .top-menu {
         gap: 2px;
         padding: 3px;
       }
       .menu-btn {
-        font-size: 0.6rem;
+        font-size: 0.55rem;
         padding: 6px 3px;
       }
       .app-header h1 {
-        font-size: 1rem;
+        font-size: 0.95rem;
       }
     }
     .error-shake {
-      animation: shake 0.2s;
+      animation: shake 0.3s ease;
     }
     @keyframes shake {
-      0% {
-        transform: translateX(0);
-      }
-      25% {
-        transform: translateX(-6px);
-      }
-      50% {
-        transform: translateX(6px);
-      }
-      75% {
-        transform: translateX(-4px);
-      }
+      0%,
       100% {
         transform: translateX(0);
+      }
+      20% {
+        transform: translateX(-8px);
+      }
+      40% {
+        transform: translateX(8px);
+      }
+      60% {
+        transform: translateX(-5px);
+      }
+      80% {
+        transform: translateX(5px);
       }
     }
   </style>
@@ -1046,7 +1199,7 @@
   <div id="fullApp" class="app-hidden" style="width:100%; max-width:480px;">
     <div class="app-card">
 
-      <!-- ===== MODERN SCHOOL LOGO - EXACT SVG ===== -->
+      <!-- ===== MODERN SCHOOL LOGO ===== -->
       <div class="school-logo-container">
         <div class="school-logo-wrapper">
           <div class="school-logo-main">
@@ -1066,9 +1219,9 @@
       </div>
 
       <div class="top-menu">
-        <button class="menu-btn active" data-page="lookup">🔍 Lookup</button>
-        <button class="menu-btn" data-page="judge">🏆 Judge</button>
-        <button class="menu-btn" data-page="feedback">💬 Feedback</button>
+        <button class="menu-btn active" data-page="lookup"><span>🔍 Lookup</span></button>
+        <button class="menu-btn" data-page="judge"><span>🏆 Judge</span></button>
+        <button class="menu-btn" data-page="feedback"><span>💬 Feedback</span></button>
       </div>
 
       <!-- LOOKUP -->
@@ -1081,7 +1234,7 @@
             <input type="text" id="uniqueIdInput" placeholder="e.g. 1001" inputmode="numeric" autocomplete="off" />
             <button id="lookupBtn">🔍 Lookup</button>
           </div>
-          <div style="font-size:0.7rem; color:var(--ms-charcoal); margin-top: 6px;">
+          <div style="font-size:0.65rem; color:var(--ms-charcoal); margin-top: 6px;">
             <span class="stats-badge" id="recordCount">Loading database...</span>
           </div>
         </div>
@@ -1108,12 +1261,12 @@
           </h3>
 
           <div id="judgeLockContainer">
-            <p style="color:var(--ms-charcoal); font-size:0.8rem; margin-bottom:10px;">Enter the judge access code to unlock</p>
+            <p style="color:var(--ms-charcoal); font-size:0.75rem; margin-bottom:10px;">Enter the judge access code to unlock</p>
             <div class="judge-code-input">
               <input type="password" id="judgeCodeInput" placeholder="Enter judge code" />
               <button id="unlockJudgeBtn">🔓 Unlock</button>
             </div>
-            <div id="judgeLockError" style="color:#721c24; font-weight:600; font-size:0.8rem; display:none;">❌ Invalid code. Please try again.</div>
+            <div id="judgeLockError" style="color:#721c24; font-weight:600; font-size:0.75rem; display:none;">❌ Invalid code. Please try again.</div>
           </div>
 
           <div id="judgeContent" style="display:none;">
@@ -1121,8 +1274,8 @@
               📧 Judgements will be sent to: <strong>prithviraj130808@gmail.com</strong>
             </div>
 
-            <div class="group-selector" style="margin-top:10px;">
-              <label style="font-weight:600; color:var(--ms-navy); font-size:0.85rem;">Select Group to Judge:</label>
+            <div class="group-selector" style="margin-top:12px;">
+              <label style="font-weight:600; color:var(--ms-navy); font-size:0.8rem;">Select Group to Judge:</label>
               <select id="groupSelector">
                 <option value="">-- Select a Group --</option>
               </select>
@@ -1145,8 +1298,8 @@
                 <div class="criteria-item"><label>🤝 Collaboration</label><select id="criteria5"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option></select></div>
               </div>
               <div style="margin-top:10px;">
-                <label style="font-weight:600; color:var(--ms-navy); font-size:0.85rem;">💬 Judge Comments</label>
-                <textarea id="judgeComments" placeholder="Add your comments..." style="width:100%; padding:10px 14px; border:2px solid var(--ms-gold); border-radius:16px; font-family:'Inter',sans-serif; font-size:0.9rem; resize:vertical; min-height:50px; margin-top:3px; background:var(--ms-cream);"></textarea>
+                <label style="font-weight:600; color:var(--ms-navy); font-size:0.8rem;">💬 Judge Comments</label>
+                <textarea id="judgeComments" placeholder="Add your comments..." style="width:100%; padding:10px 14px; border:2px solid var(--ms-gold-light); border-radius:16px; font-family:'Inter',sans-serif; font-size:0.85rem; resize:vertical; min-height:50px; margin-top:4px; background:var(--ms-cream); transition:var(--transition-smooth);"></textarea>
               </div>
               <button class="submit-judge-btn" id="submitJudgeBtn">✅ Submit Judgement</button>
               <div id="judgeResult" class="judge-result"></div>
@@ -1162,19 +1315,19 @@
           <div class="email-notice">
             📧 Feedback will be sent to: <strong>prithviraj130808@gmail.com</strong>
           </div>
-          <p style="color:var(--ms-charcoal); font-size:0.8rem; margin-bottom:10px; margin-top:6px;">Share your feedback about the event or any project</p>
+          <p style="color:var(--ms-charcoal); font-size:0.75rem; margin-bottom:10px; margin-top:6px;">Share your feedback about the event or any project</p>
 
           <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:10px;">
             <input type="text" id="feedbackStudentId" placeholder="Your Admission No (optional)" />
           </div>
 
           <div class="feedback-area">
-            <label style="font-weight:600; color:var(--ms-navy); font-size:0.85rem;">✍️ Your Feedback</label>
+            <label style="font-weight:600; color:var(--ms-navy); font-size:0.8rem;">✍️ Your Feedback</label>
             <textarea id="feedbackText" placeholder="Share your thoughts, suggestions, or feedback..."></textarea>
           </div>
 
           <div style="margin-top:10px;">
-            <label style="font-weight:600; color:var(--ms-navy); font-size:0.85rem;">⭐ Rating</label>
+            <label style="font-weight:600; color:var(--ms-navy); font-size:0.8rem;">⭐ Rating</label>
             <select id="feedbackRating">
               <option value="5">⭐⭐⭐⭐⭐ - Excellent</option>
               <option value="4">⭐⭐⭐⭐ - Very Good</option>
@@ -1253,135 +1406,215 @@
       "use strict";
 
       // =============================================================
-      //  EMAILJS CONFIGURATION - REPLACE WITH YOUR CREDENTIALS
-      //  Sign up at: https://www.emailjs.com/
+      //  EMAILJS CONFIGURATION
       // =============================================================
       const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";
       const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
       const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
 
       // =============================================================
-      //  DATABASE
+      //  GOOGLE SHEETS CONFIGURATION
+      //  STEP 1: Publish your Google Sheet as CSV
+      //  STEP 2: Copy the published CSV URL below
       // =============================================================
-      var studentData = [
-        { admissionNo: 1001, studentName: "Rahul Sharma", class: "IX", section: "A", venue: "Physics Lab",
-          project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-        { admissionNo: 1002, studentName: "Priya Patel", class: "IX", section: "A", venue: "Physics Lab",
-          project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-        { admissionNo: 1003, studentName: "Amit Kumar", class: "IX", section: "A", venue: "Physics Lab",
-          project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-        { admissionNo: 1004, studentName: "Sneha Reddy", class: "IX", section: "A", venue: "Physics Lab",
-          project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-        { admissionNo: 1005, studentName: "Vikram Singh", class: "IX", section: "A", venue: "Physics Lab",
-          project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-        { admissionNo: 1006, studentName: "Ananya Sharma", class: "X", section: "B", venue: "Hall A",
-          project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
-        { admissionNo: 1007, studentName: "Rohit Verma", class: "X", section: "B", venue: "Hall A",
-          project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
-        { admissionNo: 1008, studentName: "Kavya Nair", class: "X", section: "B", venue: "Hall A",
-          project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
-        { admissionNo: 1009, studentName: "Arjun Mehta", class: "X", section: "B", venue: "Hall A",
-          project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
-        { admissionNo: 1010, studentName: "Diya Patel", class: "XI", section: "C", venue: "Chemistry Lab",
-          project: "Green Energy Hydrogen Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-        { admissionNo: 1011, studentName: "Kiran Rao", class: "XI", section: "C", venue: "Chemistry Lab",
-          project: "Green Energy Hydrogen Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-        { admissionNo: 1012, studentName: "Suresh Iyer", class: "XI", section: "C", venue: "Chemistry Lab",
-          project: "Green Energy Hydrogen Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-        { admissionNo: 1013, studentName: "Lata Krishnan", class: "XI", section: "C", venue: "Chemistry Lab",
-          project: "Green Energy Hydrogen Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-        { admissionNo: 1014, studentName: "Manoj Singh", class: "XI", section: "C", venue: "Chemistry Lab",
-          project: "Green Energy Hydrogen Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-        { admissionNo: 1015, studentName: "Neha Sharma", class: "XI", section: "C", venue: "Chemistry Lab",
-          project: "Green Energy Hydrogen Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-        { admissionNo: 1016, studentName: "Aarav Mehta", class: "X", section: "A", venue: "Robotics Arena",
-          project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-        { admissionNo: 1017, studentName: "Ishita Roy", class: "X", section: "A", venue: "Robotics Arena",
-          project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-        { admissionNo: 1018, studentName: "Vivek Jain", class: "X", section: "A", venue: "Robotics Arena",
-          project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-        { admissionNo: 1019, studentName: "Pooja Desai", class: "X", section: "A", venue: "Robotics Arena",
-          project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-        { admissionNo: 1020, studentName: "Ravi Kumar", class: "X", section: "A", venue: "Robotics Arena",
-          project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-        { admissionNo: 1021, studentName: "Aditya Singh", class: "IX", section: "B", venue: "Makerspace",
-          project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
-        { admissionNo: 1022, studentName: "Meera Nair", class: "IX", section: "B", venue: "Makerspace",
-          project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
-        { admissionNo: 1023, studentName: "Karan Joshi", class: "IX", section: "B", venue: "Makerspace",
-          project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
-        { admissionNo: 1024, studentName: "Anjali Menon", class: "IX", section: "B", venue: "Makerspace",
-          project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
-        { admissionNo: 1025, studentName: "Priya Kaur", class: "VIII", section: "C", venue: "Biology Lab",
-          project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-        { admissionNo: 1026, studentName: "Gaurav Singh", class: "VIII", section: "C", venue: "Biology Lab",
-          project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-        { admissionNo: 1027, studentName: "Ritu Sharma", class: "VIII", section: "C", venue: "Biology Lab",
-          project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-        { admissionNo: 1028, studentName: "Deepak Patel", class: "VIII", section: "C", venue: "Biology Lab",
-          project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-        { admissionNo: 1029, studentName: "Suman Reddy", class: "VIII", section: "C", venue: "Biology Lab",
-          project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-        { admissionNo: 1030, studentName: "Arjun Kumar", class: "XII", section: "A", venue: "Auditorium",
-          project: "Smart Lighting System", description: "Motion and light sensor based automation",
-          teacher: "Mr. Mehta" },
-        { admissionNo: 1031, studentName: "Sara Khan", class: "XII", section: "A", venue: "Auditorium",
-          project: "Smart Lighting System", description: "Motion and light sensor based automation",
-          teacher: "Mr. Mehta" },
-        { admissionNo: 1032, studentName: "Rahul Saxena", class: "XII", section: "A", venue: "Auditorium",
-          project: "Smart Lighting System", description: "Motion and light sensor based automation",
-          teacher: "Mr. Mehta" },
-        { admissionNo: 1033, studentName: "Nisha Reddy", class: "XII", section: "A", venue: "Auditorium",
-          project: "Smart Lighting System", description: "Motion and light sensor based automation",
-          teacher: "Mr. Mehta" },
-        { admissionNo: 1034, studentName: "Vijay Singh", class: "XII", section: "A", venue: "Auditorium",
-          project: "Smart Lighting System", description: "Motion and light sensor based automation",
-          teacher: "Mr. Mehta" },
-        { admissionNo: 1035, studentName: "Kavita Sharma", class: "XII", section: "A", venue: "Auditorium",
-          project: "Smart Lighting System", description: "Motion and light sensor based automation",
-          teacher: "Mr. Mehta" },
-        { admissionNo: 1036, studentName: "Sai Reddy", class: "IX", section: "A", venue: "Library",
-          project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
-        { admissionNo: 1037, studentName: "Maya Krishnan", class: "IX", section: "A", venue: "Library",
-          project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
-        { admissionNo: 1038, studentName: "Rajesh Nair", class: "IX", section: "A", venue: "Library",
-          project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
-        { admissionNo: 1039, studentName: "Shreya Patel", class: "IX", section: "A", venue: "Library",
-          project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
-        { admissionNo: 1040, studentName: "Vivaan Singh", class: "XI", section: "B", venue: "STEM Lab",
-          project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
-        { admissionNo: 1041, studentName: "Ankit Reddy", class: "XI", section: "B", venue: "STEM Lab",
-          project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
-        { admissionNo: 1042, studentName: "Sneha Menon", class: "XI", section: "B", venue: "STEM Lab",
-          project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
-        { admissionNo: 1043, studentName: "Kishore Kumar", class: "XI", section: "B", venue: "STEM Lab",
-          project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
-        { admissionNo: 1044, studentName: "Divya Sharma", class: "XI", section: "B", venue: "STEM Lab",
-          project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
-        { admissionNo: 1045, studentName: "Diya Patel", class: "VII", section: "B", venue: "Art Gallery",
-          project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art",
-          teacher: "Mrs. Gupta" },
-        { admissionNo: 1046, studentName: "Rohan Verma", class: "VII", section: "B", venue: "Art Gallery",
-          project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art",
-          teacher: "Mrs. Gupta" },
-        { admissionNo: 1047, studentName: "Pari Singh", class: "VII", section: "B", venue: "Art Gallery",
-          project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art",
-          teacher: "Mrs. Gupta" },
-        { admissionNo: 1048, studentName: "Arnav Iyer", class: "VII", section: "B", venue: "Art Gallery",
-          project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art",
-          teacher: "Mrs. Gupta" },
-        { admissionNo: 1049, studentName: "Ishita Reddy", class: "VII", section: "B", venue: "Art Gallery",
-          project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art",
-          teacher: "Mrs. Gupta" },
-        { admissionNo: 1050, studentName: "Krishna Nair", class: "VII", section: "B", venue: "Art Gallery",
-          project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art",
-          teacher: "Mrs. Gupta" }
-      ];
+      const GOOGLE_SHEETS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSMV8q5pjuZ4WBK-qHcNjaf5xCtklGx0gGsoBTmFfx4E3Gd1ICZLdrGkMMnr7VUdbO7DIC800sjdXy1/pub?output=csv";
 
-      var JUDGE_CODE = "EXPO2026";
-      var EMAIL_TO = "prithviraj130808@gmail.com";
-      var judgements = JSON.parse(localStorage.getItem('groupJudgements')) || {};
-      var feedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
+      // =============================================================
+      //  STUDENT DATABASE - Loaded from Google Sheets
+      // =============================================================
+      var studentData = [];
+
+      // =============================================================
+      //  LOAD DATA FROM GOOGLE SHEETS
+      // =============================================================
+      function loadDataFromGoogleSheets() {
+        showToast('📥 Loading data from Google Sheets...', 'info');
+        
+        fetch(GOOGLE_SHEETS_CSV_URL)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to fetch CSV. Please check your Google Sheets URL.');
+            }
+            return response.text();
+          })
+          .then(csvText => {
+            const data = parseCSV(csvText);
+            if (data && data.length > 0) {
+              studentData = data;
+              sortStudentsByGroup(studentData);
+              updateUI();
+              showToast('✅ Data loaded successfully! ' + studentData.length + ' students found.', 'success');
+            } else {
+              showToast('⚠️ No data found in Google Sheets. Please check your sheet.', 'error');
+            }
+          })
+          .catch(error => {
+            console.error('Error loading data:', error);
+            showToast('❌ Failed to load data from Google Sheets. Please check the URL.', 'error');
+            // Fallback to sample data
+            loadSampleData();
+          });
+      }
+
+      // =============================================================
+      //  PARSE CSV FUNCTION
+      // =============================================================
+      function parseCSV(csvText) {
+        const lines = csvText.split('\n').filter(line => line.trim());
+        if (lines.length < 2) return [];
+
+        // Parse headers
+        const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, '').toLowerCase());
+        
+        // Map headers to field names
+        const fieldMap = {
+          'admissionno': 'admissionNo',
+          'admission': 'admissionNo',
+          'id': 'admissionNo',
+          'studentname': 'studentName',
+          'name': 'studentName',
+          'student': 'studentName',
+          'class': 'class',
+          'section': 'section',
+          'venue': 'venue',
+          'project': 'project',
+          'description': 'description',
+          'teacher': 'teacher'
+        };
+
+        const colMap = {};
+        headers.forEach((header, index) => {
+          const lowerHeader = header.replace(/\s/g, '');
+          if (fieldMap[lowerHeader]) {
+            colMap[fieldMap[lowerHeader]] = index;
+          }
+        });
+
+        // Check required fields
+        const requiredFields = ['admissionNo', 'studentName', 'class', 'section', 'venue', 'project', 'teacher'];
+        const missingFields = requiredFields.filter(f => !(f in colMap));
+        if (missingFields.length > 0) {
+          console.warn('Missing columns:', missingFields);
+          return [];
+        }
+
+        // Parse data rows
+        const result = [];
+        for (let i = 1; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (!line) continue;
+
+          // Handle quoted values
+          const values = [];
+          let current = '';
+          let inQuotes = false;
+          for (let j = 0; j < line.length; j++) {
+            const char = line[j];
+            if (char === '"') {
+              inQuotes = !inQuotes;
+            } else if (char === ',' && !inQuotes) {
+              values.push(current.trim());
+              current = '';
+            } else {
+              current += char;
+            }
+          }
+          values.push(current.trim());
+
+          const student = {};
+          Object.keys(colMap).forEach(field => {
+            const index = colMap[field];
+            student[field] = values[index] || '';
+          });
+
+          if (student.admissionNo && student.studentName) {
+            student.admissionNo = parseInt(student.admissionNo);
+            if (!isNaN(student.admissionNo)) {
+              result.push(student);
+            }
+          }
+        }
+
+        return result;
+      }
+
+      // =============================================================
+      //  SAMPLE DATA (Fallback)
+      // =============================================================
+      function loadSampleData() {
+        studentData = [
+          { admissionNo: 1001, studentName: "Rahul Sharma", class: "IX", section: "A", venue: "Physics Lab", project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
+          { admissionNo: 1002, studentName: "Priya Patel", class: "IX", section: "A", venue: "Physics Lab", project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
+          { admissionNo: 1003, studentName: "Amit Kumar", class: "IX", section: "A", venue: "Physics Lab", project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
+          { admissionNo: 1004, studentName: "Sneha Reddy", class: "IX", section: "A", venue: "Physics Lab", project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
+          { admissionNo: 1005, studentName: "Vikram Singh", class: "IX", section: "A", venue: "Physics Lab", project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
+          { admissionNo: 1006, studentName: "Ananya Sharma", class: "X", section: "B", venue: "Hall A", project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
+          { admissionNo: 1007, studentName: "Rohit Verma", class: "X", section: "B", venue: "Hall A", project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
+          { admissionNo: 1008, studentName: "Kavya Nair", class: "X", section: "B", venue: "Hall A", project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
+          { admissionNo: 1009, studentName: "Arjun Mehta", class: "X", section: "B", venue: "Hall A", project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
+          { admissionNo: 1010, studentName: "Diya Patel", class: "XI", section: "C", venue: "Chemistry Lab", project: "Green Energy Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
+          { admissionNo: 1011, studentName: "Kiran Rao", class: "XI", section: "C", venue: "Chemistry Lab", project: "Green Energy Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
+          { admissionNo: 1012, studentName: "Suresh Iyer", class: "XI", section: "C", venue: "Chemistry Lab", project: "Green Energy Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
+          { admissionNo: 1013, studentName: "Lata Krishnan", class: "XI", section: "C", venue: "Chemistry Lab", project: "Green Energy Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
+          { admissionNo: 1014, studentName: "Manoj Singh", class: "XI", section: "C", venue: "Chemistry Lab", project: "Green Energy Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
+          { admissionNo: 1015, studentName: "Neha Sharma", class: "XI", section: "C", venue: "Chemistry Lab", project: "Green Energy Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
+          { admissionNo: 1016, studentName: "Aarav Mehta", class: "X", section: "A", venue: "Robotics Arena", project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
+          { admissionNo: 1017, studentName: "Ishita Roy", class: "X", section: "A", venue: "Robotics Arena", project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
+          { admissionNo: 1018, studentName: "Vivek Jain", class: "X", section: "A", venue: "Robotics Arena", project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
+          { admissionNo: 1019, studentName: "Pooja Desai", class: "X", section: "A", venue: "Robotics Arena", project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
+          { admissionNo: 1020, studentName: "Ravi Kumar", class: "X", section: "A", venue: "Robotics Arena", project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
+          { admissionNo: 1021, studentName: "Aditya Singh", class: "IX", section: "B", venue: "Makerspace", project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
+          { admissionNo: 1022, studentName: "Meera Nair", class: "IX", section: "B", venue: "Makerspace", project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
+          { admissionNo: 1023, studentName: "Karan Joshi", class: "IX", section: "B", venue: "Makerspace", project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
+          { admissionNo: 1024, studentName: "Anjali Menon", class: "IX", section: "B", venue: "Makerspace", project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
+          { admissionNo: 1025, studentName: "Priya Kaur", class: "VIII", section: "C", venue: "Biology Lab", project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
+          { admissionNo: 1026, studentName: "Gaurav Singh", class: "VIII", section: "C", venue: "Biology Lab", project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
+          { admissionNo: 1027, studentName: "Ritu Sharma", class: "VIII", section: "C", venue: "Biology Lab", project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
+          { admissionNo: 1028, studentName: "Deepak Patel", class: "VIII", section: "C", venue: "Biology Lab", project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
+          { admissionNo: 1029, studentName: "Suman Reddy", class: "VIII", section: "C", venue: "Biology Lab", project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
+          { admissionNo: 1030, studentName: "Arjun Kumar", class: "XII", section: "A", venue: "Auditorium", project: "Smart Lighting System", description: "Motion and light sensor based automation", teacher: "Mr. Mehta" },
+          { admissionNo: 1031, studentName: "Sara Khan", class: "XII", section: "A", venue: "Auditorium", project: "Smart Lighting System", description: "Motion and light sensor based automation", teacher: "Mr. Mehta" },
+          { admissionNo: 1032, studentName: "Rahul Saxena", class: "XII", section: "A", venue: "Auditorium", project: "Smart Lighting System", description: "Motion and light sensor based automation", teacher: "Mr. Mehta" },
+          { admissionNo: 1033, studentName: "Nisha Reddy", class: "XII", section: "A", venue: "Auditorium", project: "Smart Lighting System", description: "Motion and light sensor based automation", teacher: "Mr. Mehta" },
+          { admissionNo: 1034, studentName: "Vijay Singh", class: "XII", section: "A", venue: "Auditorium", project: "Smart Lighting System", description: "Motion and light sensor based automation", teacher: "Mr. Mehta" },
+          { admissionNo: 1035, studentName: "Kavita Sharma", class: "XII", section: "A", venue: "Auditorium", project: "Smart Lighting System", description: "Motion and light sensor based automation", teacher: "Mr. Mehta" },
+          { admissionNo: 1036, studentName: "Sai Reddy", class: "IX", section: "A", venue: "Library", project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
+          { admissionNo: 1037, studentName: "Maya Krishnan", class: "IX", section: "A", venue: "Library", project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
+          { admissionNo: 1038, studentName: "Rajesh Nair", class: "IX", section: "A", venue: "Library", project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
+          { admissionNo: 1039, studentName: "Shreya Patel", class: "IX", section: "A", venue: "Library", project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
+          { admissionNo: 1040, studentName: "Vivaan Singh", class: "XI", section: "B", venue: "STEM Lab", project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
+          { admissionNo: 1041, studentName: "Ankit Reddy", class: "XI", section: "B", venue: "STEM Lab", project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
+          { admissionNo: 1042, studentName: "Sneha Menon", class: "XI", section: "B", venue: "STEM Lab", project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
+          { admissionNo: 1043, studentName: "Kishore Kumar", class: "XI", section: "B", venue: "STEM Lab", project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
+          { admissionNo: 1044, studentName: "Divya Sharma", class: "XI", section: "B", venue: "STEM Lab", project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors", teacher: "Mr. Patel" },
+          { admissionNo: 1045, studentName: "Diya Patel", class: "VII", section: "B", venue: "Art Gallery", project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art", teacher: "Mrs. Gupta" },
+          { admissionNo: 1046, studentName: "Rohan Verma", class: "VII", section: "B", venue: "Art Gallery", project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art", teacher: "Mrs. Gupta" },
+          { admissionNo: 1047, studentName: "Pari Singh", class: "VII", section: "B", venue: "Art Gallery", project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art", teacher: "Mrs. Gupta" },
+          { admissionNo: 1048, studentName: "Arnav Iyer", class: "VII", section: "B", venue: "Art Gallery", project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art", teacher: "Mrs. Gupta" },
+          { admissionNo: 1049, studentName: "Ishita Reddy", class: "VII", section: "B", venue: "Art Gallery", project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art", teacher: "Mrs. Gupta" },
+          { admissionNo: 1050, studentName: "Krishna Nair", class: "VII", section: "B", venue: "Art Gallery", project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art", teacher: "Mrs. Gupta" }
+        ];
+        sortStudentsByGroup(studentData);
+        updateUI();
+        showToast('📊 Loaded sample data: ' + studentData.length + ' students.', 'info');
+      }
+
+      // =============================================================
+      //  SORT FUNCTION
+      // =============================================================
+      function sortStudentsByGroup(students) {
+        const classOrder = { 'VII': 7, 'VIII': 8, 'IX': 9, 'X': 10, 'XI': 11, 'XII': 12 };
+        return students.sort((a, b) => {
+          if (a.venue < b.venue) return -1;
+          if (a.venue > b.venue) return 1;
+          if (a.project < b.project) return -1;
+          if (a.project > b.project) return 1;
+          const aClass = classOrder[a.class] || 0;
+          const bClass = classOrder[b.class] || 0;
+          if (aClass !== bClass) return aClass - bClass;
+          return a.studentName.localeCompare(b.studentName);
+        });
+      }
 
       // =============================================================
       //  TOAST
@@ -1441,7 +1674,22 @@
       }
 
       // =============================================================
-      //  EMAIL SENDING - Using EmailJS
+      //  UPDATE UI
+      // =============================================================
+      function updateUI() {
+        var uniqueStudents = new Set();
+        studentData.forEach(function(s) { uniqueStudents.add(s.admissionNo); });
+        document.getElementById('recordCount').textContent = '📊 ' + uniqueStudents.size + ' students · ' + studentData.length + ' projects';
+        
+        // Re-render current lookup if any
+        var inputEl = document.getElementById('uniqueIdInput');
+        if (inputEl && inputEl.value) {
+          performLookup();
+        }
+      }
+
+      // =============================================================
+      //  EMAIL SENDING
       // =============================================================
 
       function sendEmailDirect(subject, body) {
@@ -1457,14 +1705,14 @@
           emailjs.init(EMAILJS_PUBLIC_KEY);
 
           var templateParams = {
-            to_email: EMAIL_TO,
+            to_email: "prithviraj130808@gmail.com",
             subject: subject,
             message: body
           };
 
           emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
             .then(function(response) {
-              showToast('✅ Email sent successfully to ' + EMAIL_TO, 'success');
+              showToast('✅ Email sent successfully to prithviraj130808@gmail.com', 'success');
             })
             .catch(function(error) {
               console.error('EmailJS error:', error);
@@ -1537,12 +1785,6 @@
         window.__appInitialized = true;
 
         // ---- LOOKUP ----
-        var uniqueStudents = new Set();
-        studentData.forEach(function(s) { uniqueStudents.add(s.admissionNo); });
-        document.getElementById('recordCount').textContent = '📊 ' + uniqueStudents.size + ' students · ' + studentData
-        .length +
-          ' projects';
-
         var inputEl = document.getElementById('uniqueIdInput');
         var lookupBtn = document.getElementById('lookupBtn');
         var uniqueIdDisplay = document.getElementById('uniqueIdDisplay');
@@ -1588,14 +1830,14 @@
             '</span></div>' +
             '<div class="row" style="margin-top: 4px;"><span class="tag">👨‍🏫 Teacher</span><span class="teacher-tag">' +
             student.teacher + '</span></div>' +
-            '<div style="margin-top: 8px; font-size:0.8rem; color:var(--ms-charcoal); background:var(--ms-cream); padding: 2px 14px; border-radius: 40px; display:inline-block;">' +
+            '<div style="margin-top: 8px; font-size:0.75rem; color:var(--ms-charcoal); background:var(--ms-cream); padding: 2px 14px; border-radius: 40px; display:inline-block;">' +
             student.class + ' · ' + student.section + '</div>' +
-            '<div class="group-members"><span style="font-weight:600; color:var(--ms-navy); font-size:0.8rem; width:100%; margin-bottom:4px;">👥 Group Members (' +
+            '<div class="group-members"><span style="font-weight:600; color:var(--ms-navy); font-size:0.75rem; width:100%; margin-bottom:4px;">👥 Group Members (' +
             groupMembers.length + ')</span>';
           groupMembers.forEach(function(m) {
             html +=
               '<span class="member-chip">' + m.studentName +
-              ' <span style="font-weight:400; font-size:0.6rem; opacity:0.7;">#' + m.admissionNo + '</span></span>';
+              ' <span style="font-weight:400; font-size:0.55rem; opacity:0.7;">#' + m.admissionNo + '</span></span>';
           });
           html += '</div></div></div></div>';
           venueContainer.innerHTML = html;
@@ -1627,10 +1869,13 @@
             performLookup(); }
         });
         inputEl.addEventListener('focus', function() { this.select(); });
-        renderStudent(null);
+
+        // Update UI with initial data
+        updateUI();
 
         // ---- JUDGE ----
         var judgeUnlocked = false;
+        var currentLookupId = null;
 
         function populateGroupSelector() {
           var select = document.getElementById('groupSelector');
@@ -1788,7 +2033,8 @@
 
           var resultEl = document.getElementById('judgeResult');
           resultEl.className = 'judge-result success';
-          resultEl.textContent = '✅ Judgement submitted! Email sent to ' + EMAIL_TO + ' | Score: ' + total + '/25';
+          resultEl.textContent = '✅ Judgement submitted! Email sent to prithviraj130808@gmail.com | Score: ' + total +
+            '/25';
           resultEl.style.display = 'block';
           displayGroupInfo(groupKey);
         });
@@ -1829,7 +2075,7 @@
 
           var resultEl = document.getElementById('feedbackResult');
           resultEl.className = 'judge-result success';
-          resultEl.textContent = '✅ Feedback submitted! Email sent to ' + EMAIL_TO;
+          resultEl.textContent = '✅ Feedback submitted! Email sent to prithviraj130808@gmail.com';
           resultEl.style.display = 'block';
 
           document.getElementById('feedbackText').value = '';
@@ -1858,6 +2104,19 @@
           });
         });
       }
+
+      // =============================================================
+      //  GLOBAL VARIABLES
+      // =============================================================
+      var JUDGE_CODE = "EXPO2026";
+      var judgements = JSON.parse(localStorage.getItem('groupJudgements')) || {};
+      var feedbacks = JSON.parse(localStorage.getItem('feedbacks')) || {};
+
+      // Load data from Google Sheets when page loads
+      // If you want to use sample data instead, comment out the next line and uncomment the one after
+      loadDataFromGoogleSheets();
+      // loadSampleData();
+
     })();
   </script>
 </body>

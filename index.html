@@ -331,8 +331,8 @@
       50% { transform: translateY(-4px); }
     }
 
-    /* Input Section */
-    .input-section {
+    /* Lookup Dropdown Styles */
+    .filter-section {
       background: var(--ms-cream);
       border-radius: 24px;
       padding: 18px 16px 16px;
@@ -340,74 +340,52 @@
       border: 1px solid var(--ms-gold-light);
       transition: var(--transition-smooth);
     }
-    .input-section:focus-within {
+    .filter-section:focus-within {
       border-color: var(--ms-gold);
       box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.08);
     }
-    .input-label {
+    .filter-group {
+      margin-bottom: 10px;
+    }
+    .filter-group:last-child {
+      margin-bottom: 0;
+    }
+    .filter-label {
       display: block;
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       color: var(--ms-navy);
-      margin-bottom: 8px;
+      margin-bottom: 4px;
     }
-    .input-label i {
+    .filter-label i {
       color: var(--ms-gold);
-      margin-right: 6px;
+      margin-right: 4px;
     }
-    .input-row {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    #uniqueIdInput {
-      flex: 1;
-      min-width: 140px;
-      padding: 14px 16px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      background: var(--ms-white);
+    .filter-select {
+      width: 100%;
+      padding: 10px 14px;
       border: 2px solid var(--ms-gold-light);
       border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 500;
       color: var(--ms-navy);
-      height: 48px;
+      background: var(--ms-white);
+      cursor: pointer;
+      height: 42px;
       transition: var(--transition-smooth);
-      font-family: 'Inter', monospace;
+      appearance: auto;
     }
-    #uniqueIdInput:focus {
+    .filter-select:focus {
       outline: none;
       border-color: var(--ms-gold);
       box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.08);
     }
-    #uniqueIdInput::placeholder {
-      color: #b0b0b0;
-      font-weight: 400;
+    .filter-select:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
-    #lookupBtn {
-      background: var(--ms-gold);
-      border: none;
-      color: var(--ms-navy);
-      font-weight: 700;
-      font-size: 0.95rem;
-      padding: 14px 24px;
-      border-radius: 50px;
-      cursor: pointer;
-      box-shadow: 0 4px 0 var(--ms-warm-gold);
-      white-space: nowrap;
-      min-width: 80px;
-      height: 48px;
-      transition: var(--transition-smooth);
-      position: relative;
-      overflow: hidden;
-    }
-    #lookupBtn:active {
-      transform: translateY(3px);
-      box-shadow: 0 1px 0 var(--ms-warm-gold);
-    }
-    #lookupBtn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 0 var(--ms-warm-gold), 0 8px 20px rgba(201, 168, 76, 0.2);
+    .filter-select option {
+      padding: 8px;
     }
 
     .stats-badge {
@@ -991,8 +969,9 @@
       .school-logo-expo { font-size: 0.5rem; padding: 2px 12px; }
       .app-header h1 { font-size: 1.05rem; }
       .menu-btn { font-size: 0.65rem; padding: 8px 4px; }
-      #uniqueIdInput { font-size: 0.9rem; padding: 12px 14px; height: 44px; min-width: 100px; }
-      #lookupBtn { font-size: 0.9rem; padding: 12px 18px; height: 44px; min-width: 70px; }
+      .filter-select { font-size: 0.8rem; height: 38px; padding: 8px 12px; }
+      .filter-section { padding: 14px 12px 12px; }
+      .filter-group { margin-bottom: 8px; }
       .venue-name { font-size: 1.05rem; }
       .project-detail .row { font-size: 0.85rem; }
       .project-detail .row .value { font-size: 0.8rem; padding: 2px 10px; }
@@ -1060,16 +1039,36 @@
         <button class="menu-btn" data-page="feedback"><span>💬 Feedback</span></button>
       </div>
 
-      <!-- LOOKUP -->
+      <!-- LOOKUP - New Dropdown Design -->
       <div id="page-lookup" class="page-content active">
-        <div class="input-section">
-          <label class="input-label" for="uniqueIdInput">
-            <i>🔑</i> Enter Unique ID (Admission No.)
-          </label>
-          <div class="input-row">
-            <input type="text" id="uniqueIdInput" placeholder="e.g. 1001" inputmode="numeric" autocomplete="off" />
-            <button id="lookupBtn">🔍 Lookup</button>
+        <div class="filter-section">
+          <div class="filter-group">
+            <label class="filter-label" for="classSelect">
+              <i>📚</i> Select Class
+            </label>
+            <select id="classSelect" class="filter-select">
+              <option value="">-- Select Class --</option>
+            </select>
           </div>
+
+          <div class="filter-group">
+            <label class="filter-label" for="sectionSelect">
+              <i>📋</i> Select Section
+            </label>
+            <select id="sectionSelect" class="filter-select" disabled>
+              <option value="">-- Select Section --</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label" for="studentSelect">
+              <i>👤</i> Select Student
+            </label>
+            <select id="studentSelect" class="filter-select" disabled>
+              <option value="">-- Select Student --</option>
+            </select>
+          </div>
+
           <div style="font-size:0.65rem; color:var(--ms-charcoal); margin-top: 6px;">
             <span class="stats-badge" id="recordCount">Loading database...</span>
           </div>
@@ -1082,8 +1081,8 @@
 
         <div id="venueContainer">
           <div class="empty-state">
-            <span>🔍</span>
-            Type an ID and press Lookup
+            <span>👆</span>
+            Select a student from the dropdown
           </div>
         </div>
       </div>
@@ -1290,6 +1289,7 @@
               studentData = data;
               sortStudentsByGroup(studentData);
               updateUI();
+              populateFilters();
               showToast('✅ Loaded ' + studentData.length + ' students!', 'success');
             } else {
               showToast('⚠️ No data found. Using sample data.', 'info');
@@ -1476,6 +1476,7 @@
         ];
         sortStudentsByGroup(studentData);
         updateUI();
+        populateFilters();
       }
 
       function sortStudentsByGroup(students) {
@@ -1490,6 +1491,179 @@
           if (aClass !== bClass) return aClass - bClass;
           return a.studentName.localeCompare(b.studentName);
         });
+      }
+
+      // =============================================================
+      //  POPULATE FILTERS (Class → Section → Student)
+      // =============================================================
+      function populateFilters() {
+        const classSelect = document.getElementById('classSelect');
+        const sectionSelect = document.getElementById('sectionSelect');
+        const studentSelect = document.getElementById('studentSelect');
+
+        // Get unique classes
+        const classes = [...new Set(studentData.map(s => s.class))].sort();
+        classSelect.innerHTML = '<option value="">-- Select Class --</option>';
+        classes.forEach(cls => {
+          const opt = document.createElement('option');
+          opt.value = cls;
+          opt.textContent = cls;
+          classSelect.appendChild(opt);
+        });
+
+        // Reset other selects
+        sectionSelect.innerHTML = '<option value="">-- Select Section --</option>';
+        sectionSelect.disabled = true;
+        studentSelect.innerHTML = '<option value="">-- Select Student --</option>';
+        studentSelect.disabled = true;
+        document.getElementById('uniqueIdDisplay').textContent = '—';
+        document.getElementById('venueContainer').innerHTML =
+          '<div class="empty-state"><span>👆</span>Select a student from the dropdown</div>';
+
+        // Enable class select
+        classSelect.disabled = false;
+      }
+
+      // =============================================================
+      //  CLASS CHANGE → POPULATE SECTIONS
+      // =============================================================
+      document.getElementById('classSelect').addEventListener('change', function() {
+        const selectedClass = this.value;
+        const sectionSelect = document.getElementById('sectionSelect');
+        const studentSelect = document.getElementById('studentSelect');
+
+        if (!selectedClass) {
+          sectionSelect.innerHTML = '<option value="">-- Select Section --</option>';
+          sectionSelect.disabled = true;
+          studentSelect.innerHTML = '<option value="">-- Select Student --</option>';
+          studentSelect.disabled = true;
+          document.getElementById('uniqueIdDisplay').textContent = '—';
+          document.getElementById('venueContainer').innerHTML =
+            '<div class="empty-state"><span>👆</span>Select a student from the dropdown</div>';
+          return;
+        }
+
+        // Get unique sections for this class
+        const sections = [...new Set(studentData.filter(s => s.class === selectedClass).map(s => s.section))].sort();
+        sectionSelect.innerHTML = '<option value="">-- Select Section --</option>';
+        sections.forEach(sec => {
+          const opt = document.createElement('option');
+          opt.value = sec;
+          opt.textContent = sec;
+          sectionSelect.appendChild(opt);
+        });
+        sectionSelect.disabled = false;
+
+        // Reset student select
+        studentSelect.innerHTML = '<option value="">-- Select Student --</option>';
+        studentSelect.disabled = true;
+        document.getElementById('uniqueIdDisplay').textContent = '—';
+        document.getElementById('venueContainer').innerHTML =
+          '<div class="empty-state"><span>👆</span>Select a student from the dropdown</div>';
+      });
+
+      // =============================================================
+      //  SECTION CHANGE → POPULATE STUDENTS
+      // =============================================================
+      document.getElementById('sectionSelect').addEventListener('change', function() {
+        const selectedClass = document.getElementById('classSelect').value;
+        const selectedSection = this.value;
+        const studentSelect = document.getElementById('studentSelect');
+
+        if (!selectedSection || !selectedClass) {
+          studentSelect.innerHTML = '<option value="">-- Select Student --</option>';
+          studentSelect.disabled = true;
+          document.getElementById('uniqueIdDisplay').textContent = '—';
+          document.getElementById('venueContainer').innerHTML =
+            '<div class="empty-state"><span>👆</span>Select a student from the dropdown</div>';
+          return;
+        }
+
+        // Get students for this class and section
+        const students = studentData
+          .filter(s => s.class === selectedClass && s.section === selectedSection)
+          .sort((a, b) => a.studentName.localeCompare(b.studentName));
+
+        studentSelect.innerHTML = '<option value="">-- Select Student --</option>';
+        students.forEach(stu => {
+          const opt = document.createElement('option');
+          opt.value = stu.admissionNo;
+          opt.textContent = stu.studentName + ' (#' + stu.admissionNo + ')';
+          studentSelect.appendChild(opt);
+        });
+        studentSelect.disabled = false;
+
+        document.getElementById('uniqueIdDisplay').textContent = '—';
+        document.getElementById('venueContainer').innerHTML =
+          '<div class="empty-state"><span>👆</span>Select a student from the dropdown</div>';
+      });
+
+      // =============================================================
+      //  STUDENT SELECT → DISPLAY DETAILS
+      // =============================================================
+      document.getElementById('studentSelect').addEventListener('change', function() {
+        const admissionNo = parseInt(this.value);
+        if (!admissionNo) {
+          document.getElementById('uniqueIdDisplay').textContent = '—';
+          document.getElementById('venueContainer').innerHTML =
+            '<div class="empty-state"><span>👆</span>Select a student from the dropdown</div>';
+          return;
+        }
+        renderStudent(admissionNo);
+      });
+
+      // =============================================================
+      //  RENDER STUDENT DETAILS
+      // =============================================================
+      function renderStudent(admissionNo) {
+        const uniqueIdDisplay = document.getElementById('uniqueIdDisplay');
+        const venueContainer = document.getElementById('venueContainer');
+
+        if (studentData.length === 0) {
+          venueContainer.innerHTML = '<div class="empty-state"><span>📊</span>Loading data...</div>';
+          uniqueIdDisplay.textContent = '—';
+          return;
+        }
+
+        uniqueIdDisplay.textContent = admissionNo;
+
+        var venues = getVenuesForStudent(admissionNo);
+        if (venues.length === 0) {
+          venueContainer.innerHTML =
+            '<div class="empty-state"><span>📭</span>No student found <br> for ID ' + admissionNo + '</div>';
+          return;
+        }
+
+        var student = venues[0];
+        var studentName = getStudentName(admissionNo);
+        var groupMembers = getGroupMembers(admissionNo);
+        groupMembers.sort(function(a, b) { return a.studentName.localeCompare(b.studentName); });
+
+        var html = '<div class="venue-list">';
+        html +=
+          '<div class="venue-card">' +
+          '<div class="venue-name">' + student.venue + '</div>';
+        if (studentName) {
+          html += '<div class="student-name-display">👤 ' + studentName + '</div>';
+        }
+        html +=
+          '<div class="project-detail">' +
+          '<div class="row"><span class="tag">📁 Project</span><span class="value">' + student.project + '</span></div>' +
+          '<div class="row"><span class="tag">📝 Desc.</span><span class="value">' + (student.description || '—') +
+          '</span></div>' +
+          '<div class="row" style="margin-top: 4px;"><span class="tag">👨‍🏫 Teacher</span><span class="teacher-tag">' +
+          student.teacher + '</span></div>' +
+          '<div style="margin-top: 8px; font-size:0.75rem; color:var(--ms-charcoal); background:var(--ms-cream); padding: 2px 14px; border-radius: 40px; display:inline-block;">' +
+          student.class + ' · ' + student.section + '</div>' +
+          '<div class="group-members"><span style="font-weight:600; color:var(--ms-navy); font-size:0.75rem; width:100%; margin-bottom:4px;">👥 Group Members (' +
+          groupMembers.length + ')</span>';
+        groupMembers.forEach(function(m) {
+          html +=
+            '<span class="member-chip">' + m.studentName +
+            ' <span style="font-weight:400; font-size:0.55rem; opacity:0.7;">#' + m.admissionNo + '</span></span>';
+        });
+        html += '</div></div></div></div>';
+        venueContainer.innerHTML = html;
       }
 
       // =============================================================
@@ -1619,93 +1793,6 @@
       function initApp() {
         if (window.__appInitialized) return;
         window.__appInitialized = true;
-
-        // ---- LOOKUP ----
-        var inputEl = document.getElementById('uniqueIdInput');
-        var lookupBtn = document.getElementById('lookupBtn');
-        var uniqueIdDisplay = document.getElementById('uniqueIdDisplay');
-        var venueContainer = document.getElementById('venueContainer');
-
-        function renderStudent(admissionNo) {
-          if (studentData.length === 0) {
-            venueContainer.innerHTML = '<div class="empty-state"><span>📊</span>Loading data...</div>';
-            uniqueIdDisplay.textContent = '—';
-            return;
-          }
-          if (admissionNo !== null && admissionNo !== undefined && !isNaN(admissionNo)) {
-            uniqueIdDisplay.textContent = admissionNo;
-          } else {
-            uniqueIdDisplay.textContent = '—';
-          }
-          if (!admissionNo || isNaN(admissionNo)) {
-            venueContainer.innerHTML =
-              '<div class="empty-state"><span>🔍</span>Enter a valid ID <br> and press Lookup</div>';
-            return;
-          }
-          var venues = getVenuesForStudent(admissionNo);
-          if (venues.length === 0) {
-            venueContainer.innerHTML =
-              '<div class="empty-state"><span>📭</span>No student found <br> for ID ' + admissionNo + '</div>';
-            return;
-          }
-          var student = venues[0];
-          var studentName = getStudentName(admissionNo);
-          var groupMembers = getGroupMembers(admissionNo);
-          groupMembers.sort(function(a, b) { return a.studentName.localeCompare(b.studentName); });
-          var html = '<div class="venue-list">';
-          html +=
-            '<div class="venue-card">' +
-            '<div class="venue-name">' + student.venue + '</div>';
-          if (studentName) {
-            html += '<div class="student-name-display">👤 ' + studentName + '</div>';
-          }
-          html +=
-            '<div class="project-detail">' +
-            '<div class="row"><span class="tag">📁 Project</span><span class="value">' + student.project + '</span></div>' +
-            '<div class="row"><span class="tag">📝 Desc.</span><span class="value">' + (student.description || '—') +
-            '</span></div>' +
-            '<div class="row" style="margin-top: 4px;"><span class="tag">👨‍🏫 Teacher</span><span class="teacher-tag">' +
-            student.teacher + '</span></div>' +
-            '<div style="margin-top: 8px; font-size:0.75rem; color:var(--ms-charcoal); background:var(--ms-cream); padding: 2px 14px; border-radius: 40px; display:inline-block;">' +
-            student.class + ' · ' + student.section + '</div>' +
-            '<div class="group-members"><span style="font-weight:600; color:var(--ms-navy); font-size:0.75rem; width:100%; margin-bottom:4px;">👥 Group Members (' +
-            groupMembers.length + ')</span>';
-          groupMembers.forEach(function(m) {
-            html +=
-              '<span class="member-chip">' + m.studentName +
-              ' <span style="font-weight:400; font-size:0.55rem; opacity:0.7;">#' + m.admissionNo + '</span></span>';
-          });
-          html += '</div></div></div></div>';
-          venueContainer.innerHTML = html;
-        }
-
-        function performLookup() {
-          var raw = inputEl.value.trim();
-          if (raw === '') {
-            uniqueIdDisplay.textContent = '—';
-            venueContainer.innerHTML = '<div class="empty-state"><span>✏️</span>Please type an ID</div>';
-            inputEl.classList.add('error-shake');
-            setTimeout(function() { inputEl.classList.remove('error-shake'); }, 300);
-            return;
-          }
-          var idNum = Number(raw);
-          if (isNaN(idNum) || !Number.isInteger(idNum) || idNum < 0) {
-            uniqueIdDisplay.textContent = '❌';
-            venueContainer.innerHTML = '<div class="empty-state"><span>⚠️</span>Invalid ID format <br> use numbers only</div>';
-            inputEl.classList.add('error-shake');
-            setTimeout(function() { inputEl.classList.remove('error-shake'); }, 300);
-            return;
-          }
-          renderStudent(idNum);
-        }
-
-        lookupBtn.addEventListener('click', performLookup);
-        inputEl.addEventListener('keydown', function(e) {
-          if (e.key === 'Enter') { e.preventDefault();
-            performLookup(); }
-        });
-        inputEl.addEventListener('focus', function() { this.select(); });
-        updateUI();
 
         // ---- JUDGE ----
         var judgeUnlocked = false;

@@ -205,18 +205,6 @@
       position: relative;
       z-index: 1;
     }
-    .deploy-notice {
-      background: var(--ms-gold-light);
-      color: var(--ms-navy);
-      border-radius: 40px;
-      padding: 6px 16px;
-      font-size: 0.7rem;
-      font-weight: 600;
-      display: inline-block;
-      margin-top: 10px;
-      position: relative;
-      z-index: 1;
-    }
     .qr-footer {
       margin-top: 16px;
       font-size: 0.65rem;
@@ -1018,7 +1006,7 @@
 
   <div id="toast" class="toast"></div>
 
-  <!-- QR SELECTION SCREEN - ALWAYS VISIBLE -->
+  <!-- QR SELECTION SCREEN -->
   <div id="qrSelectScreen" class="qr-select-screen">
     <div class="brand">
       <h1>🧠 Cognitive</h1>
@@ -1048,7 +1036,7 @@
     <div class="qr-footer"><strong>📍</strong> Modern School · scan &amp; go</div>
   </div>
 
-  <!-- FULL APP - HIDDEN UNTIL QR IS SCANNED -->
+  <!-- FULL APP -->
   <div id="fullApp" class="app-hidden" style="width:100%; max-width:480px;">
     <div class="app-card">
 
@@ -2021,8 +2009,18 @@
 
       var urlParams = new URLSearchParams(window.location.search);
 
+      var storedRole = localStorage.getItem('cognitive_role');
+      var storedAppOpen = localStorage.getItem('cognitive_app_open');
+
       if (urlParams.get('app') === '1') {
+        var role = urlParams.get('role') || 'parent';
+        localStorage.setItem('cognitive_role', role);
+        localStorage.setItem('cognitive_app_open', 'true');
         showApp();
+      } else if (storedAppOpen === 'true' && storedRole) {
+        var tempUrl = new URL(window.location.href);
+        tempUrl.search = '?app=1&role=' + storedRole;
+        window.location.href = tempUrl.toString();
       } else {
         initQRScreen();
       }

@@ -16,7 +16,6 @@
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
     }
-
     :root {
       --ms-navy: #0a1a3a;
       --ms-gold: #c9a84c;
@@ -28,7 +27,6 @@
       --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       --transition-bounce: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-
     body {
       font-family: 'Inter', sans-serif;
       background: #f5f0eb;
@@ -38,8 +36,6 @@
       align-items: center;
       padding: 16px;
     }
-
-    /* ----- QR Selection Screen ----- */
     .qr-select-screen {
       max-width: 480px;
       width: 100%;
@@ -149,11 +145,16 @@
       transition: var(--transition-bounce);
       position: relative;
       z-index: 1;
+      cursor: pointer;
     }
     #qrcode-container-parent:hover,
     #qrcode-container-judge:hover {
       transform: translateY(-3px) scale(1.02);
       box-shadow: 0 10px 0 var(--ms-warm-gold), 0 16px 40px rgba(201, 168, 76, 0.2);
+    }
+    #qrcode-container-parent:active,
+    #qrcode-container-judge:active {
+      transform: scale(0.95);
     }
     #qrcode-container-parent img,
     #qrcode-container-parent canvas,
@@ -219,8 +220,6 @@
     .qr-footer strong {
       color: var(--ms-navy);
     }
-
-    /* ----- Full App (hidden by default) ----- */
     .app-hidden {
       display: none;
     }
@@ -358,7 +357,6 @@
     .page-content.active {
       display: block;
     }
-
     @keyframes fadeScaleIn {
       from { opacity: 0; transform: scale(0.95); }
       to { opacity: 1; transform: scale(1); }
@@ -375,8 +373,6 @@
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.03); }
     }
-
-    /* Filter / Lookup styles */
     .filter-section {
       background: var(--ms-cream);
       border-radius: 24px;
@@ -589,8 +585,6 @@
       display: block;
       margin-bottom: 8px;
     }
-
-    /* Judge styles */
     .judge-section,
     .feedback-section {
       background: var(--ms-white);
@@ -1014,7 +1008,6 @@
 
   <div id="toast" class="toast"></div>
 
-  <!-- ===== QR SELECTION SCREEN ===== -->
   <div id="qrSelectScreen" class="qr-select-screen">
     <div class="brand">
       <h1>🧠 Cognitive</h1>
@@ -1022,20 +1015,17 @@
     </div>
     <div class="sub">Scan to open the app</div>
 
-    <!-- QR Tabs -->
     <div class="qr-tabs">
       <button class="qr-tab-btn active" data-tab="parent">👨‍👩‍👧‍👦 Parents</button>
       <button class="qr-tab-btn" data-tab="judge">🏆 Judges</button>
     </div>
 
-    <!-- Parent QR -->
     <div id="tab-parent" class="qr-tab-content active">
       <div id="qrcode-container-parent"></div>
       <div class="qr-label">👨‍👩‍👧‍👦 Parent / Student QR</div>
       <div class="qr-desc">View projects and give feedback</div>
     </div>
 
-    <!-- Judge QR -->
     <div id="tab-judge" class="qr-tab-content">
       <div id="qrcode-container-judge"></div>
       <div class="qr-label">🏆 Judge QR <span class="badge judge">🔒 Restricted</span></div>
@@ -1046,7 +1036,6 @@
     <div class="qr-footer"><strong>📍</strong> Modern School · scan &amp; go</div>
   </div>
 
-  <!-- ===== FULL APP (hidden by default) ===== -->
   <div id="fullApp" class="app-hidden" style="width:100%; max-width:480px;">
     <div class="app-card">
 
@@ -1068,14 +1057,12 @@
         <span class="badge">EXPO 2026</span>
       </div>
 
-      <!-- Top Menu -->
       <div class="top-menu" id="mainMenu">
         <button class="menu-btn active" data-page="lookup"><span>🔍 Lookup</span></button>
         <button class="menu-btn judge-only" data-page="judge" style="display:none;"><span>🏆 Judge</span></button>
         <button class="menu-btn" data-page="feedback"><span>💬 Feedback</span></button>
       </div>
 
-      <!-- LOOKUP -->
       <div id="page-lookup" class="page-content active">
         <div class="filter-section">
           <div class="filter-group">
@@ -1103,7 +1090,6 @@
         </div>
       </div>
 
-      <!-- JUDGE (hidden for non-judges) -->
       <div id="page-judge" class="page-content">
         <div class="judge-section">
           <h3><span>🏆 Judgement Panel</span><span class="judge-status-badge locked" id="judgeStatusBadge">🔒 Locked</span></h3>
@@ -1148,7 +1134,6 @@
         </div>
       </div>
 
-      <!-- FEEDBACK -->
       <div id="page-feedback" class="page-content">
         <div class="feedback-section">
           <h3>💬 Feedback &amp; Suggestions</h3>
@@ -1186,7 +1171,6 @@
     </div>
   </div>
 
-  <!-- ===== SVG DEFINITIONS ===== -->
   <svg style="display:none;" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <g id="modern-school-logo">
@@ -1243,68 +1227,41 @@
     (function() {
       "use strict";
 
-      // =============================================================
-      //  GOOGLE FORMS CONFIGURATION
-      // =============================================================
-      const FEEDBACK_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSd0G_L0glHGw5WlGTcYotztShjXpDjxvaDQ9oP_yfnCfFriWg/formResponse";
-      const FEEDBACK_ENTRY_STUDENT_ID = "entry.1974581951";
-      const FEEDBACK_ENTRY_FEEDBACK = "entry.691585525";
-      const FEEDBACK_ENTRY_RATING = "entry.46711172";
+      var FEEDBACK_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSd0G_L0glHGw5WlGTcYotztShjXpDjxvaDQ9oP_yfnCfFriWg/formResponse";
+      var FEEDBACK_ENTRY_STUDENT_ID = "entry.1974581951";
+      var FEEDBACK_ENTRY_FEEDBACK = "entry.691585525";
+      var FEEDBACK_ENTRY_RATING = "entry.46711172";
 
-      const JUDGEMENT_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSchIwrq2rnzPtZUDhW-ravsqZQQA9RuYANR86shHS99lLbclQ/formResponse";
-      const JUDGEMENT_ENTRY_VENUE = "entry.209944553";
-      const JUDGEMENT_ENTRY_STUDENT_NAME = "entry.2146860099";
-      const JUDGEMENT_ENTRY_PROJECT = "entry.323521399";
-      const JUDGEMENT_ENTRY_DESCRIPTION = "entry.1815562961";
-      const JUDGEMENT_ENTRY_INNOVATION = "entry.15153843";
-      const JUDGEMENT_ENTRY_TECHNICAL = "entry.470039002";
-      const JUDGEMENT_ENTRY_PRESENTATION = "entry.590808032";
-      const JUDGEMENT_ENTRY_IMPACT = "entry.77573695";
-      const JUDGEMENT_ENTRY_COLLABORATION = "entry.254995233";
-      const JUDGEMENT_ENTRY_COMMENTS = "entry.139019586";
-      const JUDGEMENT_ENTRY_TOTAL = "entry.1255541034";
+      var JUDGEMENT_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSchIwrq2rnzPtZUDhW-ravsqZQQA9RuYANR86shHS99lLbclQ/formResponse";
+      var JUDGEMENT_ENTRY_VENUE = "entry.209944553";
+      var JUDGEMENT_ENTRY_STUDENT_NAME = "entry.2146860099";
+      var JUDGEMENT_ENTRY_PROJECT = "entry.323521399";
+      var JUDGEMENT_ENTRY_DESCRIPTION = "entry.1815562961";
+      var JUDGEMENT_ENTRY_INNOVATION = "entry.15153843";
+      var JUDGEMENT_ENTRY_TECHNICAL = "entry.470039002";
+      var JUDGEMENT_ENTRY_PRESENTATION = "entry.590808032";
+      var JUDGEMENT_ENTRY_IMPACT = "entry.77573695";
+      var JUDGEMENT_ENTRY_COLLABORATION = "entry.254995233";
+      var JUDGEMENT_ENTRY_COMMENTS = "entry.139019586";
+      var JUDGEMENT_ENTRY_TOTAL = "entry.1255541034";
 
-      // =============================================================
-      //  JUDGE ASSIGNMENTS - Restrict judges to specific projects
-      // =============================================================
       var JUDGE_ASSIGNMENTS = {
-        "JUDGE001": {
-          name: "Dr. Sharma",
-          allowedGroups: ["Physics Lab|||Solar Car", "Hall A|||AI Chatbot"]
-        },
-        "JUDGE002": {
-          name: "Mr. Verma",
-          allowedGroups: ["Chemistry Lab|||Green Energy Cell", "Robotics Arena|||Line Follower Robot"]
-        },
-        "JUDGE003": {
-          name: "Mrs. Singh",
-          allowedGroups: ["Makerspace|||3D Printed Prosthetics", "Biology Lab|||Hydroponics System"]
-        },
-        "JUDGE004": {
-          name: "Ms. Nair",
-          allowedGroups: ["Library|||Digital Library", "Art Gallery|||Recycled Art Sculpture"]
-        }
+        "JUDGE001": { name: "Dr. Sharma", allowedGroups: ["Physics Lab|||Solar Car", "Hall A|||AI Chatbot"] },
+        "JUDGE002": { name: "Mr. Verma", allowedGroups: ["Chemistry Lab|||Green Energy Cell", "Robotics Arena|||Line Follower Robot"] },
+        "JUDGE003": { name: "Mrs. Singh", allowedGroups: ["Makerspace|||3D Printed Prosthetics", "Biology Lab|||Hydroponics System"] },
+        "JUDGE004": { name: "Ms. Nair", allowedGroups: ["Library|||Digital Library", "Art Gallery|||Recycled Art Sculpture"] }
       };
       var currentJudge = null;
 
-      // =============================================================
-      //  STUDENT DATABASE - Loaded from Google Sheets CSV
-      // =============================================================
-      const GOOGLE_SHEETS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSMV8q5pjuZ4WBK-qHcNjaf5xCtklGx0gGsoBTmFfx4E3Gd1ICZLdrGkMMnr7VUdbO7DIC800sjdXy1/pub?output=csv";
+      var GOOGLE_SHEETS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSMV8q5pjuZ4WBK-qHcNjaf5xCtklGx0gGsoBTmFfx4E3Gd1ICZLdrGkMMnr7VUdbO7DIC800sjdXy1/pub?output=csv";
       var studentData = [];
 
-      // =============================================================
-      //  LOAD DATA FROM GOOGLE SHEETS
-      // =============================================================
       function loadDataFromGoogleSheets() {
         showToast('📥 Loading student data...', 'info');
         fetch(GOOGLE_SHEETS_CSV_URL)
-          .then(response => {
-            if (!response.ok) throw new Error('Failed to fetch CSV');
-            return response.text();
-          })
-          .then(csvText => {
-            const data = parseCSV(csvText);
+          .then(function(response) { if (!response.ok) throw new Error('Failed to fetch CSV'); return response.text(); })
+          .then(function(csvText) {
+            var data = parseCSV(csvText);
             if (data && data.length > 0) {
               studentData = data;
               sortStudentsByGroup(studentData);
@@ -1316,7 +1273,7 @@
               loadSampleData();
             }
           })
-          .catch(error => {
+          .catch(function(error) {
             console.error('Error loading data:', error);
             showToast('⚠️ Using sample data.', 'info');
             loadSampleData();
@@ -1324,10 +1281,10 @@
       }
 
       function parseCSV(csvText) {
-        const lines = csvText.split('\n').filter(line => line.trim());
+        var lines = csvText.split('\n').filter(function(line) { return line.trim(); });
         if (lines.length < 2) return [];
-        const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, '').toLowerCase());
-        const fieldMap = {
+        var headers = lines[0].split(',').map(function(h) { return h.trim().replace(/^"|"$/g, '').toLowerCase(); });
+        var fieldMap = {
           'admissionno': 'admissionNo',
           'admission': 'admissionNo',
           'id': 'admissionNo',
@@ -1341,29 +1298,31 @@
           'description': 'description',
           'teacher': 'teacher'
         };
-        const colMap = {};
-        headers.forEach((header, index) => {
-          const lowerHeader = header.replace(/\s/g, '');
+        var colMap = {};
+        headers.forEach(function(header, index) {
+          var lowerHeader = header.replace(/\s/g, '');
           if (fieldMap[lowerHeader]) colMap[fieldMap[lowerHeader]] = index;
         });
-        const requiredFields = ['admissionNo', 'studentName', 'class', 'section', 'venue', 'project', 'teacher'];
-        const missingFields = requiredFields.filter(f => !(f in colMap));
+        var requiredFields = ['admissionNo', 'studentName', 'class', 'section', 'venue', 'project', 'teacher'];
+        var missingFields = requiredFields.filter(function(f) { return !(f in colMap); });
         if (missingFields.length > 0) { console.warn('Missing columns:', missingFields); return []; }
-        const result = [];
-        for (let i = 1; i < lines.length; i++) {
-          const line = lines[i].trim();
+        var result = [];
+        for (var i = 1; i < lines.length; i++) {
+          var line = lines[i].trim();
           if (!line) continue;
-          const values = [];
-          let current = '', inQuotes = false;
-          for (let j = 0; j < line.length; j++) {
-            const char = line[j];
+          var values = [];
+          var current = '',
+            inQuotes = false;
+          for (var j = 0; j < line.length; j++) {
+            var char = line[j];
             if (char === '"') inQuotes = !inQuotes;
-            else if (char === ',' && !inQuotes) { values.push(current.trim()); current = ''; } else current += char;
+            else if (char === ',' && !inQuotes) { values.push(current.trim());
+              current = ''; } else current += char;
           }
           values.push(current.trim());
-          const student = {};
-          Object.keys(colMap).forEach(field => {
-            const index = colMap[field];
+          var student = {};
+          Object.keys(colMap).forEach(function(field) {
+            var index = colMap[field];
             student[field] = values[index] || '';
           });
           if (student.admissionNo && student.studentName) {
@@ -1500,31 +1459,28 @@
       }
 
       function sortStudentsByGroup(students) {
-        const classOrder = { 'VII': 7, 'VIII': 8, 'IX': 9, 'X': 10, 'XI': 11, 'XII': 12 };
-        return students.sort((a, b) => {
+        var classOrder = { 'VII': 7, 'VIII': 8, 'IX': 9, 'X': 10, 'XI': 11, 'XII': 12 };
+        return students.sort(function(a, b) {
           if (a.venue < b.venue) return -1;
           if (a.venue > b.venue) return 1;
           if (a.project < b.project) return -1;
           if (a.project > b.project) return 1;
-          const aClass = classOrder[a.class] || 0;
-          const bClass = classOrder[b.class] || 0;
+          var aClass = classOrder[a.class] || 0;
+          var bClass = classOrder[b.class] || 0;
           if (aClass !== bClass) return aClass - bClass;
           return a.studentName.localeCompare(b.studentName);
         });
       }
 
-      // =============================================================
-      //  POPULATE FILTERS
-      // =============================================================
       function populateFilters() {
-        const classSelect = document.getElementById('classSelect');
-        const sectionSelect = document.getElementById('sectionSelect');
-        const studentSelect = document.getElementById('studentSelect');
+        var classSelect = document.getElementById('classSelect');
+        var sectionSelect = document.getElementById('sectionSelect');
+        var studentSelect = document.getElementById('studentSelect');
 
-        const classes = [...new Set(studentData.map(s => s.class))].sort();
+        var classes = [...new Set(studentData.map(function(s) { return s.class; }))].sort();
         classSelect.innerHTML = '<option value="">-- Select Class --</option>';
-        classes.forEach(cls => {
-          const opt = document.createElement('option');
+        classes.forEach(function(cls) {
+          var opt = document.createElement('option');
           opt.value = cls;
           opt.textContent = cls;
           classSelect.appendChild(opt);
@@ -1540,13 +1496,10 @@
         classSelect.disabled = false;
       }
 
-      // =============================================================
-      //  EVENT LISTENERS FOR FILTERS
-      // =============================================================
       document.getElementById('classSelect').addEventListener('change', function() {
-        const selectedClass = this.value;
-        const sectionSelect = document.getElementById('sectionSelect');
-        const studentSelect = document.getElementById('studentSelect');
+        var selectedClass = this.value;
+        var sectionSelect = document.getElementById('sectionSelect');
+        var studentSelect = document.getElementById('studentSelect');
 
         if (!selectedClass) {
           sectionSelect.innerHTML = '<option value="">-- Select Section --</option>';
@@ -1559,10 +1512,12 @@
           return;
         }
 
-        const sections = [...new Set(studentData.filter(s => s.class === selectedClass).map(s => s.section))].sort();
+        var sections = [...new Set(studentData.filter(function(s) { return s.class === selectedClass; }).map(function(s) {
+          return s.section;
+        }))].sort();
         sectionSelect.innerHTML = '<option value="">-- Select Section --</option>';
-        sections.forEach(sec => {
-          const opt = document.createElement('option');
+        sections.forEach(function(sec) {
+          var opt = document.createElement('option');
           opt.value = sec;
           opt.textContent = sec;
           sectionSelect.appendChild(opt);
@@ -1576,9 +1531,9 @@
       });
 
       document.getElementById('sectionSelect').addEventListener('change', function() {
-        const selectedClass = document.getElementById('classSelect').value;
-        const selectedSection = this.value;
-        const studentSelect = document.getElementById('studentSelect');
+        var selectedClass = document.getElementById('classSelect').value;
+        var selectedSection = this.value;
+        var studentSelect = document.getElementById('studentSelect');
 
         if (!selectedSection || !selectedClass) {
           studentSelect.innerHTML = '<option value="">-- Select Student --</option>';
@@ -1589,13 +1544,13 @@
           return;
         }
 
-        const students = studentData
-          .filter(s => s.class === selectedClass && s.section === selectedSection)
-          .sort((a, b) => a.studentName.localeCompare(b.studentName));
+        var students = studentData
+          .filter(function(s) { return s.class === selectedClass && s.section === selectedSection; })
+          .sort(function(a, b) { return a.studentName.localeCompare(b.studentName); });
 
         studentSelect.innerHTML = '<option value="">-- Select Student --</option>';
-        students.forEach(stu => {
-          const opt = document.createElement('option');
+        students.forEach(function(stu) {
+          var opt = document.createElement('option');
           opt.value = stu.admissionNo;
           opt.textContent = stu.studentName + ' (#' + stu.admissionNo + ')';
           studentSelect.appendChild(opt);
@@ -1607,7 +1562,7 @@
       });
 
       document.getElementById('studentSelect').addEventListener('change', function() {
-        const admissionNo = parseInt(this.value);
+        var admissionNo = parseInt(this.value);
         if (!admissionNo) {
           document.getElementById('uniqueIdDisplay').textContent = '—';
           document.getElementById('venueContainer').innerHTML =
@@ -1617,12 +1572,9 @@
         renderStudent(admissionNo);
       });
 
-      // =============================================================
-      //  RENDER STUDENT DETAILS
-      // =============================================================
       function renderStudent(admissionNo) {
-        const uniqueIdDisplay = document.getElementById('uniqueIdDisplay');
-        const venueContainer = document.getElementById('venueContainer');
+        var uniqueIdDisplay = document.getElementById('uniqueIdDisplay');
+        var venueContainer = document.getElementById('venueContainer');
 
         if (studentData.length === 0) {
           venueContainer.innerHTML = '<div class="empty-state"><span>📊</span>Loading data...</div>';
@@ -1671,9 +1623,6 @@
         venueContainer.innerHTML = html;
       }
 
-      // =============================================================
-      //  TOAST
-      // =============================================================
       var toastEl = document.getElementById('toast');
       var toastTimeout;
 
@@ -1686,9 +1635,6 @@
         toastTimeout = setTimeout(function() { toastEl.classList.remove('show'); }, 4000);
       }
 
-      // =============================================================
-      //  HELPERS
-      // =============================================================
       function getGroupKey(s) { return s.venue + '|||' + s.project; }
 
       function getAllGroups() {
@@ -1726,17 +1672,11 @@
         return student ? student.studentName : null;
       }
 
-      // =============================================================
-      //  SUBMIT TO GOOGLE FORMS
-      // =============================================================
       function submitToGoogleForm(formUrl, params) {
         var url = formUrl + '?' + params.toString();
         return fetch(url, { method: 'GET', mode: 'no-cors' });
       }
 
-      // =============================================================
-      //  UPDATE UI
-      // =============================================================
       function updateUI() {
         var uniqueStudents = new Set();
         studentData.forEach(function(s) { uniqueStudents.add(s.admissionNo); });
@@ -1744,9 +1684,6 @@
           .length + ' projects';
       }
 
-      // =============================================================
-      //  QR CODE GENERATION
-      // =============================================================
       function generateQR(containerId, url, colorDark) {
         var container = document.getElementById(containerId);
         container.innerHTML = '';
@@ -1760,9 +1697,6 @@
         });
       }
 
-      // =============================================================
-      //  QR TABS
-      // =============================================================
       document.querySelectorAll('.qr-tab-btn').forEach(function(btn) {
         btn.addEventListener('click', function() {
           document.querySelectorAll('.qr-tab-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -1772,9 +1706,6 @@
         });
       });
 
-      // =============================================================
-      //  INIT QR SCREEN
-      // =============================================================
       function initQRScreen() {
         var currentUrl = window.location.href;
         var cleanUrl = currentUrl.split('?')[0];
@@ -1794,18 +1725,13 @@
           deployNotice.style.display = 'none';
         }
 
-        // Parent QR - opens app without judge panel
         var parentUrl = cleanUrl + '?app=1&role=parent';
         generateQR('qrcode-container-parent', parentUrl, "#0a1a3a");
 
-        // Judge QR - opens full app with judge panel
         var judgeUrl = cleanUrl + '?app=1&role=judge';
         generateQR('qrcode-container-judge', judgeUrl, "#451013");
       }
 
-      // =============================================================
-      //  QR CODE CLICK TO OPEN APP
-      // =============================================================
       document.getElementById('qrcode-container-parent').addEventListener('click', function() {
         var url = new URL(window.location.href);
         url.search = '?app=1&role=parent';
@@ -1818,9 +1744,6 @@
         window.location.href = url.toString();
       });
 
-      // =============================================================
-      //  SHOW APP BASED ON URL PARAMETERS
-      // =============================================================
       function showApp() {
         var params = new URLSearchParams(window.location.search);
         var role = params.get('role') || 'parent';
@@ -1829,12 +1752,10 @@
         document.getElementById('fullApp').style.display = 'block';
         document.getElementById('fullApp').classList.remove('app-hidden');
 
-        // Show/hide judge panel based on role
         if (role === 'judge') {
           document.querySelector('.judge-only').style.display = 'block';
         } else {
           document.querySelector('.judge-only').style.display = 'none';
-          // If judge page is active, switch to lookup
           if (document.getElementById('page-judge').classList.contains('active')) {
             document.querySelectorAll('.menu-btn').forEach(function(b) { b.classList.remove('active'); });
             document.querySelector('[data-page="lookup"]').classList.add('active');
@@ -1846,14 +1767,10 @@
         initApp(role);
       }
 
-      // =============================================================
-      //  INIT APP
-      // =============================================================
       function initApp(role) {
         if (window.__appInitialized) return;
         window.__appInitialized = true;
 
-        // ---- JUDGE ----
         var judgeUnlocked = false;
         var judgements = JSON.parse(localStorage.getItem('groupJudgements')) || {};
 
@@ -1864,7 +1781,7 @@
           var filteredGroups = allGroups;
           if (allowedGroups && allowedGroups.length > 0) {
             filteredGroups = allGroups.filter(function(g) {
-              return allowedGroups.includes(g.key);
+              return allowedGroups.indexOf(g.key) !== -1;
             });
           }
 
@@ -1930,7 +1847,6 @@
           }
         }
 
-        // ---- UNLOCK JUDGE ----
         document.getElementById('unlockJudgeBtn').addEventListener('click', function() {
           var code = document.getElementById('judgeCodeInput').value.trim().toUpperCase();
           var errorEl = document.getElementById('judgeLockError');
@@ -1974,7 +1890,6 @@
           }
         });
 
-        // ---- SUBMIT JUDGEMENT ----
         document.getElementById('submitJudgeBtn').addEventListener('click', function() {
           if (!judgeUnlocked) {
             document.getElementById('judgeResult').className = 'judge-result error';
@@ -2020,7 +1935,7 @@
           localStorage.setItem('groupJudgements', JSON.stringify(judgements));
 
           var params = new URLSearchParams();
-          var memberNames = group.members.map(m => m.studentName + ' (#' + m.admissionNo + ')').join(', ');
+          var memberNames = group.members.map(function(m) { return m.studentName + ' (#' + m.admissionNo + ')'; }).join(', ');
           params.append(JUDGEMENT_ENTRY_VENUE, group.venue);
           params.append(JUDGEMENT_ENTRY_STUDENT_NAME, memberNames);
           params.append(JUDGEMENT_ENTRY_PROJECT, group.project);
@@ -2049,7 +1964,6 @@
             });
         });
 
-        // ---- FEEDBACK ----
         document.getElementById('submitFeedbackBtn').addEventListener('click', function() {
           var studentId = document.getElementById('feedbackStudentId').value.trim();
           var feedbackText = document.getElementById('feedbackText').value.trim();
@@ -2083,7 +1997,6 @@
             });
         });
 
-        // ---- MENU ----
         var menuBtns = document.querySelectorAll('.menu-btn');
         var pages = {
           lookup: document.getElementById('page-lookup'),
@@ -2104,19 +2017,14 @@
         });
       }
 
-      // =============================================================
-      //  AUTO-SWITCH OR SHOW QR SCREEN
-      // =============================================================
       var urlParams = new URLSearchParams(window.location.search);
 
       if (urlParams.get('app') === '1') {
         showApp();
       } else {
-        // Show QR screen with both QR codes
         initQRScreen();
       }
 
-      // Load data when page loads
       loadDataFromGoogleSheets();
 
     })();

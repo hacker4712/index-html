@@ -195,6 +195,16 @@
       position: relative;
       z-index: 1;
     }
+    .qr-url {
+      font-size: 0.6rem;
+      color: var(--ms-charcoal);
+      opacity: 0.4;
+      margin-top: 4px;
+      word-break: break-all;
+      padding: 0 10px;
+      position: relative;
+      z-index: 1;
+    }
     .deploy-notice {
       background: var(--ms-gold-light);
       color: var(--ms-navy);
@@ -1008,6 +1018,7 @@
 
   <div id="toast" class="toast"></div>
 
+  <!-- QR SELECTION SCREEN - ALWAYS VISIBLE -->
   <div id="qrSelectScreen" class="qr-select-screen">
     <div class="brand">
       <h1>🧠 Cognitive</h1>
@@ -1024,18 +1035,20 @@
       <div id="qrcode-container-parent"></div>
       <div class="qr-label">👨‍👩‍👧‍👦 Parent / Student QR</div>
       <div class="qr-desc">View projects and give feedback</div>
+      <div class="qr-url" id="parentUrlDisplay">Loading...</div>
     </div>
 
     <div id="tab-judge" class="qr-tab-content">
       <div id="qrcode-container-judge"></div>
       <div class="qr-label">🏆 Judge QR <span class="badge judge">🔒 Restricted</span></div>
       <div class="qr-desc">Full access including judging panel</div>
+      <div class="qr-url" id="judgeUrlDisplay">Loading...</div>
     </div>
 
-    <div class="deploy-notice" id="deployNotice">⚠️ Deploy to server for universal access</div>
     <div class="qr-footer"><strong>📍</strong> Modern School · scan &amp; go</div>
   </div>
 
+  <!-- FULL APP - HIDDEN UNTIL QR IS SCANNED -->
   <div id="fullApp" class="app-hidden" style="width:100%; max-width:480px;">
     <div class="app-card">
 
@@ -1711,24 +1724,13 @@
         var cleanUrl = currentUrl.split('?')[0];
         var isLocalFile = cleanUrl.indexOf('file://') === 0;
 
-        var qrStatus = document.getElementById('qrStatus');
-        var deployNotice = document.getElementById('deployNotice');
-
-        if (isLocalFile) {
-          qrStatus.innerHTML = '⚠️ Local file — deploy to server for universal access';
-          qrStatus.style.color = '#cc3300';
-          qrStatus.style.fontWeight = '600';
-          deployNotice.style.display = 'inline-block';
-        } else {
-          qrStatus.innerHTML = '📸 Scan with your phone camera';
-          qrStatus.style.color = 'var(--ms-charcoal)';
-          deployNotice.style.display = 'none';
-        }
-
         var parentUrl = cleanUrl + '?app=1&role=parent';
-        generateQR('qrcode-container-parent', parentUrl, "#0a1a3a");
-
         var judgeUrl = cleanUrl + '?app=1&role=judge';
+
+        document.getElementById('parentUrlDisplay').textContent = parentUrl;
+        document.getElementById('judgeUrlDisplay').textContent = judgeUrl;
+
+        generateQR('qrcode-container-parent', parentUrl, "#0a1a3a");
         generateQR('qrcode-container-judge', judgeUrl, "#451013");
       }
 

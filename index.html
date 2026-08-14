@@ -2012,20 +2012,21 @@
       var storedRole = localStorage.getItem('cognitive_role');
       var storedAppOpen = localStorage.getItem('cognitive_app_open');
 
+      // FIX: Always start on QR screen unless app=1 is present
       if (urlParams.get('app') === '1') {
         var role = urlParams.get('role') || 'parent';
         localStorage.setItem('cognitive_role', role);
         localStorage.setItem('cognitive_app_open', 'true');
         showApp();
-      } else if (storedAppOpen === 'true' && storedRole) {
-        var tempUrl = new URL(window.location.href);
-        tempUrl.search = '?app=1&role=' + storedRole;
-        window.location.href = tempUrl.toString();
       } else {
+        // Clear stored state to ensure we start on QR screen
+        localStorage.removeItem('cognitive_role');
+        localStorage.removeItem('cognitive_app_open');
+        document.getElementById('qrSelectScreen').style.display = 'block';
         initQRScreen();
+        // Load data in background
+        loadDataFromGoogleSheets();
       }
-
-      loadDataFromGoogleSheets();
 
     })();
   </script>

@@ -1079,7 +1079,7 @@
             <select id="studentSelect" class="filter-select" disabled><option value="">-- Select Student --</option></select>
           </div>
           <div style="font-size:0.65rem; color:var(--ms-charcoal); margin-top:6px;">
-            <span class="stats-badge" id="recordCount">Loading database...</span>
+            <span class="stats-badge" id="recordCount">📊 Loading database...</span>
           </div>
         </div>
         <div class="unique-id-box">
@@ -1257,17 +1257,30 @@
       var GOOGLE_SHEETS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSMV8q5pjuZ4WBK-qHcNjaf5xCtklGx0gGsoBTmFfx4E3Gd1ICZLdrGkMMnr7VUdbO7DIC800sjdXy1/pub?output=csv";
       var studentData = [];
 
+      // --- Helper: Convert Roman numerals to numbers ---
+      function romanToNum(roman) {
+        if (!roman) return 0;
+        var map = { I: 1, II: 2, III: 3, IV: 4, V: 5, VI: 6, VII: 7, VIII: 8, IX: 9, X: 10, XI: 11, XII: 12 };
+        return map[roman.toUpperCase().trim()] || parseInt(roman) || 0;
+      }
+
+      // --- Load data from Google Sheets ---
       function loadDataFromGoogleSheets() {
         showToast('📥 Loading student data...', 'info');
+        document.getElementById('recordCount').textContent = '📊 Loading database...';
+
         fetch(GOOGLE_SHEETS_CSV_URL)
-          .then(function(response) { if (!response.ok) throw new Error('Failed to fetch CSV'); return response.text(); })
+          .then(function(response) {
+            if (!response.ok) throw new Error('Failed to fetch CSV');
+            return response.text();
+          })
           .then(function(csvText) {
             var data = parseCSV(csvText);
             if (data && data.length > 0) {
               studentData = data;
               sortStudentsByGroup(studentData);
-              updateUI();
               populateFilters();
+              updateUI();
               showToast('✅ Loaded ' + studentData.length + ' students!', 'success');
             } else {
               showToast('⚠️ No data found. Using sample data.', 'info');
@@ -1281,10 +1294,13 @@
           });
       }
 
+      // --- Parse CSV with proper handling ---
       function parseCSV(csvText) {
         var lines = csvText.split('\n').filter(function(line) { return line.trim(); });
         if (lines.length < 2) return [];
+
         var headers = lines[0].split(',').map(function(h) { return h.trim().replace(/^"|"$/g, '').toLowerCase(); });
+
         var fieldMap = {
           'admissionno': 'admissionNo',
           'admission': 'admissionNo',
@@ -1299,33 +1315,51 @@
           'description': 'description',
           'teacher': 'teacher'
         };
+
         var colMap = {};
         headers.forEach(function(header, index) {
           var lowerHeader = header.replace(/\s/g, '');
           if (fieldMap[lowerHeader]) colMap[fieldMap[lowerHeader]] = index;
         });
+
         var requiredFields = ['admissionNo', 'studentName', 'class', 'section', 'venue', 'project', 'teacher'];
         var missingFields = requiredFields.filter(function(f) { return !(f in colMap); });
-        if (missingFields.length > 0) { console.warn('Missing columns:', missingFields); return []; }
+        if (missingFields.length > 0) {
+          console.warn('Missing columns:', missingFields);
+          return [];
+        }
+
         var result = [];
         for (var i = 1; i < lines.length; i++) {
           var line = lines[i].trim();
           if (!line) continue;
+
+          // Parse CSV line properly
           var values = [];
           var current = '',
             inQuotes = false;
           for (var j = 0; j < line.length; j++) {
             var char = line[j];
             if (char === '"') inQuotes = !inQuotes;
-            else if (char === ',' && !inQuotes) { values.push(current.trim());
-              current = ''; } else current += char;
+            else if (char === ',' && !inQuotes) {
+              values.push(current.trim());
+              current = '';
+            } else current += char;
           }
           values.push(current.trim());
+
           var student = {};
           Object.keys(colMap).forEach(function(field) {
             var index = colMap[field];
             student[field] = values[index] || '';
           });
+
+          // Convert class to number if possible (supports both "7" and "VII")
+          if (student.class) {
+            var classNum = romanToNum(student.class);
+            if (classNum > 0) student.class = String(classNum);
+          }
+
           if (student.admissionNo && student.studentName) {
             student.admissionNo = parseInt(student.admissionNo);
             if (!isNaN(student.admissionNo)) result.push(student);
@@ -1334,151 +1368,157 @@
         return result;
       }
 
+      // --- Sample data with numeric classes ---
       function loadSampleData() {
         studentData = [
-          { admissionNo: 1001, studentName: "Rahul Sharma", class: "IX", section: "A", venue: "Physics Lab",
+          { admissionNo: 1001, studentName: "Rahul Sharma", class: "9", section: "A", venue: "Physics Lab",
             project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-          { admissionNo: 1002, studentName: "Priya Patel", class: "IX", section: "A", venue: "Physics Lab",
+          { admissionNo: 1002, studentName: "Priya Patel", class: "9", section: "A", venue: "Physics Lab",
             project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-          { admissionNo: 1003, studentName: "Amit Kumar", class: "IX", section: "A", venue: "Physics Lab",
+          { admissionNo: 1003, studentName: "Amit Kumar", class: "9", section: "A", venue: "Physics Lab",
             project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-          { admissionNo: 1004, studentName: "Sneha Reddy", class: "IX", section: "A", venue: "Physics Lab",
+          { admissionNo: 1004, studentName: "Sneha Reddy", class: "9", section: "A", venue: "Physics Lab",
             project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-          { admissionNo: 1005, studentName: "Vikram Singh", class: "IX", section: "A", venue: "Physics Lab",
+          { admissionNo: 1005, studentName: "Vikram Singh", class: "9", section: "A", venue: "Physics Lab",
             project: "Solar Car", description: "Solar powered vehicle with battery backup", teacher: "Mr. Verma" },
-          { admissionNo: 1006, studentName: "Ananya Sharma", class: "X", section: "B", venue: "Hall A",
+          { admissionNo: 1006, studentName: "Ananya Sharma", class: "10", section: "B", venue: "Hall A",
             project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
-          { admissionNo: 1007, studentName: "Rohit Verma", class: "X", section: "B", venue: "Hall A",
+          { admissionNo: 1007, studentName: "Rohit Verma", class: "10", section: "B", venue: "Hall A",
             project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
-          { admissionNo: 1008, studentName: "Kavya Nair", class: "X", section: "B", venue: "Hall A",
+          { admissionNo: 1008, studentName: "Kavya Nair", class: "10", section: "B", venue: "Hall A",
             project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
-          { admissionNo: 1009, studentName: "Arjun Mehta", class: "X", section: "B", venue: "Hall A",
+          { admissionNo: 1009, studentName: "Arjun Mehta", class: "10", section: "B", venue: "Hall A",
             project: "AI Chatbot", description: "Conversational AI for student queries", teacher: "Mrs. Singh" },
-          { admissionNo: 1010, studentName: "Diya Patel", class: "XI", section: "C", venue: "Chemistry Lab",
+          { admissionNo: 1010, studentName: "Diya Patel", class: "11", section: "C", venue: "Chemistry Lab",
             project: "Green Energy Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-          { admissionNo: 1011, studentName: "Kiran Rao", class: "XI", section: "C", venue: "Chemistry Lab",
+          { admissionNo: 1011, studentName: "Kiran Rao", class: "11", section: "C", venue: "Chemistry Lab",
             project: "Green Energy Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-          { admissionNo: 1012, studentName: "Suresh Iyer", class: "XI", section: "C", venue: "Chemistry Lab",
+          { admissionNo: 1012, studentName: "Suresh Iyer", class: "11", section: "C", venue: "Chemistry Lab",
             project: "Green Energy Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-          { admissionNo: 1013, studentName: "Lata Krishnan", class: "XI", section: "C", venue: "Chemistry Lab",
+          { admissionNo: 1013, studentName: "Lata Krishnan", class: "11", section: "C", venue: "Chemistry Lab",
             project: "Green Energy Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-          { admissionNo: 1014, studentName: "Manoj Singh", class: "XI", section: "C", venue: "Chemistry Lab",
+          { admissionNo: 1014, studentName: "Manoj Singh", class: "11", section: "C", venue: "Chemistry Lab",
             project: "Green Energy Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-          { admissionNo: 1015, studentName: "Neha Sharma", class: "XI", section: "C", venue: "Chemistry Lab",
+          { admissionNo: 1015, studentName: "Neha Sharma", class: "11", section: "C", venue: "Chemistry Lab",
             project: "Green Energy Cell", description: "Hydrogen fuel cell demonstration", teacher: "Mr. Gupta" },
-          { admissionNo: 1016, studentName: "Aarav Mehta", class: "X", section: "A", venue: "Robotics Arena",
+          { admissionNo: 1016, studentName: "Aarav Mehta", class: "10", section: "A", venue: "Robotics Arena",
             project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-          { admissionNo: 1017, studentName: "Ishita Roy", class: "X", section: "A", venue: "Robotics Arena",
+          { admissionNo: 1017, studentName: "Ishita Roy", class: "10", section: "A", venue: "Robotics Arena",
             project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-          { admissionNo: 1018, studentName: "Vivek Jain", class: "X", section: "A", venue: "Robotics Arena",
+          { admissionNo: 1018, studentName: "Vivek Jain", class: "10", section: "A", venue: "Robotics Arena",
             project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-          { admissionNo: 1019, studentName: "Pooja Desai", class: "X", section: "A", venue: "Robotics Arena",
+          { admissionNo: 1019, studentName: "Pooja Desai", class: "10", section: "A", venue: "Robotics Arena",
             project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-          { admissionNo: 1020, studentName: "Ravi Kumar", class: "X", section: "A", venue: "Robotics Arena",
+          { admissionNo: 1020, studentName: "Ravi Kumar", class: "10", section: "A", venue: "Robotics Arena",
             project: "Line Follower Robot", description: "IR sensor based autonomous navigation", teacher: "Ms. Nair" },
-          { admissionNo: 1021, studentName: "Aditya Singh", class: "IX", section: "B", venue: "Makerspace",
+          { admissionNo: 1021, studentName: "Aditya Singh", class: "9", section: "B", venue: "Makerspace",
             project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
-          { admissionNo: 1022, studentName: "Meera Nair", class: "IX", section: "B", venue: "Makerspace",
+          { admissionNo: 1022, studentName: "Meera Nair", class: "9", section: "B", venue: "Makerspace",
             project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
-          { admissionNo: 1023, studentName: "Karan Joshi", class: "IX", section: "B", venue: "Makerspace",
+          { admissionNo: 1023, studentName: "Karan Joshi", class: "9", section: "B", venue: "Makerspace",
             project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
-          { admissionNo: 1024, studentName: "Anjali Menon", class: "IX", section: "B", venue: "Makerspace",
+          { admissionNo: 1024, studentName: "Anjali Menon", class: "9", section: "B", venue: "Makerspace",
             project: "3D Printed Prosthetics", description: "Affordable prosthetic hand design", teacher: "Mr. Iyer" },
-          { admissionNo: 1025, studentName: "Priya Kaur", class: "VIII", section: "C", venue: "Biology Lab",
+          { admissionNo: 1025, studentName: "Priya Kaur", class: "8", section: "C", venue: "Biology Lab",
             project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-          { admissionNo: 1026, studentName: "Gaurav Singh", class: "VIII", section: "C", venue: "Biology Lab",
+          { admissionNo: 1026, studentName: "Gaurav Singh", class: "8", section: "C", venue: "Biology Lab",
             project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-          { admissionNo: 1027, studentName: "Ritu Sharma", class: "VIII", section: "C", venue: "Biology Lab",
+          { admissionNo: 1027, studentName: "Ritu Sharma", class: "8", section: "C", venue: "Biology Lab",
             project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-          { admissionNo: 1028, studentName: "Deepak Patel", class: "VIII", section: "C", venue: "Biology Lab",
+          { admissionNo: 1028, studentName: "Deepak Patel", class: "8", section: "C", venue: "Biology Lab",
             project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-          { admissionNo: 1029, studentName: "Suman Reddy", class: "VIII", section: "C", venue: "Biology Lab",
+          { admissionNo: 1029, studentName: "Suman Reddy", class: "8", section: "C", venue: "Biology Lab",
             project: "Hydroponics System", description: "Soilless farming with nutrient solution", teacher: "Mrs. Rao" },
-          { admissionNo: 1030, studentName: "Arjun Kumar", class: "XII", section: "A", venue: "Auditorium",
+          { admissionNo: 1030, studentName: "Arjun Kumar", class: "12", section: "A", venue: "Auditorium",
             project: "Smart Lighting System", description: "Motion and light sensor based automation",
             teacher: "Mr. Mehta" },
-          { admissionNo: 1031, studentName: "Sara Khan", class: "XII", section: "A", venue: "Auditorium",
+          { admissionNo: 1031, studentName: "Sara Khan", class: "12", section: "A", venue: "Auditorium",
             project: "Smart Lighting System", description: "Motion and light sensor based automation",
             teacher: "Mr. Mehta" },
-          { admissionNo: 1032, studentName: "Rahul Saxena", class: "XII", section: "A", venue: "Auditorium",
+          { admissionNo: 1032, studentName: "Rahul Saxena", class: "12", section: "A", venue: "Auditorium",
             project: "Smart Lighting System", description: "Motion and light sensor based automation",
             teacher: "Mr. Mehta" },
-          { admissionNo: 1033, studentName: "Nisha Reddy", class: "XII", section: "A", venue: "Auditorium",
+          { admissionNo: 1033, studentName: "Nisha Reddy", class: "12", section: "A", venue: "Auditorium",
             project: "Smart Lighting System", description: "Motion and light sensor based automation",
             teacher: "Mr. Mehta" },
-          { admissionNo: 1034, studentName: "Vijay Singh", class: "XII", section: "A", venue: "Auditorium",
+          { admissionNo: 1034, studentName: "Vijay Singh", class: "12", section: "A", venue: "Auditorium",
             project: "Smart Lighting System", description: "Motion and light sensor based automation",
             teacher: "Mr. Mehta" },
-          { admissionNo: 1035, studentName: "Kavita Sharma", class: "XII", section: "A", venue: "Auditorium",
+          { admissionNo: 1035, studentName: "Kavita Sharma", class: "12", section: "A", venue: "Auditorium",
             project: "Smart Lighting System", description: "Motion and light sensor based automation",
             teacher: "Mr. Mehta" },
-          { admissionNo: 1036, studentName: "Sai Reddy", class: "IX", section: "A", venue: "Library",
+          { admissionNo: 1036, studentName: "Sai Reddy", class: "9", section: "A", venue: "Library",
             project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
-          { admissionNo: 1037, studentName: "Maya Krishnan", class: "IX", section: "A", venue: "Library",
+          { admissionNo: 1037, studentName: "Maya Krishnan", class: "9", section: "A", venue: "Library",
             project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
-          { admissionNo: 1038, studentName: "Rajesh Nair", class: "IX", section: "A", venue: "Library",
+          { admissionNo: 1038, studentName: "Rajesh Nair", class: "9", section: "A", venue: "Library",
             project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
-          { admissionNo: 1039, studentName: "Shreya Patel", class: "IX", section: "A", venue: "Library",
+          { admissionNo: 1039, studentName: "Shreya Patel", class: "9", section: "A", venue: "Library",
             project: "Digital Library", description: "QR code based book borrowing system", teacher: "Ms. Desai" },
-          { admissionNo: 1040, studentName: "Vivaan Singh", class: "XI", section: "B", venue: "STEM Lab",
+          { admissionNo: 1040, studentName: "Vivaan Singh", class: "11", section: "B", venue: "STEM Lab",
             project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors",
             teacher: "Mr. Patel" },
-          { admissionNo: 1041, studentName: "Ankit Reddy", class: "XI", section: "B", venue: "STEM Lab",
+          { admissionNo: 1041, studentName: "Ankit Reddy", class: "11", section: "B", venue: "STEM Lab",
             project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors",
             teacher: "Mr. Patel" },
-          { admissionNo: 1042, studentName: "Sneha Menon", class: "XI", section: "B", venue: "STEM Lab",
+          { admissionNo: 1042, studentName: "Sneha Menon", class: "11", section: "B", venue: "STEM Lab",
             project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors",
             teacher: "Mr. Patel" },
-          { admissionNo: 1043, studentName: "Kishore Kumar", class: "XI", section: "B", venue: "STEM Lab",
+          { admissionNo: 1043, studentName: "Kishore Kumar", class: "11", section: "B", venue: "STEM Lab",
             project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors",
             teacher: "Mr. Patel" },
-          { admissionNo: 1044, studentName: "Divya Sharma", class: "XI", section: "B", venue: "STEM Lab",
+          { admissionNo: 1044, studentName: "Divya Sharma", class: "11", section: "B", venue: "STEM Lab",
             project: "Autonomous Drone", description: "Obstacle avoidance with ultrasonic sensors",
             teacher: "Mr. Patel" },
-          { admissionNo: 1045, studentName: "Diya Patel", class: "VII", section: "B", venue: "Art Gallery",
+          { admissionNo: 1045, studentName: "Diya Patel", class: "7", section: "B", venue: "Art Gallery",
             project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art",
             teacher: "Mrs. Gupta" },
-          { admissionNo: 1046, studentName: "Rohan Verma", class: "VII", section: "B", venue: "Art Gallery",
+          { admissionNo: 1046, studentName: "Rohan Verma", class: "7", section: "B", venue: "Art Gallery",
             project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art",
             teacher: "Mrs. Gupta" },
-          { admissionNo: 1047, studentName: "Pari Singh", class: "VII", section: "B", venue: "Art Gallery",
+          { admissionNo: 1047, studentName: "Pari Singh", class: "7", section: "B", venue: "Art Gallery",
             project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art",
             teacher: "Mrs. Gupta" },
-          { admissionNo: 1048, studentName: "Arnav Iyer", class: "VII", section: "B", venue: "Art Gallery",
+          { admissionNo: 1048, studentName: "Arnav Iyer", class: "7", section: "B", venue: "Art Gallery",
             project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art",
             teacher: "Mrs. Gupta" },
-          { admissionNo: 1049, studentName: "Ishita Reddy", class: "VII", section: "B", venue: "Art Gallery",
+          { admissionNo: 1049, studentName: "Ishita Reddy", class: "7", section: "B", venue: "Art Gallery",
             project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art",
             teacher: "Mrs. Gupta" },
-          { admissionNo: 1050, studentName: "Krishna Nair", class: "VII", section: "B", venue: "Art Gallery",
+          { admissionNo: 1050, studentName: "Krishna Nair", class: "7", section: "B", venue: "Art Gallery",
             project: "Recycled Art Sculpture", description: "Plastic bottle and waste material art",
             teacher: "Mrs. Gupta" }
         ];
         sortStudentsByGroup(studentData);
-        updateUI();
         populateFilters();
+        updateUI();
+        showToast('📊 Sample data loaded (' + studentData.length + ' students)', 'info');
       }
 
+      // --- Sort students: by venue, project, class (numeric), name ---
       function sortStudentsByGroup(students) {
-        var classOrder = { 'VII': 7, 'VIII': 8, 'IX': 9, 'X': 10, 'XI': 11, 'XII': 12 };
         return students.sort(function(a, b) {
           if (a.venue < b.venue) return -1;
           if (a.venue > b.venue) return 1;
           if (a.project < b.project) return -1;
           if (a.project > b.project) return 1;
-          var aClass = classOrder[a.class] || 0;
-          var bClass = classOrder[b.class] || 0;
+          var aClass = parseInt(a.class) || 0;
+          var bClass = parseInt(b.class) || 0;
           if (aClass !== bClass) return aClass - bClass;
           return a.studentName.localeCompare(b.studentName);
         });
       }
 
+      // --- Populate filters with numeric class sorting ---
       function populateFilters() {
         var classSelect = document.getElementById('classSelect');
         var sectionSelect = document.getElementById('sectionSelect');
         var studentSelect = document.getElementById('studentSelect');
 
-        var classes = [...new Set(studentData.map(function(s) { return s.class; }))].sort();
+        // Get unique classes and sort numerically
+        var classes = [...new Set(studentData.map(function(s) { return s.class; }))];
+        classes.sort(function(a, b) { return (parseInt(a) || 0) - (parseInt(b) || 0); });
+
         classSelect.innerHTML = '<option value="">-- Select Class --</option>';
         classes.forEach(function(cls) {
           var opt = document.createElement('option');
@@ -1495,8 +1535,11 @@
         document.getElementById('venueContainer').innerHTML =
           '<div class="empty-state"><span>👆</span>Select a student from the dropdown</div>';
         classSelect.disabled = false;
+
+        updateUI();
       }
 
+      // --- Event listeners ---
       document.getElementById('classSelect').addEventListener('change', function() {
         var selectedClass = this.value;
         var sectionSelect = document.getElementById('sectionSelect');
@@ -1573,6 +1616,7 @@
         renderStudent(admissionNo);
       });
 
+      // --- Render student details ---
       function renderStudent(admissionNo) {
         var uniqueIdDisplay = document.getElementById('uniqueIdDisplay');
         var venueContainer = document.getElementById('venueContainer');
@@ -1698,6 +1742,7 @@
         });
       }
 
+      // --- QR Tab switching ---
       document.querySelectorAll('.qr-tab-btn').forEach(function(btn) {
         btn.addEventListener('click', function() {
           document.querySelectorAll('.qr-tab-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -1710,8 +1755,6 @@
       function initQRScreen() {
         var currentUrl = window.location.href;
         var cleanUrl = currentUrl.split('?')[0];
-        var isLocalFile = cleanUrl.indexOf('file://') === 0;
-
         var parentUrl = cleanUrl + '?app=1&role=parent';
         var judgeUrl = cleanUrl + '?app=1&role=judge';
 
@@ -2009,22 +2052,20 @@
 
       var urlParams = new URLSearchParams(window.location.search);
 
-      var storedRole = localStorage.getItem('cognitive_role');
-      var storedAppOpen = localStorage.getItem('cognitive_app_open');
-
-      // FIX: Always start on QR screen unless app=1 is present
+      // Always start on QR screen unless app=1 is present
       if (urlParams.get('app') === '1') {
         var role = urlParams.get('role') || 'parent';
         localStorage.setItem('cognitive_role', role);
         localStorage.setItem('cognitive_app_open', 'true');
         showApp();
+        // Load data after showing app
+        loadDataFromGoogleSheets();
       } else {
-        // Clear stored state to ensure we start on QR screen
         localStorage.removeItem('cognitive_role');
         localStorage.removeItem('cognitive_app_open');
         document.getElementById('qrSelectScreen').style.display = 'block';
         initQRScreen();
-        // Load data in background
+        // Load data in background for QR screen
         loadDataFromGoogleSheets();
       }
 

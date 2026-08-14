@@ -382,7 +382,6 @@
       };
       var currentJudge = null;
 
-      // Updated CSV URL - reads from your Google Sheets
       var GOOGLE_SHEETS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSMV8q5pjuZ4WBK-qHcNjaf5xCtklGx0gGsoBTmFfx4E3Gd1ICZLdrGkMMnr7VUdbO7DIC800sjdXy1/pub?output=csv";
       var studentData = [];
 
@@ -476,7 +475,7 @@
             }
           });
 
-          // Check if this is a class header row
+          // Check if this is a class header row (has classSection but no groupName and little data)
           if (student.classSection && !student.groupName && !hasData) {
             currentClass = student.classSection;
             continue;

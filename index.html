@@ -382,13 +382,17 @@
       };
       var currentJudge = null;
 
+      // CORRECT CSV URL - Use this exact format
       var GOOGLE_SHEETS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSMV8q5pjuZ4WBK-qHcNjaf5xCtklGx0gGsoBTmFfx4E3Gd1ICZLdrGkMMnr7VUdbO7DIC800sjdXy1/pub?output=csv";
       var studentData = [];
 
       function loadDataFromGoogleSheets() {
         showToast('📥 Loading project data...', 'info');
         fetch(GOOGLE_SHEETS_CSV_URL)
-          .then(function(response) { if (!response.ok) throw new Error('Failed to fetch CSV'); return response.text(); })
+          .then(function(response) {
+            if (!response.ok) throw new Error('Failed to fetch CSV');
+            return response.text();
+          })
           .then(function(csvText) {
             var data = parseCSV(csvText);
             if (data && data.length > 0) {
@@ -475,7 +479,7 @@
             }
           });
 
-          // Check if this is a class header row (has classSection but no groupName and little data)
+          // Check if this is a class header row
           if (student.classSection && !student.groupName && !hasData) {
             currentClass = student.classSection;
             continue;
@@ -536,6 +540,25 @@
         JUDGE_ASSIGNMENTS['MASTER'] = { name: 'Master Judge', allowedGroups: allGroups.map(function(g) { return g.key; }) };
       }
 
+      function getAllGroups() {
+        var groups = [];
+        var seen = {};
+        studentData.forEach(function(s) {
+          var key = s.classSection + '|||' + s.groupName;
+          if (!seen[key] && s.groupName) {
+            seen[key] = true;
+            groups.push({
+              key: key,
+              classSection: s.classSection,
+              groupName: s.groupName,
+              description: s.description,
+              members: s.groupMembers || []
+            });
+          }
+        });
+        return groups;
+      }
+
       function populateFilters() {
         var classSelect = document.getElementById('classSelect');
         var groupSelect = document.getElementById('groupSelect');
@@ -558,6 +581,8 @@
         document.getElementById('venueContainer').innerHTML =
           '<div class="empty-state"><span>👆</span>Select a member from the dropdown</div>';
         classSelect.disabled = false;
+
+        document.getElementById('recordCount').textContent = '📊 ' + studentData.length + ' projects loaded';
       }
 
       document.getElementById('classSelect').addEventListener('change', function() {
@@ -685,402 +710,389 @@
         html += '<div class="student-name-display">👥 ' + student.groupName + '</div>';
 
         if (student.groupMembers && student.groupMembers.length > 0) {
-          html += '<div style="margin-bottom:10px;"><span style="font-weight:600; color:var(--ms-navy); font-size:0.8rem;">👤 Members:</span> ';
-          html += student.groupMembers.join(', ');
+          html += '<div class="group-members">';
+          student.groupMembers.forEach(function(member) {
+            html += '<span class="member-chip">' + member + '</span>';
+          });
           html += '</div>';
         }
 
-        html +=
-          '<div class="project-detail">' +
-          '<div class="row"><span class="tag">📁 Project</span><span class="value">' + (student.project || student.topic || '—') + '</span></div>' +
-          '<div class="row"><span class="tag">📝 Description</span><span class="value" style="white-space:normal; text-align:left;">' + (student.description || '—') + '</span></div>' +
-          '<div class="row" style="margin-top: 4px;"><span class="tag">👨‍🏫 Mentor</span><span class="teacher-tag">' + (student.teacher || student.mentor || '—') + '</span></div>' +
-          '<div style="margin-top: 8px; font-size:0.75rem; color:var(--ms-charcoal); background:var(--ms-cream); padding: 2px 14px; border-radius: 40px; display:inline-block;">' +
-          (student.classSection || '—') + '</div>';
+        html += '<div class="project-detail">';
+        html += '<div class="row"><span class="tag">📋 Project</span><span class="value">' + (student.project || 'Untitled') + '</span></div>';
+        html += '<div class="row"><span class="tag">📝 Description</span><span class="value">' + (student.description || 'No description') + '</span></div>';
+        if (student.teacher) {
+          html += '<div class="row"><span class="tag">👨‍🏫 Mentor</span><span class="value">' + student.teacher + '</span></div>';
+        }
+        html += '<div class="row"><span class="tag">📚 Class</span><span class="value">' + (student.classSection || 'N/A') + '</span></div>';
+        html += '</div>';
 
-        html += '</div></div></div>';
+        html += '<div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">';
+        html += '<span class="teacher-tag">🏷️ ' + (student.teacher || 'No mentor assigned') + '</span>';
+        html += '</div>';
+
+        html += '</div>';
+        html += '</div>';
+
         venueContainer.innerHTML = html;
       }
 
-      var toastEl = document.getElementById('toast');
-      var toastTimeout;
-      function showToast(message, type) {
-        clearTimeout(toastTimeout);
-        toastEl.textContent = message;
-        toastEl.className = 'toast';
-        if (type) toastEl.classList.add(type);
-        toastEl.classList.add('show');
-        toastTimeout = setTimeout(function() { toastEl.classList.remove('show'); }, 4000);
-      }
-
-      function getGroupKey(s) { return s.venue + '|||' + (s.project || s.groupName); }
-
-      function getAllGroups() {
-        var groups = {};
-        studentData.forEach(function(s) {
-          var key = getGroupKey(s);
-          if (!groups[key]) {
-            groups[key] = { key: key, venue: s.venue || s.classSection || 'Unknown', project: s.project || s.groupName || 'Untitled', description: s.description || '', teacher: s.teacher || s.mentor || '', members: [] };
-          }
-          groups[key].members.push(s);
-        });
-        return Object.values(groups);
-      }
-
-      function getGroupByKey(key) {
-        var groups = getAllGroups();
-        return groups.find(function(g) { return g.key === key; }) || null;
-      }
-
-      function submitToGoogleForm(formUrl, params) {
-        var url = formUrl + '?' + params.toString();
-        return fetch(url, { method: 'GET', mode: 'no-cors' });
-      }
-
       function updateUI() {
-        var uniqueStudents = new Set();
-        studentData.forEach(function(s) { uniqueStudents.add(s.admissionNo); });
-        document.getElementById('recordCount').textContent = '📊 ' + uniqueStudents.size + ' members · ' + studentData.length + ' projects';
+        // Initial UI update
+        populateFilters();
       }
 
-      function generateQR(containerId, url, colorDark) {
-        var container = document.getElementById(containerId);
-        container.innerHTML = '';
-        new QRCode(container, {
-          text: url,
-          width: 200,
-          height: 200,
-          colorDark: colorDark || "#0a1a3a",
-          colorLight: "#ffffff",
-          correctLevel: QRCode.CorrectLevel.H
-        });
-      }
-
-      document.querySelectorAll('.qr-tab-btn').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          document.querySelectorAll('.qr-tab-btn').forEach(function(b) { b.classList.remove('active'); });
-          btn.classList.add('active');
-          document.querySelectorAll('.qr-tab-content').forEach(function(c) { c.classList.remove('active'); });
-          document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
-        });
-      });
-
-      function initQRScreen() {
-        var currentUrl = window.location.href;
-        var cleanUrl = currentUrl.split('?')[0];
-
-        var parentUrl = cleanUrl + '?app=1&role=parent';
-        var judgeUrl = cleanUrl + '?app=1&role=judge';
+      // ==================== QR CODE GENERATION ====================
+      function generateQR() {
+        var appUrl = window.location.href;
+        var parentUrl = appUrl + '?mode=parent';
+        var judgeUrl = appUrl + '?mode=judge';
 
         document.getElementById('parentUrlDisplay').textContent = parentUrl;
         document.getElementById('judgeUrlDisplay').textContent = judgeUrl;
 
-        generateQR('qrcode-container-parent', parentUrl, "#0a1a3a");
-        generateQR('qrcode-container-judge', judgeUrl, "#451013");
+        try {
+          var parentContainer = document.getElementById('qrcode-container-parent');
+          parentContainer.innerHTML = '';
+          new QRCode(parentContainer, {
+            text: parentUrl,
+            width: 200,
+            height: 200,
+            colorDark: "#0a1a3a",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+          });
+
+          var judgeContainer = document.getElementById('qrcode-container-judge');
+          judgeContainer.innerHTML = '';
+          new QRCode(judgeContainer, {
+            text: judgeUrl,
+            width: 200,
+            height: 200,
+            colorDark: "#451013",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+          });
+        } catch (e) {
+          console.warn('QR generation error:', e);
+        }
       }
 
-      document.getElementById('qrcode-container-parent').addEventListener('click', function() {
-        var url = new URL(window.location.href);
-        url.search = '?app=1&role=parent';
-        window.location.href = url.toString();
+      // ==================== TOAST ====================
+      function showToast(message, type) {
+        var toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.className = 'toast';
+        if (type) toast.classList.add(type);
+        toast.classList.add('show');
+        clearTimeout(toast._timeout);
+        toast._timeout = setTimeout(function() {
+          toast.classList.remove('show');
+        }, 4000);
+      }
+
+      // ==================== QR TABS ====================
+      document.querySelectorAll('.qr-tab-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.qr-tab-btn').forEach(function(b) { b.classList.remove('active'); });
+          this.classList.add('active');
+          var tab = this.dataset.tab;
+          document.querySelectorAll('.qr-tab-content').forEach(function(c) { c.classList.remove('active'); });
+          document.getElementById('tab-' + tab).classList.add('active');
+        });
       });
-      document.getElementById('qrcode-container-judge').addEventListener('click', function() {
-        var url = new URL(window.location.href);
-        url.search = '?app=1&role=judge';
-        window.location.href = url.toString();
+
+      // ==================== MAIN MENU ====================
+      document.querySelectorAll('.menu-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.menu-btn').forEach(function(b) { b.classList.remove('active'); });
+          this.classList.add('active');
+          var page = this.dataset.page;
+          document.querySelectorAll('.page-content').forEach(function(c) { c.classList.remove('active'); });
+          document.getElementById('page-' + page).classList.add('active');
+        });
       });
 
-      function showApp() {
-        var params = new URLSearchParams(window.location.search);
-        var role = params.get('role') || 'parent';
+      // ==================== JUDGE UNLOCK ====================
+      document.getElementById('unlockJudgeBtn').addEventListener('click', function() {
+        var code = document.getElementById('judgeCodeInput').value.trim().toUpperCase();
+        var errorEl = document.getElementById('judgeLockError');
 
-        document.getElementById('qrSelectScreen').style.display = 'none';
-        document.getElementById('fullApp').style.display = 'block';
-        document.getElementById('fullApp').classList.remove('app-hidden');
+        if (!code) {
+          errorEl.textContent = '❌ Please enter a judge code.';
+          errorEl.style.display = 'block';
+          return;
+        }
 
-        if (role === 'judge') {
-          document.querySelector('.judge-only').style.display = 'block';
+        if (JUDGE_ASSIGNMENTS[code]) {
+          currentJudge = code;
+          errorEl.style.display = 'none';
+          document.getElementById('judgeLockContainer').style.display = 'none';
+          document.getElementById('judgeContent').style.display = 'block';
+          document.getElementById('judgeStatusBadge').textContent = '🔓 Unlocked';
+          document.getElementById('judgeStatusBadge').className = 'judge-status-badge unlocked';
+          showToast('✅ Welcome, ' + JUDGE_ASSIGNMENTS[code].name + '!', 'success');
+          populateJudgeGroups();
         } else {
-          document.querySelector('.judge-only').style.display = 'none';
-          if (document.getElementById('page-judge').classList.contains('active')) {
-            document.querySelectorAll('.menu-btn').forEach(function(b) { b.classList.remove('active'); });
-            document.querySelector('[data-page="lookup"]').classList.add('active');
-            document.querySelectorAll('.page-content').forEach(function(p) { p.classList.remove('active'); });
-            document.getElementById('page-lookup').classList.add('active');
-          }
+          errorEl.textContent = '❌ Invalid code. Please try again.';
+          errorEl.style.display = 'block';
+          document.getElementById('judgeCodeInput').classList.add('error-shake');
+          setTimeout(function() {
+            document.getElementById('judgeCodeInput').classList.remove('error-shake');
+          }, 300);
+          showToast('❌ Invalid judge code', 'error');
+        }
+      });
+
+      document.getElementById('judgeCodeInput').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          document.getElementById('unlockJudgeBtn').click();
+        }
+      });
+
+      function populateJudgeGroups() {
+        var selector = document.getElementById('groupSelector');
+        selector.innerHTML = '<option value="">-- Select a Group --</option>';
+
+        var assigned = JUDGE_ASSIGNMENTS[currentJudge];
+        var allGroups = getAllGroups();
+
+        var allowedKeys = assigned.allowedGroups || [];
+        var groupsToShow = allGroups.filter(function(g) {
+          return allowedKeys.includes(g.key) || allowedKeys.includes('ALL');
+        });
+
+        if (groupsToShow.length === 0) {
+          groupsToShow = allGroups;
         }
 
-        initApp(role);
-      }
-
-      function initApp(role) {
-        if (window.__appInitialized) return;
-        window.__appInitialized = true;
-
-        var judgeUnlocked = false;
-        var judgements = JSON.parse(localStorage.getItem('groupJudgements')) || {};
-
-        function populateGroupSelector(allowedGroups) {
-          var select = document.getElementById('groupSelector');
-          var allGroups = getAllGroups();
-
-          var filteredGroups = allGroups;
-          if (allowedGroups && allowedGroups.length > 0) {
-            filteredGroups = allGroups.filter(function(g) {
-              return allowedGroups.indexOf(g.key) !== -1;
-            });
-          }
-
-          select.innerHTML = '<option value="">-- Select a Group --</option>';
-          filteredGroups.sort(function(a, b) {
-            return (a.venue || '').localeCompare(b.venue || '') || (a.project || '').localeCompare(b.project || '');
-          });
-          filteredGroups.forEach(function(g) {
-            var opt = document.createElement('option');
-            opt.value = g.key;
-            opt.textContent = (g.venue || 'Unknown') + ' - ' + (g.project || 'Untitled') + ' (' + g.members.length + ' members)';
-            select.appendChild(opt);
-          });
-
-          if (filteredGroups.length === 0) {
-            select.innerHTML = '<option value="">-- No groups assigned --</option>';
-          }
-        }
-
-        function displayGroupInfo(groupKey) {
-          var group = getGroupByKey(groupKey);
-          var infoDisplay = document.getElementById('groupInfoDisplay');
-          var criteriaDisplay = document.getElementById('judgeCriteria');
-          if (!group) { infoDisplay.style.display = 'none'; criteriaDisplay.style.display = 'none'; return; }
-          infoDisplay.style.display = 'block';
-          criteriaDisplay.style.display = 'block';
-          document.getElementById('groupDisplayName').textContent = (group.venue || 'Unknown') + ' - ' + (group.project || 'Untitled');
-          document.getElementById('groupDescriptionDisplay').textContent = '📝 ' + (group.description || 'No description');
-          var membersHtml = '';
-          group.members.forEach(function(m) {
-            membersHtml += '<span class="member-tag">' + (m.groupName || m.project || 'Group') + ' (' + (m.groupMembers ? m.groupMembers.join(', ') : '') + ')</span>';
-          });
-          document.getElementById('groupMembersList').innerHTML = membersHtml;
-          if (judgements[groupKey]) {
-            var j = judgements[groupKey];
-            var statusEl = document.getElementById('groupStatusDisplay');
-            var percentage = Math.round((j.total / 25) * 10);
-            statusEl.textContent = '✅ Judged! Score: ' + percentage + '/10 on ' + new Date(j.timestamp).toLocaleDateString();
-            statusEl.className = 'group-status judged';
-            if (j.criteria) {
-              document.getElementById('criteria1').value = j.criteria.innovation || 1;
-              document.getElementById('criteria2').value = j.criteria.technical || 1;
-              document.getElementById('criteria3').value = j.criteria.presentation || 1;
-              document.getElementById('criteria4').value = j.criteria.impact || 1;
-              document.getElementById('criteria5').value = j.criteria.collaboration || 1;
-              document.getElementById('judgeComments').value = j.comments || '';
-            }
-            document.getElementById('judgeResult').className = 'judge-result info';
-            document.getElementById('judgeResult').textContent = '✅ Already judged on ' + new Date(j.timestamp).toLocaleString() + ' | Score: ' + percentage + '/10';
-            document.getElementById('judgeResult').style.display = 'block';
-          } else {
-            document.getElementById('groupStatusDisplay').textContent = '⏳ Not Judged Yet';
-            document.getElementById('groupStatusDisplay').className = 'group-status not-judged';
-            document.getElementById('criteria1').value = 5;
-            document.getElementById('criteria2').value = 5;
-            document.getElementById('criteria3').value = 5;
-            document.getElementById('criteria4').value = 5;
-            document.getElementById('criteria5').value = 5;
-            document.getElementById('judgeComments').value = '';
-            document.getElementById('judgeResult').style.display = 'none';
-          }
-        }
-
-        document.getElementById('unlockJudgeBtn').addEventListener('click', function() {
-          var code = document.getElementById('judgeCodeInput').value.trim().toUpperCase();
-          var errorEl = document.getElementById('judgeLockError');
-
-          if (JUDGE_ASSIGNMENTS[code]) {
-            judgeUnlocked = true;
-            currentJudge = JUDGE_ASSIGNMENTS[code];
-
-            document.getElementById('judgeLockContainer').style.display = 'none';
-            document.getElementById('judgeContent').style.display = 'block';
-
-            var badge = document.getElementById('judgeStatusBadge');
-            badge.textContent = '🔓 ' + currentJudge.name;
-            badge.className = 'judge-status-badge unlocked';
-            errorEl.style.display = 'none';
-
-            populateGroupSelector(currentJudge.allowedGroups);
-
-            var select = document.getElementById('groupSelector');
-            if (select.value) {
-              displayGroupInfo(select.value);
-            } else {
-              document.getElementById('groupInfoDisplay').style.display = 'none';
-              document.getElementById('judgeCriteria').style.display = 'none';
-            }
-          } else {
-            errorEl.style.display = 'block';
-            setTimeout(function() { errorEl.style.display = 'none'; }, 3000);
-          }
-        });
-
-        document.getElementById('judgeCodeInput').addEventListener('keydown', function(e) {
-          if (e.key === 'Enter') document.getElementById('unlockJudgeBtn').click();
-        });
-
-        document.getElementById('groupSelector').addEventListener('change', function() {
-          if (this.value) displayGroupInfo(this.value);
-          else {
-            document.getElementById('groupInfoDisplay').style.display = 'none';
-            document.getElementById('judgeCriteria').style.display = 'none';
-          }
-        });
-
-        document.getElementById('submitJudgeBtn').addEventListener('click', function() {
-          if (!judgeUnlocked) {
-            document.getElementById('judgeResult').className = 'judge-result error';
-            document.getElementById('judgeResult').textContent = '❌ Please unlock judging first!';
-            document.getElementById('judgeResult').style.display = 'block';
-            return;
-          }
-          var groupKey = document.getElementById('groupSelector').value;
-          if (!groupKey) {
-            document.getElementById('judgeResult').className = 'judge-result error';
-            document.getElementById('judgeResult').textContent = '❌ Please select a group first!';
-            document.getElementById('judgeResult').style.display = 'block';
-            return;
-          }
-          var group = getGroupByKey(groupKey);
-          if (!group) {
-            document.getElementById('judgeResult').className = 'judge-result error';
-            document.getElementById('judgeResult').textContent = '❌ Group not found!';
-            document.getElementById('judgeResult').style.display = 'block';
-            return;
-          }
-
-          var c1 = parseInt(document.getElementById('criteria1').value);
-          var c2 = parseInt(document.getElementById('criteria2').value);
-          var c3 = parseInt(document.getElementById('criteria3').value);
-          var c4 = parseInt(document.getElementById('criteria4').value);
-          var c5 = parseInt(document.getElementById('criteria5').value);
-          var comments = document.getElementById('judgeComments').value.trim();
-          var total = c1 + c2 + c3 + c4 + c5;
-          var percentage = Math.round((total / 25) * 10);
-
-          var judgementData = {
-            criteria: { innovation: c1, technical: c2, presentation: c3, impact: c4, collaboration: c5 },
-            total: total,
-            percentage: percentage,
-            comments: comments || 'No comments',
-            timestamp: Date.now(),
-            judgeName: currentJudge ? currentJudge.name : 'Unknown',
-            groupName: group.venue + ' - ' + group.project,
-            members: group.members.map(function(m) { return m.admissionNo + ': ' + (m.groupName || m.project); })
-          };
-          judgements[groupKey] = judgementData;
-          localStorage.setItem('groupJudgements', JSON.stringify(judgements));
-
-          var params = new URLSearchParams();
-          var memberNames = group.members.map(function(m) { return (m.groupName || m.project) + ' (' + (m.groupMembers ? m.groupMembers.join(', ') : '') + ')'; }).join('; ');
-          params.append(JUDGEMENT_ENTRY_VENUE, group.venue || 'Unknown');
-          params.append(JUDGEMENT_ENTRY_STUDENT_NAME, memberNames);
-          params.append(JUDGEMENT_ENTRY_PROJECT, group.project || 'Untitled');
-          params.append(JUDGEMENT_ENTRY_DESCRIPTION, group.description || '');
-          params.append(JUDGEMENT_ENTRY_INNOVATION, c1);
-          params.append(JUDGEMENT_ENTRY_TECHNICAL, c2);
-          params.append(JUDGEMENT_ENTRY_PRESENTATION, c3);
-          params.append(JUDGEMENT_ENTRY_IMPACT, c4);
-          params.append(JUDGEMENT_ENTRY_COLLABORATION, c5);
-          params.append(JUDGEMENT_ENTRY_COMMENTS, comments || 'No comments');
-          params.append(JUDGEMENT_ENTRY_TOTAL, percentage);
-
-          submitToGoogleForm(JUDGEMENT_FORM_URL, params)
-            .then(function() {
-              document.getElementById('judgeResult').className = 'judge-result success';
-              document.getElementById('judgeResult').textContent = '✅ Judgement submitted! Score: ' + percentage + '/10';
-              document.getElementById('judgeResult').style.display = 'block';
-              displayGroupInfo(groupKey);
-              showToast('✅ Judgement saved to Google Sheets!', 'success');
-            })
-            .catch(function() {
-              document.getElementById('judgeResult').className = 'judge-result error';
-              document.getElementById('judgeResult').textContent = '❌ Error submitting. Please check your form URL.';
-              document.getElementById('judgeResult').style.display = 'block';
-              showToast('❌ Error submitting to Google Sheets.', 'error');
-            });
-        });
-
-        document.getElementById('submitFeedbackBtn').addEventListener('click', function() {
-          var studentId = document.getElementById('feedbackStudentId').value.trim();
-          var feedbackText = document.getElementById('feedbackText').value.trim();
-          var rating = parseInt(document.getElementById('feedbackRating').value);
-          if (!feedbackText) {
-            document.getElementById('feedbackResult').className = 'judge-result error';
-            document.getElementById('feedbackResult').textContent = '❌ Please write your feedback!';
-            document.getElementById('feedbackResult').style.display = 'block';
-            setTimeout(function() { document.getElementById('feedbackResult').style.display = 'none'; }, 3000);
-            return;
-          }
-          var params = new URLSearchParams();
-          params.append(FEEDBACK_ENTRY_STUDENT_ID, studentId || 'Anonymous');
-          params.append(FEEDBACK_ENTRY_FEEDBACK, feedbackText);
-          params.append(FEEDBACK_ENTRY_RATING, rating);
-          submitToGoogleForm(FEEDBACK_FORM_URL, params)
-            .then(function() {
-              document.getElementById('feedbackResult').className = 'judge-result success';
-              document.getElementById('feedbackResult').textContent = '✅ Feedback submitted! Saved to Google Sheets.';
-              document.getElementById('feedbackResult').style.display = 'block';
-              document.getElementById('feedbackText').value = '';
-              document.getElementById('feedbackStudentId').value = '';
-              showToast('✅ Feedback saved to Google Sheets!', 'success');
-              setTimeout(function() { document.getElementById('feedbackResult').style.display = 'none'; }, 3000);
-            })
-            .catch(function() {
-              document.getElementById('feedbackResult').className = 'judge-result error';
-              document.getElementById('feedbackResult').textContent = '❌ Error submitting. Please check your form URL.';
-              document.getElementById('feedbackResult').style.display = 'block';
-              showToast('❌ Error submitting to Google Sheets.', 'error');
-            });
-        });
-
-        var menuBtns = document.querySelectorAll('.menu-btn');
-        var pages = {
-          lookup: document.getElementById('page-lookup'),
-          judge: document.getElementById('page-judge'),
-          feedback: document.getElementById('page-feedback')
-        };
-        menuBtns.forEach(function(btn) {
-          btn.addEventListener('click', function() {
-            menuBtns.forEach(function(b) { b.classList.remove('active'); });
-            btn.classList.add('active');
-            var page = btn.getAttribute('data-page');
-            Object.keys(pages).forEach(function(key) { pages[key].classList.remove('active'); });
-            pages[page].classList.add('active');
-            if (page === 'judge' && judgeUnlocked && currentJudge) {
-              populateGroupSelector(currentJudge.allowedGroups);
-            }
-          });
+        groupsToShow.forEach(function(g) {
+          var opt = document.createElement('option');
+          opt.value = g.key;
+          opt.textContent = g.classSection + ' - ' + g.groupName;
+          selector.appendChild(opt);
         });
       }
 
-      var urlParams = new URLSearchParams(window.location.search);
-      var storedRole = localStorage.getItem('cognitive_role');
-      var storedAppOpen = localStorage.getItem('cognitive_app_open');
+      document.getElementById('groupSelector').addEventListener('change', function() {
+        var key = this.value;
+        if (!key) {
+          document.getElementById('groupInfoDisplay').style.display = 'none';
+          document.getElementById('judgeCriteria').style.display = 'none';
+          return;
+        }
 
-      if (urlParams.get('app') === '1') {
-        var role = urlParams.get('role') || 'parent';
-        localStorage.setItem('cognitive_role', role);
-        localStorage.setItem('cognitive_app_open', 'true');
-        showApp();
-      } else if (storedAppOpen === 'true' && storedRole) {
-        var tempUrl = new URL(window.location.href);
-        tempUrl.search = '?app=1&role=' + storedRole;
-        window.location.href = tempUrl.toString();
-      } else {
-        initQRScreen();
+        var parts = key.split('|||');
+        var classSection = parts[0];
+        var groupName = parts[1];
+
+        var group = studentData.find(function(s) {
+          return s.classSection === classSection && s.groupName === groupName;
+        });
+
+        if (!group) {
+          showToast('❌ Group not found', 'error');
+          return;
+        }
+
+        document.getElementById('groupDisplayName').textContent = group.groupName + ' (' + group.classSection + ')';
+        document.getElementById('groupDescriptionDisplay').textContent = group.description || 'No description';
+
+        var membersList = document.getElementById('groupMembersList');
+        membersList.innerHTML = '';
+        if (group.groupMembers && group.groupMembers.length > 0) {
+          group.groupMembers.forEach(function(m) {
+            var tag = document.createElement('span');
+            tag.className = 'member-tag';
+            tag.textContent = m;
+            membersList.appendChild(tag);
+          });
+        } else {
+          membersList.innerHTML = '<span style="font-size:0.7rem; opacity:0.6;">No members listed</span>';
+        }
+
+        var statusEl = document.getElementById('groupStatusDisplay');
+        // Check if already judged (you can implement this with localStorage)
+        var judgedKey = 'judged_' + key;
+        var isJudged = localStorage.getItem(judgedKey) === 'true';
+        statusEl.textContent = isJudged ? '✅ Status: Judged' : '⏳ Status: Not Judged';
+        statusEl.className = 'group-status ' + (isJudged ? 'judged' : 'not-judged');
+
+        document.getElementById('groupInfoDisplay').style.display = 'block';
+        document.getElementById('judgeCriteria').style.display = 'block';
+        document.getElementById('judgeResult').className = 'judge-result';
+        document.getElementById('judgeResult').style.display = 'none';
+      });
+
+      // ==================== SUBMIT JUDGEMENT ====================
+      document.getElementById('submitJudgeBtn').addEventListener('click', function() {
+        var groupKey = document.getElementById('groupSelector').value;
+        if (!groupKey) {
+          showToast('⚠️ Please select a group first', 'error');
+          return;
+        }
+
+        var parts = groupKey.split('|||');
+        var classSection = parts[0];
+        var groupName = parts[1];
+
+        var group = studentData.find(function(s) {
+          return s.classSection === classSection && s.groupName === groupName;
+        });
+
+        if (!group) {
+          showToast('❌ Group not found', 'error');
+          return;
+        }
+
+        var innovation = parseInt(document.getElementById('criteria1').value);
+        var technical = parseInt(document.getElementById('criteria2').value);
+        var presentation = parseInt(document.getElementById('criteria3').value);
+        var impact = parseInt(document.getElementById('criteria4').value);
+        var collaboration = parseInt(document.getElementById('criteria5').value);
+        var comments = document.getElementById('judgeComments').value.trim();
+
+        var total = innovation + technical + presentation + impact + collaboration;
+
+        // Build form data
+        var formData = new FormData();
+        formData.append(JUDGEMENT_ENTRY_VENUE, group.venue || group.classSection || 'Unknown');
+        formData.append(JUDGEMENT_ENTRY_STUDENT_NAME, group.groupName);
+        formData.append(JUDGEMENT_ENTRY_PROJECT, group.project || 'Untitled');
+        formData.append(JUDGEMENT_ENTRY_DESCRIPTION, group.description || 'No description');
+        formData.append(JUDGEMENT_ENTRY_INNOVATION, innovation);
+        formData.append(JUDGEMENT_ENTRY_TECHNICAL, technical);
+        formData.append(JUDGEMENT_ENTRY_PRESENTATION, presentation);
+        formData.append(JUDGEMENT_ENTRY_IMPACT, impact);
+        formData.append(JUDGEMENT_ENTRY_COLLABORATION, collaboration);
+        formData.append(JUDGEMENT_ENTRY_COMMENTS, comments);
+        formData.append(JUDGEMENT_ENTRY_TOTAL, total);
+
+        // Submit to Google Forms
+        fetch(JUDGEMENT_FORM_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: formData
+        }).then(function() {
+          // Mark as judged
+          var judgedKey = 'judged_' + groupKey;
+          localStorage.setItem(judgedKey, 'true');
+
+          var resultEl = document.getElementById('judgeResult');
+          resultEl.textContent = '✅ Judgement submitted successfully! Total: ' + total + '/25';
+          resultEl.className = 'judge-result success';
+          resultEl.style.display = 'block';
+          showToast('✅ Judgement submitted! Total: ' + total + '/25', 'success');
+
+          // Update status
+          var statusEl = document.getElementById('groupStatusDisplay');
+          statusEl.textContent = '✅ Status: Judged';
+          statusEl.className = 'group-status judged';
+        }).catch(function() {
+          showToast('❌ Error submitting judgement. Please try again.', 'error');
+        });
+      });
+
+      // ==================== SUBMIT FEEDBACK ====================
+      document.getElementById('submitFeedbackBtn').addEventListener('click', function() {
+        var studentId = document.getElementById('feedbackStudentId').value.trim();
+        var feedback = document.getElementById('feedbackText').value.trim();
+        var rating = document.getElementById('feedbackRating').value;
+
+        if (!feedback) {
+          showToast('⚠️ Please enter your feedback', 'error');
+          return;
+        }
+
+        var formData = new FormData();
+        formData.append(FEEDBACK_ENTRY_STUDENT_ID, studentId || 'Anonymous');
+        formData.append(FEEDBACK_ENTRY_FEEDBACK, feedback);
+        formData.append(FEEDBACK_ENTRY_RATING, rating);
+
+        fetch(FEEDBACK_FORM_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: formData
+        }).then(function() {
+          var resultEl = document.getElementById('feedbackResult');
+          resultEl.textContent = '✅ Feedback submitted successfully! Thank you!';
+          resultEl.className = 'judge-result success';
+          resultEl.style.display = 'block';
+          showToast('✅ Feedback submitted! Thank you!', 'success');
+
+          // Clear fields
+          document.getElementById('feedbackStudentId').value = '';
+          document.getElementById('feedbackText').value = '';
+        }).catch(function() {
+          showToast('❌ Error submitting feedback. Please try again.', 'error');
+        });
+      });
+
+      // ==================== URL PARAMETER HANDLING ====================
+      function handleUrlParams() {
+        var params = new URLSearchParams(window.location.search);
+        var mode = params.get('mode');
+
+        if (mode === 'judge' && window.innerWidth < 768) {
+          // Show judge tab on mobile
+          document.querySelector('.qr-tab-btn[data-tab="judge"]').click();
+        }
+
+        // Auto-enter app if it's a mobile device or if mode is set
+        var isMobile = window.innerWidth < 768;
+        if (isMobile || mode) {
+          setTimeout(function() {
+            document.getElementById('qrSelectScreen').style.display = 'none';
+            document.getElementById('fullApp').classList.remove('app-hidden');
+            document.getElementById('fullApp').style.display = 'block';
+
+            if (mode === 'judge') {
+              // Auto-open judge panel
+              document.querySelector('.menu-btn[data-page="judge"]').click();
+            }
+          }, 1000);
+        }
       }
 
-      loadDataFromGoogleSheets();
+      // ==================== DETECT MOBILE ====================
+      function detectMobile() {
+        var isMobile = /iPhone|iPad|iPod|Android|BlackBerry|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+        var isTablet = /iPad|Android(?!.*Mobile)/i.test(navigator.userAgent);
+        return isMobile || isTablet || window.innerWidth < 768;
+      }
+
+      // ==================== AUTO-ENTER APP ON MOBILE ====================
+      if (detectMobile()) {
+        setTimeout(function() {
+          document.getElementById('qrSelectScreen').style.display = 'none';
+          document.getElementById('fullApp').classList.remove('app-hidden');
+          document.getElementById('fullApp').style.display = 'block';
+        }, 800);
+      }
+
+      // ==================== INIT ====================
+      window.addEventListener('load', function() {
+        generateQR();
+        loadDataFromGoogleSheets();
+        handleUrlParams();
+
+        // Set feedback sheet link
+        var sheetLink = document.getElementById('feedbackSheetLink');
+        if (sheetLink) {
+          sheetLink.href = 'https://docs.google.com/spreadsheets/d/1xDQXxL5Boml6PTFygQLXe3N3b0Bz7qPRXy8QoWqY0Fg/edit?usp=sharing';
+        }
+      });
+
+      // Handle resize for mobile
+      window.addEventListener('resize', function() {
+        if (detectMobile()) {
+          document.getElementById('qrSelectScreen').style.display = 'none';
+          document.getElementById('fullApp').classList.remove('app-hidden');
+          document.getElementById('fullApp').style.display = 'block';
+        }
+      });
 
     })();
   </script>
+
 </body>
 </html>

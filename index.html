@@ -1070,7 +1070,7 @@
             <label class="filter-label" for="classSelect"><i>📚</i> Select Class</label>
             <select id="classSelect" class="filter-select"><option value="">-- Select Class --</option></select>
           </div>
-          <div class="filter-group">
+          <div class="filter-group" id="sectionGroup">
             <label class="filter-label" for="sectionSelect"><i>📋</i> Select Section</label>
             <select id="sectionSelect" class="filter-select" disabled><option value="">-- Select Section --</option></select>
           </div>
@@ -1095,9 +1095,9 @@
         <div class="judge-section">
           <h3><span>🏆 Judgement Panel</span><span class="judge-status-badge locked" id="judgeStatusBadge">🔒 Locked</span></h3>
           <div id="judgeLockContainer">
-            <p style="color:var(--ms-charcoal); font-size:0.75rem; margin-bottom:10px;">Enter your judge code to access your assigned projects</p>
+            <p style="color:var(--ms-charcoal); font-size:0.75rem; margin-bottom:10px;">Enter the master judge code to access all projects</p>
             <div class="judge-code-input">
-              <input type="password" id="judgeCodeInput" placeholder="Enter judge code" />
+              <input type="password" id="judgeCodeInput" placeholder="Enter master code" />
               <button id="unlockJudgeBtn">🔓 Unlock</button>
             </div>
             <div id="judgeLockError" style="color:#721c24; font-weight:600; font-size:0.75rem; display:none;">❌ Invalid code. Please try again.</div>
@@ -1228,6 +1228,8 @@
     (function() {
       "use strict";
 
+      var MASTER_JUDGE_CODE = "COGNITIVE2026";
+
       var FEEDBACK_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSd0G_L0glHGw5WlGTcYotztShjXpDjxvaDQ9oP_yfnCfFriWg/formResponse";
       var FEEDBACK_ENTRY_STUDENT_ID = "entry.1974581951";
       var FEEDBACK_ENTRY_FEEDBACK = "entry.691585525";
@@ -1246,25 +1248,15 @@
       var JUDGEMENT_ENTRY_COMMENTS = "entry.139019586";
       var JUDGEMENT_ENTRY_TOTAL = "entry.1255541034";
 
-      var JUDGE_ASSIGNMENTS = {
-        "JUDGE001": { name: "Dr. Sharma", allowedGroups: ["Physics Lab|||Solar Car", "Hall A|||AI Chatbot"] },
-        "JUDGE002": { name: "Mr. Verma", allowedGroups: ["Chemistry Lab|||Green Energy Cell", "Robotics Arena|||Line Follower Robot"] },
-        "JUDGE003": { name: "Mrs. Singh", allowedGroups: ["Makerspace|||3D Printed Prosthetics", "Biology Lab|||Hydroponics System"] },
-        "JUDGE004": { name: "Ms. Nair", allowedGroups: ["Library|||Digital Library", "Art Gallery|||Recycled Art Sculpture"] }
-      };
-      var currentJudge = null;
-
       var GOOGLE_SHEETS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSMV8q5pjuZ4WBK-qHcNjaf5xCtklGx0gGsoBTmFfx4E3Gd1ICZLdrGkMMnr7VUdbO7DIC800sjdXy1/pub?output=csv";
       var studentData = [];
 
-      // --- Helper: Convert Roman numerals to numbers ---
       function romanToNum(roman) {
         if (!roman) return 0;
         var map = { I: 1, II: 2, III: 3, IV: 4, V: 5, VI: 6, VII: 7, VIII: 8, IX: 9, X: 10, XI: 11, XII: 12 };
         return map[roman.toUpperCase().trim()] || parseInt(roman) || 0;
       }
 
-      // --- Load data from Google Sheets ---
       function loadDataFromGoogleSheets() {
         showToast('📥 Loading student data...', 'info');
         document.getElementById('recordCount').textContent = '📊 Loading database...';
@@ -1294,7 +1286,6 @@
           });
       }
 
-      // --- Parse CSV with proper handling ---
       function parseCSV(csvText) {
         var lines = csvText.split('\n').filter(function(line) { return line.trim(); });
         if (lines.length < 2) return [];
@@ -1334,7 +1325,6 @@
           var line = lines[i].trim();
           if (!line) continue;
 
-          // Parse CSV line properly
           var values = [];
           var current = '',
             inQuotes = false;
@@ -1354,7 +1344,6 @@
             student[field] = values[index] || '';
           });
 
-          // Convert class to number if possible (supports both "7" and "VII")
           if (student.class) {
             var classNum = romanToNum(student.class);
             if (classNum > 0) student.class = String(classNum);
@@ -1368,7 +1357,6 @@
         return result;
       }
 
-      // --- Sample data with numeric classes ---
       function loadSampleData() {
         studentData = [
           { admissionNo: 1001, studentName: "Rahul Sharma", class: "9", section: "A", venue: "Physics Lab",
@@ -1495,7 +1483,6 @@
         showToast('📊 Sample data loaded (' + studentData.length + ' students)', 'info');
       }
 
-      // --- Sort students: by venue, project, class (numeric), name ---
       function sortStudentsByGroup(students) {
         return students.sort(function(a, b) {
           if (a.venue < b.venue) return -1;
@@ -1509,13 +1496,12 @@
         });
       }
 
-      // --- Populate filters with numeric class sorting ---
       function populateFilters() {
         var classSelect = document.getElementById('classSelect');
         var sectionSelect = document.getElementById('sectionSelect');
         var studentSelect = document.getElementById('studentSelect');
+        var sectionGroup = document.getElementById('sectionGroup');
 
-        // Get unique classes and sort numerically
         var classes = [...new Set(studentData.map(function(s) { return s.class; }))];
         classes.sort(function(a, b) { return (parseInt(a) || 0) - (parseInt(b) || 0); });
 
@@ -1536,14 +1522,17 @@
           '<div class="empty-state"><span>👆</span>Select a student from the dropdown</div>';
         classSelect.disabled = false;
 
+        // Show section group by default
+        sectionGroup.style.display = 'block';
+
         updateUI();
       }
 
-      // --- Event listeners ---
       document.getElementById('classSelect').addEventListener('change', function() {
         var selectedClass = this.value;
         var sectionSelect = document.getElementById('sectionSelect');
         var studentSelect = document.getElementById('studentSelect');
+        var sectionGroup = document.getElementById('sectionGroup');
 
         if (!selectedClass) {
           sectionSelect.innerHTML = '<option value="">-- Select Section --</option>';
@@ -1553,26 +1542,85 @@
           document.getElementById('uniqueIdDisplay').textContent = '—';
           document.getElementById('venueContainer').innerHTML =
             '<div class="empty-state"><span>👆</span>Select a student from the dropdown</div>';
+          sectionGroup.style.display = 'block';
           return;
         }
 
         var sections = [...new Set(studentData.filter(function(s) { return s.class === selectedClass; }).map(function(s) {
           return s.section;
         }))].sort();
-        sectionSelect.innerHTML = '<option value="">-- Select Section --</option>';
-        sections.forEach(function(sec) {
-          var opt = document.createElement('option');
-          opt.value = sec;
-          opt.textContent = sec;
-          sectionSelect.appendChild(opt);
-        });
-        sectionSelect.disabled = false;
+
+        // Check if class has only one section or no sections
+        if (sections.length <= 1) {
+          // Hide section dropdown and auto-select the only section
+          sectionGroup.style.display = 'none';
+          if (sections.length === 1) {
+            // Auto-select the only section and load students
+            sectionSelect.innerHTML = '<option value="' + sections[0] + '" selected>' + sections[0] + '</option>';
+            sectionSelect.disabled = false;
+            loadStudentsForSection(selectedClass, sections[0]);
+          } else {
+            // No sections found, show all students for this class
+            sectionSelect.innerHTML = '<option value="">-- All Students --</option>';
+            sectionSelect.disabled = true;
+            loadStudentsForClass(selectedClass);
+          }
+        } else {
+          // Multiple sections, show section dropdown
+          sectionGroup.style.display = 'block';
+          sectionSelect.innerHTML = '<option value="">-- Select Section --</option>';
+          sections.forEach(function(sec) {
+            var opt = document.createElement('option');
+            opt.value = sec;
+            opt.textContent = sec;
+            sectionSelect.appendChild(opt);
+          });
+          sectionSelect.disabled = false;
+          studentSelect.innerHTML = '<option value="">-- Select Student --</option>';
+          studentSelect.disabled = true;
+          document.getElementById('uniqueIdDisplay').textContent = '—';
+          document.getElementById('venueContainer').innerHTML =
+            '<div class="empty-state"><span>👆</span>Select a student from the dropdown</div>';
+        }
+      });
+
+      function loadStudentsForClass(className) {
+        var studentSelect = document.getElementById('studentSelect');
+        var students = studentData
+          .filter(function(s) { return s.class === className; })
+          .sort(function(a, b) { return a.studentName.localeCompare(b.studentName); });
+
         studentSelect.innerHTML = '<option value="">-- Select Student --</option>';
-        studentSelect.disabled = true;
+        students.forEach(function(stu) {
+          var opt = document.createElement('option');
+          opt.value = stu.admissionNo;
+          opt.textContent = stu.studentName + ' (#' + stu.admissionNo + ')';
+          studentSelect.appendChild(opt);
+        });
+        studentSelect.disabled = false;
         document.getElementById('uniqueIdDisplay').textContent = '—';
         document.getElementById('venueContainer').innerHTML =
           '<div class="empty-state"><span>👆</span>Select a student from the dropdown</div>';
-      });
+      }
+
+      function loadStudentsForSection(className, sectionName) {
+        var studentSelect = document.getElementById('studentSelect');
+        var students = studentData
+          .filter(function(s) { return s.class === className && s.section === sectionName; })
+          .sort(function(a, b) { return a.studentName.localeCompare(b.studentName); });
+
+        studentSelect.innerHTML = '<option value="">-- Select Student --</option>';
+        students.forEach(function(stu) {
+          var opt = document.createElement('option');
+          opt.value = stu.admissionNo;
+          opt.textContent = stu.studentName + ' (#' + stu.admissionNo + ')';
+          studentSelect.appendChild(opt);
+        });
+        studentSelect.disabled = false;
+        document.getElementById('uniqueIdDisplay').textContent = '—';
+        document.getElementById('venueContainer').innerHTML =
+          '<div class="empty-state"><span>👆</span>Select a student from the dropdown</div>';
+      }
 
       document.getElementById('sectionSelect').addEventListener('change', function() {
         var selectedClass = document.getElementById('classSelect').value;
@@ -1588,21 +1636,7 @@
           return;
         }
 
-        var students = studentData
-          .filter(function(s) { return s.class === selectedClass && s.section === selectedSection; })
-          .sort(function(a, b) { return a.studentName.localeCompare(b.studentName); });
-
-        studentSelect.innerHTML = '<option value="">-- Select Student --</option>';
-        students.forEach(function(stu) {
-          var opt = document.createElement('option');
-          opt.value = stu.admissionNo;
-          opt.textContent = stu.studentName + ' (#' + stu.admissionNo + ')';
-          studentSelect.appendChild(opt);
-        });
-        studentSelect.disabled = false;
-        document.getElementById('uniqueIdDisplay').textContent = '—';
-        document.getElementById('venueContainer').innerHTML =
-          '<div class="empty-state"><span>👆</span>Select a student from the dropdown</div>';
+        loadStudentsForSection(selectedClass, selectedSection);
       });
 
       document.getElementById('studentSelect').addEventListener('change', function() {
@@ -1616,7 +1650,6 @@
         renderStudent(admissionNo);
       });
 
-      // --- Render student details ---
       function renderStudent(admissionNo) {
         var uniqueIdDisplay = document.getElementById('uniqueIdDisplay');
         var venueContainer = document.getElementById('venueContainer');
@@ -1742,7 +1775,6 @@
         });
       }
 
-      // --- QR Tab switching ---
       document.querySelectorAll('.qr-tab-btn').forEach(function(btn) {
         btn.addEventListener('click', function() {
           document.querySelectorAll('.qr-tab-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -1807,30 +1839,23 @@
         var judgeUnlocked = false;
         var judgements = JSON.parse(localStorage.getItem('groupJudgements')) || {};
 
-        function populateGroupSelector(allowedGroups) {
+        function populateGroupSelector() {
           var select = document.getElementById('groupSelector');
           var allGroups = getAllGroups();
 
-          var filteredGroups = allGroups;
-          if (allowedGroups && allowedGroups.length > 0) {
-            filteredGroups = allGroups.filter(function(g) {
-              return allowedGroups.indexOf(g.key) !== -1;
-            });
-          }
-
           select.innerHTML = '<option value="">-- Select a Group --</option>';
-          filteredGroups.sort(function(a, b) {
+          allGroups.sort(function(a, b) {
             return a.venue.localeCompare(b.venue) || a.project.localeCompare(b.project);
           });
-          filteredGroups.forEach(function(g) {
+          allGroups.forEach(function(g) {
             var opt = document.createElement('option');
             opt.value = g.key;
             opt.textContent = g.venue + ' - ' + g.project + ' (' + g.members.length + ' members)';
             select.appendChild(opt);
           });
 
-          if (filteredGroups.length === 0) {
-            select.innerHTML = '<option value="">-- No groups assigned --</option>';
+          if (allGroups.length === 0) {
+            select.innerHTML = '<option value="">-- No groups available --</option>';
           }
         }
 
@@ -1881,22 +1906,21 @@
         }
 
         document.getElementById('unlockJudgeBtn').addEventListener('click', function() {
-          var code = document.getElementById('judgeCodeInput').value.trim().toUpperCase();
+          var code = document.getElementById('judgeCodeInput').value.trim();
           var errorEl = document.getElementById('judgeLockError');
 
-          if (JUDGE_ASSIGNMENTS[code]) {
+          if (code === MASTER_JUDGE_CODE) {
             judgeUnlocked = true;
-            currentJudge = JUDGE_ASSIGNMENTS[code];
 
             document.getElementById('judgeLockContainer').style.display = 'none';
             document.getElementById('judgeContent').style.display = 'block';
 
             var badge = document.getElementById('judgeStatusBadge');
-            badge.textContent = '🔓 ' + currentJudge.name;
+            badge.textContent = '🔓 Master Judge Access';
             badge.className = 'judge-status-badge unlocked';
             errorEl.style.display = 'none';
 
-            populateGroupSelector(currentJudge.allowedGroups);
+            populateGroupSelector();
 
             var select = document.getElementById('groupSelector');
             if (select.value) {
@@ -1905,9 +1929,11 @@
               document.getElementById('groupInfoDisplay').style.display = 'none';
               document.getElementById('judgeCriteria').style.display = 'none';
             }
+            showToast('✅ Master Judge unlocked! All groups available.', 'success');
           } else {
             errorEl.style.display = 'block';
             setTimeout(function() { errorEl.style.display = 'none'; }, 3000);
+            showToast('❌ Invalid judge code. Please try again.', 'error');
           }
         });
 
@@ -1960,7 +1986,7 @@
             percentage: percentage,
             comments: comments || 'No comments',
             timestamp: Date.now(),
-            judgeName: currentJudge ? currentJudge.name : 'Unknown',
+            judgeName: 'Master Judge',
             groupName: group.venue + ' - ' + group.project,
             members: group.members.map(function(m) { return m.admissionNo + ': ' + m.studentName; })
           };
@@ -2043,8 +2069,8 @@
             var page = btn.getAttribute('data-page');
             Object.keys(pages).forEach(function(key) { pages[key].classList.remove('active'); });
             pages[page].classList.add('active');
-            if (page === 'judge' && judgeUnlocked && currentJudge) {
-              populateGroupSelector(currentJudge.allowedGroups);
+            if (page === 'judge' && judgeUnlocked) {
+              populateGroupSelector();
             }
           });
         });
@@ -2052,20 +2078,17 @@
 
       var urlParams = new URLSearchParams(window.location.search);
 
-      // Always start on QR screen unless app=1 is present
       if (urlParams.get('app') === '1') {
         var role = urlParams.get('role') || 'parent';
         localStorage.setItem('cognitive_role', role);
         localStorage.setItem('cognitive_app_open', 'true');
         showApp();
-        // Load data after showing app
         loadDataFromGoogleSheets();
       } else {
         localStorage.removeItem('cognitive_role');
         localStorage.removeItem('cognitive_app_open');
         document.getElementById('qrSelectScreen').style.display = 'block';
         initQRScreen();
-        // Load data in background for QR screen
         loadDataFromGoogleSheets();
       }
 
